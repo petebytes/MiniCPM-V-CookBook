@@ -19,15 +19,15 @@ site:
   tagline:
     en: "Recipes for vision, speech, and live-streaming multimodal AI."
     zh: "视觉 / 语音 / 实时流多模态 AI 的实战手册。"
-  repo: "https://github.com/OpenSQZ/MiniCPM-o-cookbook"
-  base_url: "/MiniCPM-o-cookbook"
+  repo: "https://github.com/OpenSQZ/MiniCPM-V-CookBook"
+  base_url: "/MiniCPM-V-CookBook"
   default_version: v4.6
   default_lang: en
   brand:
     primary: "#3680ff"        # MiniCPM blue
     accent:  "#1AC8DB"        # OpenBMB cyan
   links:
-    - { label: { en: "GitHub",      zh: "GitHub" },     url: "https://github.com/OpenSQZ/MiniCPM-o-cookbook" }
+    - { label: { en: "GitHub",      zh: "GitHub" },     url: "https://github.com/OpenSQZ/MiniCPM-V-CookBook" }
     - { label: { en: "HuggingFace", zh: "HuggingFace" }, url: "https://huggingface.co/openbmb" }
     - { label: { en: "ModelScope",  zh: "魔搭社区" },     url: "https://modelscope.cn/organization/OpenBMB" }
     - { label: { en: "Discord",     zh: "Discord" },    url: "https://discord.gg/rftuRMbqzf" }

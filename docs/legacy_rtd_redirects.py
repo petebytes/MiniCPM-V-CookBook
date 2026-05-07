@@ -6,7 +6,7 @@ Why this script exists
 The cookbook documentation moved from
     https://minicpm-o.readthedocs.io/
 to
-    https://opensqz.github.io/MiniCPM-o-cookbook/
+    https://opensqz.github.io/MiniCPM-V-CookBook/
 
 This script installs a catch-all *page* redirect on the RTD project so that
 every legacy URL — including deep links indexed by search engines — sends a
@@ -44,7 +44,7 @@ import urllib.error
 import urllib.request
 
 API = "https://app.readthedocs.org/api/v3"
-NEW_SITE = "https://opensqz.github.io/MiniCPM-o-cookbook/"
+NEW_SITE = "https://opensqz.github.io/MiniCPM-V-CookBook/"
 
 # `minicpm-o`     — main English project
 # `minicpm-o-cn`  — Simplified Chinese translation project (linked from the parent)
@@ -118,6 +118,12 @@ def create_redirect(project: str, token: str, redirect: dict) -> dict:
     if status not in (200, 201):
         raise SystemExit(f"[error] POST /projects/{project}/redirects/ → {status}: {body}")
     return body
+
+
+def delete_redirect(project: str, token: str, redirect_pk) -> None:
+    status, body = _request("DELETE", f"/projects/{project}/redirects/{redirect_pk}/", token)
+    if status not in (200, 204):
+        raise SystemExit(f"[error] DELETE /projects/{project}/redirects/{redirect_pk}/ → {status}: {body}")
 
 
 # --------------------------------------------------------------------------
@@ -219,15 +225,35 @@ def main() -> int:
             print("  (no existing redirects)")
 
         for r in REDIRECTS:
-            already = any(
+            already_perfect = any(
                 e.get("from_url") == r["from_url"]
                 and e.get("type")     == r["type"]
                 and (e.get("to_url") or "").rstrip("/") == r["to_url"].rstrip("/")
                 for e in existing
             )
-            if already:
+            stale = [
+                e for e in existing
+                if e.get("from_url") == r["from_url"]
+                and e.get("type") == r["type"]
+                and (e.get("to_url") or "").rstrip("/") != r["to_url"].rstrip("/")
+            ]
+
+            if already_perfect:
                 print(f"  [skip] redirect already in place: {r['type']} {r['from_url']}")
                 continue
+
+            for s in stale:
+                pk = s.get("pk") or s.get("id")
+                msg = (
+                    f"  [stale] same from_url with wrong to_url: {s.get('to_url')!r}"
+                    f" (pk={pk})"
+                )
+                if not args.apply:
+                    print(f"{msg}\n  [DRY-RUN] would delete it first")
+                else:
+                    delete_redirect(project, token, pk)
+                    print(f"{msg}\n  [OK] deleted")
+
             if not args.apply:
                 print(f"  [DRY-RUN] would create: {r['type']} {r['from_url']} → {r['to_url']}")
             else:

@@ -82,7 +82,7 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Think --port 3
               {
                 "type": "image_url",
                 "image_url": {
-                  "url": "https://github.com/OpenSQZ/MiniCPM-o-cookbook/blob/main/inference/assets/airplane.jpeg?raw=true"
+                  "url": "https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/inference/assets/airplane.jpeg?raw=true"
                 }
               }
             ]
@@ -109,7 +109,7 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Think --port 3
                     {
                         "type": "image_url",
                         "image_url": {
-                            "url": "https://github.com/OpenSQZ/MiniCPM-o-cookbook/blob/main/inference/assets/airplane.jpeg?raw=true",
+                            "url": "https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/inference/assets/airplane.jpeg?raw=true",
                         },
                     },
                 ],

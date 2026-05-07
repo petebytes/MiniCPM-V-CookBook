@@ -1,7 +1,7 @@
 # Cookbook documentation site
 
 This directory builds the cookbook's bilingual static site at
-**https://opensqz.github.io/MiniCPM-o-cookbook/**.
+**https://opensqz.github.io/MiniCPM-V-CookBook/**.
 
 ## Layout
 
@@ -104,7 +104,7 @@ Configured under repo *Settings → Pages*:
 - **Folder**: `/docs`
 
 GitHub Pages will then serve the contents of `docs/` at
-`https://opensqz.github.io/MiniCPM-o-cookbook/`. The `docs/index.html`
+`https://opensqz.github.io/MiniCPM-V-CookBook/`. The `docs/index.html`
 redirects to `docs/site/{lang}/index.html`, which is the actual entry point.
 
 ## Conventions and gotchas
