@@ -664,6 +664,15 @@ def render_sidebar(
         out.append(f'  <li><a class="{active.strip()}" href="{url}">{title}</a></li>')
     out.append('</ul>')
 
+    # For top-level pages (Home / Framework Matrix) the page has no version of
+    # its own, but we still want a fully populated sidebar (otherwise the home
+    # page looks empty compared to deeper pages). Fall back to the default
+    # version's nav in that case.
+    nav_version_id = current_version
+    if nav_version_id in (None, "shared"):
+        default_id = site_cfg.get("default_version") or (versions[0].id if versions else None)
+        nav_version_id = default_id
+
     # Version switcher
     out.append(f'<div class="sidebar-section-title">{"Version" if lang == "en" else "版本"}</div>')
     out.append('<div class="version-switcher">')
@@ -672,16 +681,15 @@ def render_sidebar(
         # determine target URL when switching to this version
         target_slug = _equivalent_slug(current, v.id)
         target = _href_to_slug(current, target_slug, lang)
-        selected = " selected" if v.id == current_version else ""
+        selected = " selected" if v.id == nav_version_id else ""
         label = v.label.get(lang, v.label["en"])
         badge = f' [{v.badge}]' if v.badge else ""
         out.append(f'    <option value="{target}"{selected}>{label}{badge}</option>')
     out.append('  </select>')
     out.append('</div>')
 
-    # Per-version nav
     for v in versions:
-        if v.id != current_version:
+        if v.id != nav_version_id:
             continue
         out.append('<ul class="nav-list">')
         for entry in v.nav:
