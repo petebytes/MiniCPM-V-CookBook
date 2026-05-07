@@ -115,6 +115,7 @@ We provide training methods serving different needs as following:
 | [GGUF](./quantization/gguf/minicpm-v4_6_gguf_quantize.md)| Simplest and most portable format  |
 | [BNB](./quantization/bnb/minicpm-v4_6_bnb_quantize.md)   | Simple and easy-to-use quantization method |
 | [AWQ](./quantization/awq/minicpm-v4_6_awq_quantize.md)   | High-performance quantization for efficient inference |
+| [GPTQ](./quantization/gptq/minicpm-v4_5_gptq_quantize.md)   | Weight-only INT4 with vLLM-compatible packaging *(v4.5 only — Qwen3 backbone)* |
 
 ## Framework Support Matrix
 
@@ -204,7 +205,7 @@ We provide training methods serving different needs as following:
       <td>Waiting for official release</td>
     </tr>
     <tr>
-      <td rowspan="5"><em>Cross-version</em></td>
+      <td rowspan="6"><em>Cross-version</em></td>
       <td>Finetuning</td>
       <td>LLaMA-Factory</td>
       <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/finetune/finetune_llamafactory.md">LLaMA-Factory Doc</a></td>
@@ -213,7 +214,7 @@ We provide training methods serving different needs as following:
       <td>Waiting for official release</td>
     </tr>
     <tr>
-      <td rowspan="3">Quantization</td>
+      <td rowspan="4">Quantization</td>
       <td>GGUF</td>
       <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/gguf/minicpm-v4_6_gguf_quantize.md">GGUF Doc</a></td>
       <td>—</td>
@@ -231,6 +232,13 @@ We provide training methods serving different needs as following:
       <td>AWQ</td>
       <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/awq/minicpm-v4_6_awq_quantize.md">AWQ Doc</a></td>
       <td><a href="https://github.com/tc-mb/AutoAWQ">tc-mb/AutoAWQ</a></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>GPTQ</td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/gptq/minicpm-v4_5_gptq_quantize.md">GPTQ Doc</a></td>
+      <td>—</td>
       <td>—</td>
       <td>—</td>
     </tr>

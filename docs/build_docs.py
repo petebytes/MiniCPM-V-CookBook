@@ -741,10 +741,11 @@ def _render_leaf(p: PageEntry, current: PageEntry, lang: str) -> str:
 def _render_group(grp: NavGroup, current: PageEntry, lang: str) -> str:
     label = grp.label.get(lang, grp.label.get("en", ""))
     children_html = "\n".join(_render_leaf(p, current, lang) for p in grp.items)
-    has_active = any(p.slug == current.slug for p in grp.items)
-    classes = "nav-group" if has_active else "nav-group collapsed"
+    # All groups start expanded so visitors immediately see every recipe under
+    # Inference / Deployment / Quantization / etc. The arrow caret still
+    # indicates click-to-collapse, but no nav item is hidden by default.
     return (
-        f'<li class="{classes}">'
+        f'<li class="nav-group">'
         f'<div class="nav-group-header">{label}</div>'
         f'<ul class="nav-group-children">{children_html}</ul>'
         f'</li>'

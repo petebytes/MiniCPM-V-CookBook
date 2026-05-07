@@ -156,6 +156,9 @@ versions:
           - title: { en: "AWQ",  zh: "AWQ"  }
             src:   quantization/awq/minicpm-v4_5_awq_quantize.md
             url:   quantization/awq
+          - title: { en: "GPTQ", zh: "GPTQ" }
+            src:   quantization/gptq/minicpm-v4_5_gptq_quantize.md
+            url:   quantization/gptq
 
   - id: o4.5
     label: { en: "MiniCPM-o 4.5", zh: "MiniCPM-o 4.5" }
