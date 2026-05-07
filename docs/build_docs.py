@@ -598,22 +598,17 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   </footer>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/core.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/common.min.js"></script>
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({{ startOnLoad: true, theme: 'default', securityLevel: 'loose' }});
-</script>
 <script>
-  hljs.highlightAll();
-
+  // ----- core UI behaviour (must run even if external CDNs are blocked) -----
   function toggleSidebar() {{
     document.getElementById('sidebar').classList.toggle('open');
   }}
+
   document.querySelectorAll('.nav-group-header').forEach(h => {{
     h.addEventListener('click', () => h.parentElement.classList.toggle('collapsed'));
   }});
-  // Close sidebar when clicking a link on mobile
+
+  // Close sidebar when clicking a link on mobile.
   document.querySelectorAll('.sidebar a').forEach(a => {{
     a.addEventListener('click', () => {{
       if (window.innerWidth <= 900) {{
@@ -622,7 +617,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     }});
   }});
 
-  // Version switcher
+  // Version switcher dropdown.
   const verSel = document.getElementById('version-switcher-select');
   if (verSel) {{
     verSel.addEventListener('change', e => {{
@@ -630,6 +625,20 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
       if (target) window.location.href = target;
     }});
   }}
+</script>
+
+<!-- Optional enhancements below. Wrapped so a CDN hiccup never breaks the
+     interactive sidebar / version switcher above. -->
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/core.min.js" onerror="window.__hljsBlocked=true"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/common.min.js" onerror="window.__hljsBlocked=true"></script>
+<script>
+  try {{ if (typeof hljs !== 'undefined') hljs.highlightAll(); }} catch (e) {{ console.warn('hljs failed:', e); }}
+</script>
+<script type="module">
+  try {{
+    const m = await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
+    m.default.initialize({{ startOnLoad: true, theme: 'default', securityLevel: 'loose' }});
+  }} catch (e) {{ console.warn('mermaid failed:', e); }}
 </script>
 {search_script}
 </body>
