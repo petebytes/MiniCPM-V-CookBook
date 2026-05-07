@@ -446,6 +446,16 @@ img { max-width: 100%; }
   padding: 16px 0 32px;
   transition: transform .25s;
 }
+.sidebar-header { padding: 4px 18px 14px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+.sidebar-lang-switch {
+  display: inline-block; font-size: 12px; color: var(--primary);
+  text-decoration: none; padding: 3px 12px;
+  border: 1px solid var(--border); border-radius: 999px;
+  transition: background .15s, border-color .15s;
+}
+.sidebar-lang-switch:hover { background: var(--nav-active-bg); border-color: var(--primary); text-decoration: none; }
+.sidebar-lang-switch::before { content: "🌐 "; opacity: .8; margin-right: 2px; }
+
 .version-switcher { padding: 0 18px 12px; }
 .version-switcher select {
   width: 100%; padding: 7px 10px; font-size: 14px;
@@ -580,12 +590,14 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <input type="search" placeholder="{search_placeholder}" id="pagefind-search">
   </div>
   <nav class="topbar-actions">
-    <a href="{lang_switch_href}" rel="alternate" hreflang="{other_lang}">{other_lang_label}</a>
     {action_links}
   </nav>
 </header>
 
 <aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a class="sidebar-lang-switch" href="{lang_switch_href}" rel="alternate" hreflang="{other_lang}">{other_lang_label}</a>
+  </div>
   {sidebar_html}
 </aside>
 

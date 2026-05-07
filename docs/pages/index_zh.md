@@ -8,7 +8,6 @@
   - 推理：[单图问答](v4.6/inference/single-image.html) · [多图问答](v4.6/inference/multi-images.html) · [视频](v4.6/inference/video-understanding.html) · [OCR](v4.6/inference/ocr.html) · [PDF 解析](v4.6/inference/pdf-parse.html) · [Grounding](v4.6/inference/grounding.html)
   - 部署：[vLLM](v4.6/deployment/vllm.html) · [SGLang](v4.6/deployment/sglang.html) · [llama.cpp](v4.6/deployment/llamacpp.html) · [Ollama](v4.6/deployment/ollama.html)
   - 量化：[GGUF](v4.6/quantization/gguf.html) · [BNB](v4.6/quantization/bnb.html) · [AWQ](v4.6/quantization/awq.html)
-- 各框架（vLLM、SGLang、llama.cpp、Ollama、transformers）的上游合并状态请参见 [框架支持矩阵](framework-matrix.html)。
 
 ## 按场景选择
 

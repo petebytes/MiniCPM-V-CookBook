@@ -8,7 +8,6 @@ Cook up amazing multimodal AI applications effortlessly with **MiniCPM-V** and *
   - Inference: [Single-image QA](v4.6/inference/single-image.html) · [Multi-image QA](v4.6/inference/multi-images.html) · [Video](v4.6/inference/video-understanding.html) · [OCR](v4.6/inference/ocr.html) · [PDF](v4.6/inference/pdf-parse.html) · [Grounding](v4.6/inference/grounding.html)
   - Deployment: [vLLM](v4.6/deployment/vllm.html) · [SGLang](v4.6/deployment/sglang.html) · [llama.cpp](v4.6/deployment/llamacpp.html) · [Ollama](v4.6/deployment/ollama.html)
   - Quantization: [GGUF](v4.6/quantization/gguf.html) · [BNB](v4.6/quantization/bnb.html) · [AWQ](v4.6/quantization/awq.html)
-- See the [Framework Support Matrix](framework-matrix.html) for upstream PR / release status across vLLM, SGLang, llama.cpp, Ollama, transformers, …
 
 ## Pick the right recipe
 

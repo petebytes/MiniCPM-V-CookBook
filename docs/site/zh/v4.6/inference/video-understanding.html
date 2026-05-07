@@ -81,6 +81,16 @@ img { max-width: 100%; }
   padding: 16px 0 32px;
   transition: transform .25s;
 }
+.sidebar-header { padding: 4px 18px 14px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+.sidebar-lang-switch {
+  display: inline-block; font-size: 12px; color: var(--primary);
+  text-decoration: none; padding: 3px 12px;
+  border: 1px solid var(--border); border-radius: 999px;
+  transition: background .15s, border-color .15s;
+}
+.sidebar-lang-switch:hover { background: var(--nav-active-bg); border-color: var(--primary); text-decoration: none; }
+.sidebar-lang-switch::before { content: "🌐 "; opacity: .8; margin-right: 2px; }
+
 .version-switcher { padding: 0 18px 12px; }
 .version-switcher select {
   width: 100%; padding: 7px 10px; font-size: 14px;
@@ -204,7 +214,6 @@ footer.page-footer a:hover { color: var(--primary); }
     <input type="search" placeholder="搜索文档…" id="pagefind-search">
   </div>
   <nav class="topbar-actions">
-    <a href="../../../en/v4.6/inference/video-understanding.html" rel="alternate" hreflang="en">English</a>
     <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook" target="_blank" rel="noopener">GitHub</a>
     <a href="https://huggingface.co/openbmb" target="_blank" rel="noopener">HuggingFace</a>
     <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">魔搭社区</a>
@@ -214,9 +223,11 @@ footer.page-footer a:hover { color: var(--primary); }
 </header>
 
 <aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a class="sidebar-lang-switch" href="../../../en/v4.6/inference/video-understanding.html" rel="alternate" hreflang="en">English</a>
+  </div>
   <ul class="nav-list">
   <li><a class="" href="../../index.html">首页</a></li>
-  <li><a class="" href="../../framework-matrix.html">框架支持矩阵</a></li>
 </ul>
 <div class="sidebar-section-title">版本</div>
 <div class="version-switcher">

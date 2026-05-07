@@ -38,9 +38,6 @@ top_level:
   - title: { en: "Home",                 zh: "首页"        }
     src:    docs/pages/index.md
     url:    index
-  - title: { en: "Framework Matrix",     zh: "框架支持矩阵" }
-    src:    docs/pages/framework_matrix.md
-    url:    framework-matrix
 
 versions:
   - id: v4.6
