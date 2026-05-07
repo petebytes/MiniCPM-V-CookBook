@@ -21,8 +21,8 @@ All features are displayed at a glance, making it easy for you to quickly find e
 
 We support a wide range of users, from individuals to enterprises and researchers.
 
-* **Individuals**: Enjoy effortless inference using [Ollama](./deployment/ollama/minicpm-v4_5_ollama.md) and [Llama.cpp](./deployment/llama.cpp/minicpm-v4_5_llamacpp.md) with minimal setup.
-* **Enterprises**: Achieve high-throughput, scalable performance with [vLLM](./deployment/vllm/minicpm-v4_5_vllm.md) and [SGLang](./deployment/sglang/MiniCPM-v4_5_sglang.md).
+* **Individuals**: Enjoy effortless inference using [Ollama](./deployment/ollama/minicpm-v4_6_ollama.md) and [Llama.cpp](./deployment/llama.cpp/minicpm-v4_6_llamacpp.md) with minimal setup.
+* **Enterprises**: Achieve high-throughput, scalable performance with [vLLM](./deployment/vllm/minicpm-v4_6_vllm.md) and [SGLang](./deployment/sglang/MiniCPM-v4_6_sglang.md).
 * **Researchers**: Leverage advanced frameworks including [Transformers](./finetune/finetune_full.md) , [LLaMA-Factory](./finetune/finetune_llamafactory.md), [SWIFT](./finetune/swift.md), and [Align-anything](./finetune/align_anything.md) to enable flexible model development and cutting-edge experimentation.
 
 
@@ -31,7 +31,7 @@ We support a wide range of users, from individuals to enterprises and researcher
 Our ecosystem delivers optimal solution for a variety of hardware environments and deployment demands.
 
 * **Web demo**: Launch interactive multimodal AI web demo with [FastAPI](./demo/README.md).
-* **Quantized deployment**: Maximize efficiency and minimize resource consumption using [GGUF](./quantization/gguf/minicpm-v4_5_gguf_quantize.md), [BNB](./quantization/bnb/minicpm-v4_5_bnb_quantize.md), and [AWQ](./quantization/awq/minicpm-v4_awq_quantize.md).
+* **Quantized deployment**: Maximize efficiency and minimize resource consumption using [GGUF](./quantization/gguf/minicpm-v4_6_gguf_quantize.md), [BNB](./quantization/bnb/minicpm-v4_6_bnb_quantize.md), and [AWQ](./quantization/awq/minicpm-v4_6_awq_quantize.md).
 * **Edge devices**: Bring powerful AI experiences to [iPhone and iPad](./demo/ios_demo/ios.md), supporting offline and privacy-sensitive applications.
 
 ## ⭐️ Live Demonstrations
@@ -59,14 +59,14 @@ Explore real-world examples of MiniCPM-V deployed on edge devices using our cura
 
 | Recipe | Description | 
 |---------|:-------------|
-| **Vision Capabilities** | |
-| 🖼️ [Single-image QA](./inference/minicpm-v4_5_single_image.md) | Question answering on a single image |
-| 🧩 [Multi-image QA](./inference/minicpm-v4_5_multi_images.md) | Question answering with multiple images |
-| 🎬 [Video QA](./inference/minicpm-v4_5_video_understanding.md) | Video-based question answering |
-| 📄 [Document Parser](./inference/minicpm-v4_5_pdf_parse.md) | Parse and extract content from PDFs and webpages |
-| 📝 [Text Recognition](./inference/minicpm-v4_5_ocr.md) | Reliable OCR for photos and screenshots |
-| 🎯 [Grounding](./inference/minicpm-v4_5_grounding.md) | Visual grounding and object localization in images |
-| **Audio Capabilities** | |
+| **Vision Capabilities** (MiniCPM-V 4.6) | |
+| 🖼️ [Single-image QA](./inference/minicpm-v4_6_single_image.md) | Question answering on a single image |
+| 🧩 [Multi-image QA](./inference/minicpm-v4_6_multi_images.md) | Question answering with multiple images |
+| 🎬 [Video QA](./inference/minicpm-v4_6_video_understanding.md) | Video-based question answering |
+| 📄 [Document Parser](./inference/minicpm-v4_6_pdf_parse.md) | Parse and extract content from PDFs and webpages |
+| 📝 [Text Recognition](./inference/minicpm-v4_6_ocr.md) | Reliable OCR for photos and screenshots |
+| 🎯 [Grounding](./inference/minicpm-v4_6_grounding.md) | Visual grounding and object localization in images |
+| **Audio Capabilities** (MiniCPM-o) | |
 | 🎤 [Speech-to-Text](./inference/speech2text.md) | Multilingual speech recognition |
 | 🗣️ [Text-to-Speech](./inference/text2speech.md) | Instruction-following speech synthesis |
 | 🎭 [Voice Cloning](./inference/voice_clone.md) | Realistic voice cloning and role-play |
@@ -98,10 +98,10 @@ We provide training methods serving different needs as following:
 
 | Method                                | Description                                  |
 |-------------------------------------------|----------------------------------------------|
-| [vLLM](./deployment/vllm/minicpm-v4_5_vllm.md)| High-throughput GPU inference                |
-| [SGLang](./deployment/sglang/MiniCPM-v4_5_sglang.md)| High-throughput GPU inference                |
-| [Llama.cpp](./deployment/llama.cpp/minicpm-v4_5_llamacpp.md)| Fast CPU inference on PC, iPhone and iPad                        |
-| [Ollama](./deployment/ollama/minicpm-v4_5_ollama.md)| User-friendly setup  |
+| [vLLM](./deployment/vllm/minicpm-v4_6_vllm.md)| High-throughput GPU inference                |
+| [SGLang](./deployment/sglang/MiniCPM-v4_6_sglang.md)| High-throughput GPU inference                |
+| [Llama.cpp](./deployment/llama.cpp/minicpm-v4_6_llamacpp.md)| Fast CPU inference on PC, iPhone and iPad                        |
+| [Ollama](./deployment/ollama/minicpm-v4_6_ollama.md)| User-friendly setup  |
 | [OpenWebUI](./demo/web_demo/openwebui) | Interactive Web demo with Open WebUI |
 | [Gradio](./demo/web_demo/gradio/README.md) | Interactive Web demo with Gradio |
 | [FastAPI](./demo/README.md) | Interactive Omni Streaming demo with FastAPI |
@@ -112,25 +112,69 @@ We provide training methods serving different needs as following:
 
 | Format                                 | Key Feature                        |
 |-----------------------------------------|------------------------------------|
-| [GGUF](./quantization/gguf/minicpm-v4_5_gguf_quantize.md)| Simplest and most portable format  |
-| [BNB](./quantization/bnb/minicpm-v4_5_bnb_quantize.md)   | Simple and easy-to-use quantization method |
-| [AWQ](./quantization/awq/minicpm-v4_awq_quantize.md)   | High-performance quantization for efficient inference |
+| [GGUF](./quantization/gguf/minicpm-v4_6_gguf_quantize.md)| Simplest and most portable format  |
+| [BNB](./quantization/bnb/minicpm-v4_6_bnb_quantize.md)   | Simple and easy-to-use quantization method |
+| [AWQ](./quantization/awq/minicpm-v4_6_awq_quantize.md)   | High-performance quantization for efficient inference |
 
 ## Framework Support Matrix
+
+> The latest release is **MiniCPM-V 4.6** (Instruct + Think). The matrix below tracks v4.6 first, with v4.5 / o4.5 rows kept for reference.
+
 <table>
   <thead>
     <tr>
+      <th>Model</th>
       <th>Category</th>
       <th>Framework</th>
       <th>Cookbook Link</th>
       <th>Upstream PR</th>
-      <th>Supported since(branch)</th>
-      <th>Supported since(release)</th>
+      <th>Supported since (branch)</th>
+      <th>Supported since (release)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td rowspan="2">Edge(On-device)</td>
+      <td rowspan="5"><b>MiniCPM-V 4.6</b><br><em>(latest)</em></td>
+      <td>Inference</td>
+      <td>Transformers</td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/inference/minicpm-v4_6_single_image.md">Transformers Doc</a></td>
+      <td><a href="https://github.com/huggingface/transformers/tree/v5.7.0/src/transformers/models/minicpmv4_6">huggingface/transformers</a> (merged)</td>
+      <td>main</td>
+      <td><a href="https://github.com/huggingface/transformers/releases/tag/v5.7.0">v5.7.0</a></td>
+    </tr>
+    <tr>
+      <td rowspan="2">Edge (On-device)</td>
+      <td>Llama.cpp</td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/deployment/llama.cpp/minicpm-v4_6_llamacpp.md">Llama.cpp Doc</a></td>
+      <td><a href="https://github.com/ggml-org/llama.cpp/pull/22529">#22529</a> (2026-05-06)</td>
+      <td>master (2026-05-06)</td>
+      <td><a href="https://github.com/ggml-org/llama.cpp/releases/tag/b9049">b9049</a></td>
+    </tr>
+    <tr>
+      <td>Ollama</td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/deployment/ollama/minicpm-v4_6_ollama.md">Ollama Doc</a></td>
+      <td>Merging</td>
+      <td>Merging</td>
+      <td>Waiting for official release</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Serving (Cloud)</td>
+      <td>vLLM</td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/deployment/vllm/minicpm-v4_6_vllm.md">vLLM Doc</a></td>
+      <td><a href="https://github.com/vllm-project/vllm/pull/41254">#41254</a> (2026-04-29)</td>
+      <td>Merging</td>
+      <td>Waiting for official release</td>
+    </tr>
+    <tr>
+      <td>SGLang</td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/deployment/sglang/MiniCPM-v4_6_sglang.md">SGLang Doc</a></td>
+      <td>Merging</td>
+      <td>Merging</td>
+      <td>Waiting for official release</td>
+    </tr>
+    <tr>
+      <td rowspan="4"><b>MiniCPM-o 4.5</b></td>
+      <td rowspan="2">Edge (On-device)</td>
       <td>Llama.cpp</td>
       <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/deployment/llama.cpp/minicpm-o4_5_llamacpp.md">Llama.cpp Doc</a></td>
       <td><a href="https://github.com/ggml-org/llama.cpp/pull/19211">#19211</a>(2026-01-30)</td>
@@ -160,31 +204,32 @@ We provide training methods serving different needs as following:
       <td>Waiting for official release</td>
     </tr>
     <tr>
+      <td rowspan="5"><em>Cross-version</em></td>
       <td>Finetuning</td>
       <td>LLaMA-Factory</td>
       <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/finetune/finetune_llamafactory.md">LLaMA-Factory Doc</a></td>
-      <td><a href="https://github.com/hiyouga/LLaMA-Factory/pull/9022">#9022</a>(2025-08-26)</td>
-      <td>main(2025-08-26)</td>
+      <td><a href="https://github.com/hiyouga/LLaMA-Factory/pull/9022">#9022</a> (2025-08-26)</td>
+      <td>main (2025-08-26)</td>
       <td>Waiting for official release</td>
     </tr>
     <tr>
       <td rowspan="3">Quantization</td>
       <td>GGUF</td>
-      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/gguf/minicpm-o4_5_gguf_quantize.md">GGUF Doc</a></td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/gguf/minicpm-v4_6_gguf_quantize.md">GGUF Doc</a></td>
       <td>—</td>
       <td>—</td>
       <td>—</td>
     </tr>
     <tr>
       <td>BNB</td>
-      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/bnb/minicpm-o4_5_bnb_quantize.md">BNB Doc</a></td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/bnb/minicpm-v4_6_bnb_quantize.md">BNB Doc</a></td>
       <td>—</td>
       <td>—</td>
       <td>—</td>
     </tr>
     <tr>
       <td>AWQ</td>
-      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/awq/minicpm-o4_5_awq_quantize.md">AWQ Doc</a></td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/awq/minicpm-v4_6_awq_quantize.md">AWQ Doc</a></td>
       <td><a href="https://github.com/tc-mb/AutoAWQ">tc-mb/AutoAWQ</a></td>
       <td>—</td>
       <td>—</td>
