@@ -277,12 +277,12 @@ footer.page-footer a:hover { color: var(--primary); }
 ::::</p>
 <h2 id="method-1-use-the-pre-quantized-model">Method 1 (Use the pre-quantized model)</h2>
 <h3 id="1-download-the-model">1.Download the Model</h3>
-<!-- 下载量化模型
-https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ-Int4
- -->
-
-<p>Download the 4-bit quantized MiniCPM-V-4_5 model with GPTQ from <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ-Int4">HuggingFace</a></p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ-Int4
+<p>Download the 4-bit GPTQ-quantized MiniCPM-V-4_5 from one of:</p>
+<ul>
+<li><strong>HuggingFace</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ">https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ</a></li>
+<li><strong>ModelScope</strong> — <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_5-GPTQ">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_5-GPTQ</a></li>
+</ul>
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ
 </code></pre></div>
 
 <h3 id="2-run-with-vllm">2.Run with vllm</h3>
@@ -293,7 +293,7 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ-Int4
 
 
 <span class="c1"># Quantized model name or path</span>
-<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_5-GPTQ-Int4&quot;</span>
+<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_5-GPTQ&quot;</span>
 
 <span class="c1"># List of image file paths</span>
 <span class="n">IMAGES</span> <span class="o">=</span> <span class="p">[</span>

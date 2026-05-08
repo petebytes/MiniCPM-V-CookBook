@@ -22,7 +22,7 @@ All features are displayed at a glance, making it easy for you to quickly find e
 We support a wide range of users, from individuals to enterprises and researchers.
 
 * **Individuals**: Enjoy effortless inference using [Ollama](./deployment/ollama/minicpm-v4_6_ollama.md) and [Llama.cpp](./deployment/llama.cpp/minicpm-v4_6_llamacpp.md) with minimal setup.
-* **Enterprises**: Achieve high-throughput, scalable performance with [vLLM](./deployment/vllm/minicpm-v4_6_vllm.md) and [SGLang](./deployment/sglang/MiniCPM-v4_6_sglang.md).
+* **Enterprises**: Achieve high-throughput, scalable performance with [vLLM](./deployment/vllm/minicpm-v4_6_vllm.md) and [SGLang](./deployment/sglang/minicpm-v4_6_sglang.md).
 * **Researchers**: Leverage advanced frameworks including [Transformers](./finetune/finetune_full.md) , [LLaMA-Factory](./finetune/finetune_llamafactory.md), [SWIFT](./finetune/swift.md), and [Align-anything](./finetune/align_anything.md) to enable flexible model development and cutting-edge experimentation.
 
 
@@ -99,7 +99,7 @@ We provide training methods serving different needs as following:
 | Method                                | Description                                  |
 |-------------------------------------------|----------------------------------------------|
 | [vLLM](./deployment/vllm/minicpm-v4_6_vllm.md)| High-throughput GPU inference                |
-| [SGLang](./deployment/sglang/MiniCPM-v4_6_sglang.md)| High-throughput GPU inference                |
+| [SGLang](./deployment/sglang/minicpm-v4_6_sglang.md)| High-throughput GPU inference                |
 | [Llama.cpp](./deployment/llama.cpp/minicpm-v4_6_llamacpp.md)| Fast CPU inference on PC, iPhone and iPad                        |
 | [Ollama](./deployment/ollama/minicpm-v4_6_ollama.md)| User-friendly setup  |
 | [OpenWebUI](./demo/web_demo/openwebui) | Interactive Web demo with Open WebUI |
@@ -168,7 +168,7 @@ We provide training methods serving different needs as following:
     </tr>
     <tr>
       <td>SGLang</td>
-      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/deployment/sglang/MiniCPM-v4_6_sglang.md">SGLang Doc</a></td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/deployment/sglang/minicpm-v4_6_sglang.md">SGLang Doc</a></td>
       <td>Merging</td>
       <td>Merging</td>
       <td>Waiting for official release</td>
@@ -199,7 +199,7 @@ We provide training methods serving different needs as following:
     </tr>
     <tr>
       <td>SGLang</td>
-      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/deployment/sglang/MiniCPM-o4_5_sglang.md">SGLang Doc</a></td>
+      <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/deployment/sglang/minicpm-o4_5_sglang.md">SGLang Doc</a></td>
       <td><a href="https://github.com/sgl-project/sglang/pull/9610">#9610</a>(2025-08-26)</td>
       <td>Merging</td>
       <td>Waiting for official release</td>

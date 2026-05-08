@@ -75,7 +75,7 @@ versions:
             src:   deployment/vllm/minicpm-v4_6_vllm.md
             url:   deployment/vllm
           - title: { en: "SGLang",    zh: "SGLang"    }
-            src:   deployment/sglang/MiniCPM-v4_6_sglang.md
+            src:   deployment/sglang/minicpm-v4_6_sglang.md
             url:   deployment/sglang
           - title: { en: "llama.cpp", zh: "llama.cpp" }
             src:   deployment/llama.cpp/minicpm-v4_6_llamacpp.md
@@ -136,7 +136,7 @@ versions:
             src:   deployment/vllm/minicpm-v4_5_vllm.md
             url:   deployment/vllm
           - title: { en: "SGLang",    zh: "SGLang"    }
-            src:   deployment/sglang/MiniCPM-v4_5_sglang.md
+            src:   deployment/sglang/minicpm-v4_5_sglang.md
             url:   deployment/sglang
           - title: { en: "llama.cpp", zh: "llama.cpp" }
             src:   deployment/llama.cpp/minicpm-v4_5_llamacpp.md
@@ -188,7 +188,7 @@ versions:
             src:   deployment/vllm/minicpm-o4_5_vllm.md
             url:   deployment/vllm
           - title: { en: "SGLang",    zh: "SGLang"    }
-            src:   deployment/sglang/MiniCPM-o4_5_sglang.md
+            src:   deployment/sglang/minicpm-o4_5_sglang.md
             url:   deployment/sglang
           - title: { en: "llama.cpp", zh: "llama.cpp" }
             src:   deployment/llama.cpp/minicpm-o4_5_llamacpp.md
