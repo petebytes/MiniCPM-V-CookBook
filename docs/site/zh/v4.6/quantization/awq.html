@@ -268,23 +268,21 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="awq">AWQ</h1>
+  <article><h1 id="awq">AWQ</h1>
 <p>::::{Note}
-<strong>Support:</strong> MiniCPM-V 4.6 (Instruct &amp; Think) / MiniCPM-V 4.5
+<strong>支持版本：</strong> MiniCPM-V 4.6（Instruct &amp; Think）/ MiniCPM-V 4.5
 ::::</p>
 <blockquote>
-<p>The AutoAWQ workflow used by MiniCPM-V is hosted at <a href="https://github.com/tc-mb/AutoAWQ"><code>tc-mb/AutoAWQ</code></a> (the upstream <code>casper-hansen/AutoAWQ</code> is no longer maintained).</p>
-<p>MiniCPM-V 4.6 requires <code>transformers&gt;=5.7.0</code>; the AutoAWQ fork tracks that requirement.</p>
+<p>MiniCPM-V 使用的 AutoAWQ 工作流位于 <a href="https://github.com/tc-mb/AutoAWQ"><code>tc-mb/AutoAWQ</code></a>（上游 <code>casper-hansen/AutoAWQ</code> 已停止维护）。</p>
+<p>MiniCPM-V 4.6 要求 <code>transformers&gt;=5.7.0</code>；上述 AutoAWQ fork 同步跟进了这个依赖。</p>
 </blockquote>
-<h2 id="method-1-use-the-pre-quantized-model-with-vllm">Method 1 — Use the pre-quantized model with vLLM</h2>
-<h3 id="1-download-the-pre-quantized-model">1. Download the pre-quantized model</h3>
+<h2 id="方法-1-用预量化模型-vllm-推理">方法 1 — 用预量化模型 + vLLM 推理</h2>
+<h3 id="1-下载预量化模型">1. 下载预量化模型</h3>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_6-AWQ
 </code></pre></div>
 
-<p>(Or <code>openbmb/MiniCPM-V-4_6-Think-AWQ</code> for the Think variant once published.)</p>
-<h3 id="2-run-with-vllm">2. Run with vLLM</h3>
+<p>（Think 版本发布后将是 <code>openbmb/MiniCPM-V-4_6-Think-AWQ</code>。）</p>
+<h3 id="2-用-vllm-运行">2. 用 vLLM 运行</h3>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span>
 <span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
@@ -306,7 +304,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
     <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Please describe the content of this image&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;请描述这张图片的内容&quot;</span><span class="p">},</span>
     <span class="p">],</span>
 <span class="p">}]</span>
 
@@ -315,7 +313,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="p">)</span>
 
 <span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span>
-    <span class="n">stop_token_ids</span><span class="o">=</span><span class="p">[</span><span class="mi">248044</span><span class="p">,</span> <span class="mi">248046</span><span class="p">],</span>   <span class="c1"># v4.6 uses Qwen3.5 vocab</span>
+    <span class="n">stop_token_ids</span><span class="o">=</span><span class="p">[</span><span class="mi">248044</span><span class="p">,</span> <span class="mi">248046</span><span class="p">],</span>   <span class="c1"># v4.6 使用 Qwen3.5 词表</span>
     <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
     <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
     <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
@@ -331,18 +329,18 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="nb">print</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="method-2-run-the-awq-checkpoint-with-autoawq-directly">Method 2 — Run the AWQ checkpoint with AutoAWQ directly</h2>
-<h3 id="1-download-the-model">1. Download the model</h3>
+<h2 id="方法-2-用-autoawq-直接运行-awq-模型">方法 2 — 用 AutoAWQ 直接运行 AWQ 模型</h2>
+<h3 id="1-下载模型">1. 下载模型</h3>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_6-AWQ
 </code></pre></div>
 
-<h3 id="2-build-autoawq-from-source">2. Build AutoAWQ from source</h3>
+<h3 id="2-从源码安装-autoawq">2. 从源码安装 AutoAWQ</h3>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/AutoAWQ.git
 <span class="nb">cd</span><span class="w"> </span>AutoAWQ
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 
-<h3 id="3-inference-script">3. Inference script</h3>
+<h3 id="3-推理脚本">3. 推理脚本</h3>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span>
@@ -361,7 +359,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
     <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;What is in this picture?&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;图中是什么？&quot;</span><span class="p">},</span>
     <span class="p">],</span>
 <span class="p">}]</span>
 
@@ -380,21 +378,21 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
     <span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span>
     <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;输出:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="method-3-quantize-the-model-yourself">Method 3 — Quantize the model yourself</h2>
-<h3 id="1-download-the-original-model">1. Download the original model</h3>
+<h2 id="方法-3-自己进行-awq-量化">方法 3 — 自己进行 AWQ 量化</h2>
+<h3 id="1-下载原始模型">1. 下载原始模型</h3>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_6
 </code></pre></div>
 
-<h3 id="2-build-autoawq-from-source_1">2. Build AutoAWQ from source</h3>
+<h3 id="2-从源码安装-autoawq_1">2. 从源码安装 AutoAWQ</h3>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/AutoAWQ.git
 <span class="nb">cd</span><span class="w"> </span>AutoAWQ
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 
-<h3 id="3-quantization-script">3. Quantization script</h3>
+<h3 id="3-量化脚本">3. 量化脚本</h3>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -405,7 +403,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/openbmb/MiniCPM-V-4_6&quot;</span>
 <span class="n">quant_path</span> <span class="o">=</span> <span class="s2">&quot;/model_quantized/minicpmv4_6_awq&quot;</span>
 
-<span class="c1"># AWQ config — 4-bit weights, group size 128, GEMM backend</span>
+<span class="c1"># AWQ 配置 — 4-bit 权重，group size 128，GEMM 后端</span>
 <span class="n">quant_config</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;zero_point&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="s2">&quot;q_group_size&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
@@ -420,7 +418,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 
 
 <span class="k">def</span> <span class="nf">copy_files_not_in_B</span><span class="p">(</span><span class="n">A_path</span><span class="p">,</span> <span class="n">B_path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Copy non-weight files from A to B if missing.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;如果文件在 A 中存在但 B 中不存在，则从 A 拷贝到 B（跳过权重文件）。&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">A_path</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The directory </span><span class="si">{</span><span class="n">A_path</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">B_path</span><span class="p">):</span>

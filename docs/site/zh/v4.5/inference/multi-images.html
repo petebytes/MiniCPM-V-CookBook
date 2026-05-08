@@ -271,26 +271,24 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="multi-images">Multi Images</h1>
-<h3 id="initialize-model">Initialize model</h3>
+  <article><h1 id="多图问答">多图问答</h1>
+<h3 id="加载模型">加载模型</h3>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>  <span class="c1"># sdpa or flash_attention_2, no eager</span>
+                                  <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>  <span class="c1"># sdpa 或 flash_attention_2，不要用 eager</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
     <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 
-<h3 id="chat-with-multiple-images">Chat with multiple images</h3>
+<h3 id="多图对话">多图对话</h3>
 <div class="code"><pre><span></span><code><span class="n">image1</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;assets/multi1.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
 <span class="n">image2</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;assets/multi2.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s1">&#39;Compare the two images, tell me about the differences between them.&#39;</span>
+<span class="n">question</span> <span class="o">=</span> <span class="s1">&#39;比较这两张图片，告诉我它们之间的差异。&#39;</span>
 
 <span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">image1</span><span class="p">,</span> <span class="n">image2</span><span class="p">,</span> <span class="n">question</span><span class="p">]}]</span>
 
@@ -302,10 +300,10 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 </code></pre></div>
 
-<h3 id="sample-images">Sample Images</h3>
+<h3 id="示例图片">示例图片</h3>
 <p><img alt="alt text" src="./assets/multi1.png"></p>
 <p><img alt="alt text" src="./assets/multi2.png"></p>
-<h3 id="example-output">Example Output</h3>
+<h3 id="示例输出">示例输出</h3>
 <div class="code"><pre><span></span><code>The vases have different shapes, with the first being rounder and more bulbous. The patterns on the vases are also distinct: the first vase has red designs against a white background, while the second features green and blue floral motifs. Additionally, the neck of the first vase is narrower than that of the second one.
 </code></pre></div></article>
 

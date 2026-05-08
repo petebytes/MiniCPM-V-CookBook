@@ -268,18 +268,16 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="bnb">BNB</h1>
+  <article><h1 id="bnb">BNB</h1>
 <p>:::{Note}
-<strong>Support:</strong> MiniCPM-V 4.6 / MiniCPM-V 4.5 / MiniCPM-V 4.0 / MiniCPM-V 2.6 / MiniCPM-V 2.5
+<strong>支持版本：</strong> MiniCPM-V 4.6 / MiniCPM-V 4.5 / MiniCPM-V 4.0 / MiniCPM-V 2.6 / MiniCPM-V 2.5
 :::</p>
-<h2 id="1-download-the-model">1. Download the Model</h2>
-<p>Download the MiniCPM-V-4_6 model from <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">HuggingFace</a> (or <code>openbmb/MiniCPM-V-4_6-Think</code> for the think variant) and extract it to a local directory.</p>
-<h2 id="2-quantization-script">2. Quantization Script</h2>
-<p>The following script loads the original model, quantizes it to 4-bit using bitsandbytes, runs a sanity-check inference, and saves the quantized model.</p>
+<h2 id="1-下载模型">1. 下载模型</h2>
+<p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">HuggingFace</a> 下载 MiniCPM-V-4_6 模型（Think 版本为 <code>openbmb/MiniCPM-V-4_6-Think</code>），解压到本地目录。</p>
+<h2 id="2-量化脚本">2. 量化脚本</h2>
+<p>下方脚本会加载原始模型，使用 bitsandbytes 量化为 4-bit，运行一次推理校验，并保存量化后的模型。</p>
 <blockquote>
-<p>Requires <code>transformers&gt;=5.7.0</code> (where MiniCPM-V 4.6 is registered as a standalone architecture).</p>
+<p>需要 <code>transformers&gt;=5.7.0</code>（MiniCPM-V 4.6 在该版本注册为独立架构）。</p>
 </blockquote>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -294,11 +292,11 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">(),</span> <span class="s2">&quot;CUDA is not available, but this code requires a GPU.&quot;</span>
 
 <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/model/MiniCPM-V-4_6&quot;</span>  <span class="c1"># Original model path</span>
-<span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;./model/MiniCPM-V-4_6-int4&quot;</span>  <span class="c1"># Path to save quantized model</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/model/MiniCPM-V-4_6&quot;</span>  <span class="c1"># 原始模型路径</span>
+<span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;./model/MiniCPM-V-4_6-int4&quot;</span>  <span class="c1"># 量化模型保存路径</span>
 <span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;./assets/airplane.jpeg&quot;</span>
 
-<span class="c1"># 4-bit quantization configuration</span>
+<span class="c1"># 4-bit 量化配置</span>
 <span class="n">quantization_config</span> <span class="o">=</span> <span class="n">BitsAndBytesConfig</span><span class="p">(</span>
     <span class="n">load_in_4bit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">load_in_8bit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -324,7 +322,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
     <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;What is in this picture?&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;图中是什么？&quot;</span><span class="p">},</span>
     <span class="p">],</span>
 <span class="p">}]</span>
 
@@ -343,24 +341,24 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output after quantization:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Inference time after quantization:&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;量化后输出：&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;量化后推理耗时：&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
 
-<span class="c1"># Save the quantized model and tokenizer/processor</span>
+<span class="c1"># 保存量化模型与 tokenizer / processor</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">safe_serialization</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">processor</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="3-expected-output">3. Expected Output</h2>
-<p>After quantization you should see something like:</p>
-<div class="code"><pre><span></span><code>Output after quantization: The image depicts an Airbus A380-800 aircraft in mid-flight against a clear blue sky. The airplane is predominantly white with a distinctive blue tail fin featuring a red and white logo. ...
-Inference time after quantization: ~9 s on a single A100/4090
+<h2 id="3-预期输出">3. 预期输出</h2>
+<p>量化完成后大致会看到：</p>
+<div class="code"><pre><span></span><code>量化后输出： 图中是一架空客 A380-800 飞机，正在晴朗蓝天中飞行。机身以白色为主，垂直尾翼是醒目的蓝色，并印有红白配色的徽标。……
+量化后推理耗时： 单卡 A100/4090 上约 9 s
 </code></pre></div>
 
-<p>The quantized model will be saved at <code>save_path</code> and can be reloaded with <code>AutoModelForImageTextToText.from_pretrained(save_path)</code> for further inference or fine-tuning.</p>
+<p>量化模型会保存到 <code>save_path</code>，可通过 <code>AutoModelForImageTextToText.from_pretrained(save_path)</code> 重新加载继续推理或微调。</p>
 <hr>
-<p>To customize the model path, image, or save path, edit the variables at the top of the script.</p></article>
+<p>要自定义模型路径、图片或保存路径，修改脚本顶部的变量即可。</p></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

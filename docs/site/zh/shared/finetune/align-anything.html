@@ -268,53 +268,51 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="align-anything">Align-Anything</h1>
+  <article><h1 id="align-anything">Align-Anything</h1>
 <p>:::{Note}
-<strong>Support:</strong> MiniCPM-o 2.6
+<strong>支持版本：</strong> MiniCPM-o 2.6
 :::</p>
-<h2 id="environment-setup">Environment Setup</h2>
-<div class="code"><pre><span></span><code><span class="c1"># clone the repository</span>
+<h2 id="环境准备">环境准备</h2>
+<div class="code"><pre><span></span><code><span class="c1"># 克隆仓库</span>
 git<span class="w"> </span>clone<span class="w"> </span>git@github.com:PKU-Alignment/align-anything.git
 <span class="nb">cd</span><span class="w"> </span>align-anything
 
-<span class="c1"># create virtual env</span>
+<span class="c1"># 创建虚拟环境</span>
 conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>align-anything<span class="w"> </span><span class="nv">python</span><span class="o">==</span><span class="m">3</span>.11
 conda<span class="w"> </span>activate<span class="w"> </span>align-anything
 </code></pre></div>
 
-<p><strong>On Nvidia GPU</strong></p>
+<p><strong>Nvidia GPU 上</strong></p>
 <ul>
-<li><strong><code>[Optional]</code></strong> We recommend installing <a href="https://anaconda.org/nvidia/cuda">CUDA</a> in the conda environment and set the environment variable.</li>
+<li><strong><code>[可选]</code></strong> 推荐在 conda 环境中安装 <a href="https://anaconda.org/nvidia/cuda">CUDA</a> 并设置环境变量。</li>
 </ul>
-<div class="code"><pre><span></span><code><span class="c1"># We tested on the H800 computing cluster, and this version of CUDA works well.</span>
-<span class="c1"># You can adjust this version according to the actual situation of the computing cluster.</span>
+<div class="code"><pre><span></span><code><span class="c1"># 我们在 H800 计算集群上做了测试，下面这个 CUDA 版本工作良好。</span>
+<span class="c1"># 可以根据实际计算集群情况调整版本。</span>
 
 conda<span class="w"> </span>install<span class="w"> </span>nvidia/label/cuda-12.2.0::cuda
 <span class="nb">export</span><span class="w"> </span><span class="nv">CUDA_HOME</span><span class="o">=</span><span class="nv">$CONDA_PREFIX</span>
 </code></pre></div>
 
 <blockquote>
-<p>If your CUDA installed in a different location, such as <code>/usr/local/cuda/bin/nvcc</code>, you can set the environment variables as follows:</p>
+<p>如果 CUDA 装在别的位置（比如 <code>/usr/local/cuda/bin/nvcc</code>），按下面方式设置环境变量：</p>
 </blockquote>
 <div class="code"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">CUDA_HOME</span><span class="o">=</span><span class="s2">&quot;/usr/local/cuda&quot;</span>
 </code></pre></div>
 
-<p>Finally, install <code>align-anything</code> by:</p>
+<p>最后安装 <code>align-anything</code>：</p>
 <div class="code"><pre><span></span><code>pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 
-pip3<span class="w"> </span>install<span class="w"> </span><span class="nv">vllm</span><span class="o">==</span><span class="m">0</span>.7.2<span class="w"> </span><span class="c1"># to run ppo on vllm engine</span>
+pip3<span class="w"> </span>install<span class="w"> </span><span class="nv">vllm</span><span class="o">==</span><span class="m">0</span>.7.2<span class="w"> </span><span class="c1"># 在 vllm 引擎上跑 ppo 时需要</span>
 </code></pre></div>
 
-<h2 id="training">Training</h2>
-<p>You can find SFT &amp; DPO training script in the <code>./scripts/minicpmo</code> directory. These scripts would automatically download the model and dataset, and run the training or evaluation.</p>
-<p>For example, <code>scripts/minicpmo/minicpmo_dpo_vision.sh</code> is the script for <code>Text + Image -&gt; Text</code> modality, you can run it by:</p>
+<h2 id="训练">训练</h2>
+<p><code>./scripts/minicpmo</code> 目录下提供了 SFT 和 DPO 的训练脚本。这些脚本会自动下载模型与数据集，并启动训练或评测。</p>
+<p>例如 <code>scripts/minicpmo/minicpmo_dpo_vision.sh</code> 是 <code>Text + Image -&gt; Text</code> 模态的训练脚本，运行：</p>
 <div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>scripts
 bash<span class="w"> </span>minicpmo/minicpmo_dpo_vision.sh
 </code></pre></div>
 
-<p><strong>Note:</strong> The scripts will automatically download the model and dataset from huggingface. If you are prohibited from the internet, please try to use the <code>HF Mirror</code>:</p>
+<p><strong>注意：</strong> 脚本会自动从 huggingface 下载模型与数据集。如果国内访问受限，可以使用 <code>HF Mirror</code>：</p>
 <div class="code"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">HF_ENDPOINT</span><span class="o">=</span>https://hf-mirror.com
 </code></pre></div></article>
 

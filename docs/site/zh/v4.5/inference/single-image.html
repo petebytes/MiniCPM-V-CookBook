@@ -271,28 +271,26 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="single-image">Single Image</h1>
-<h3 id="initialize-model">Initialize model</h3>
+  <article><h1 id="单图问答">单图问答</h1>
+<h3 id="加载模型">加载模型</h3>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="c1"># sdpa or flash_attention_2, no eager</span>
+                                  <span class="c1"># sdpa 或 flash_attention_2，不要用 eager</span>
                                   <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
     <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 
-<h3 id="chat-with-single-image">Chat with single image</h3>
+<h3 id="单图对话">单图对话</h3>
 <div class="code"><pre><span></span><code><span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;./assets/single.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
 
-<span class="c1"># First round chat </span>
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;What is the landform in the picture?&quot;</span>
+<span class="c1"># 第一轮对话</span>
+<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;图片中的地貌是什么？&quot;</span>
 <span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">question</span><span class="p">]}]</span>
 
 <span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
@@ -303,11 +301,11 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 </code></pre></div>
 
-<h3 id="second-round-chat">Second round chat</h3>
-<div class="code"><pre><span></span><code><span class="c1"># Second round chat, pass history context of multi-turn conversation</span>
+<h3 id="第二轮对话">第二轮对话</h3>
+<div class="code"><pre><span></span><code><span class="c1"># 第二轮对话，带上多轮历史上下文</span>
 <span class="n">msgs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">answer</span><span class="p">]})</span>
 <span class="n">msgs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;What should I pay attention to when traveling here?&quot;</span><span class="p">]})</span>
+            <span class="s2">&quot;去这里旅行需要注意什么？&quot;</span><span class="p">]})</span>
 
 <span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
     <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
@@ -317,14 +315,14 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 </code></pre></div>
 
-<h3 id="sample-image">Sample Image</h3>
+<h3 id="示例图片">示例图片</h3>
 <p><img alt="alt text" src="./assets/single.png"></p>
-<h3 id="example-output">Example Output</h3>
-<p>First round</p>
+<h3 id="示例输出">示例输出</h3>
+<p>第一轮</p>
 <div class="code"><pre><span></span><code>The landform in the picture is a mountain range. The image shows steep cliffs, rugged terrain, and a winding path that ascends between two prominent rocky peaks covered with green vegetation. This type of landscape features high elevations and dramatic slopes characteristic of mountains.
 </code></pre></div>
 
-<p>Second round</p>
+<p>第二轮</p>
 <div class="code"><pre><span></span><code>When traveling to a mountainous area like this, it&#39;s important to pay attention to several factors. Firstly, be mindful of the steep paths and uneven terrain; wear appropriate footwear with good grip for safety. Secondly, stay hydrated as high altitudes can lead to dehydration more quickly than at sea level. Thirdly, check weather conditions before your trip since mountains can have sudden changes in weather which might affect visibility and trail conditions. Lastly, if you plan to hike or climb, carry essential supplies such as food, water, first aid kits, and navigation tools (maps or GPS) because help may not be readily available on remote trails.
 </code></pre></div></article>
 

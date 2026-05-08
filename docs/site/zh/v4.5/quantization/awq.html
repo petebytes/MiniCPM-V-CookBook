@@ -271,44 +271,42 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="awq">AWQ</h1>
+  <article><h1 id="awq">AWQ</h1>
 <p>::::{Note}
-<strong>Support:</strong> MiniCPM-V 4.5
+<strong>支持版本：</strong> MiniCPM-V 4.5
 ::::</p>
-<h2 id="method-1-use-the-pre-quantized-model-with-vllm">Method 1 (Use the pre-quantized model with vllm)</h2>
-<h3 id="1-download-the-model">1.Download the Model</h3>
+<h2 id="方法-1-用预量化模型-vllm-推理">方法 1（用预量化模型 + vLLM 推理）</h2>
+<h3 id="1-下载模型">1. 下载模型</h3>
 <!-- 下载量化模型
 https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ
  -->
 
-<p>Download the 4-bit quantized MiniCPM-V-4_5 model with AutoAWQ from <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ">HuggingFace</a></p>
+<p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ">HuggingFace</a> 下载 AutoAWQ 量化的 4-bit MiniCPM-V-4_5 模型。</p>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ
 </code></pre></div>
 
-<h3 id="2-run-with-vllm">2.Run with vllm</h3>
+<h3 id="2-用-vllm-运行">2. 用 vLLM 运行</h3>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
 <span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
 
 
-<span class="c1"># Quantized model name or path</span>
+<span class="c1"># 量化模型名称或本地路径</span>
 <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_5-AWQ&quot;</span>
 
-<span class="c1"># List of image file paths</span>
+<span class="c1"># 图片文件列表</span>
 <span class="n">IMAGES</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;image.png&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
-<span class="c1"># Open and convert image</span>
+<span class="c1"># 加载并转换图片</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">IMAGES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
 
-<span class="c1"># Initialize tokenizer</span>
+<span class="c1"># 初始化 tokenizer</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Initialize LLM</span>
+<span class="c1"># 初始化 LLM</span>
 <span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="n">MODEL_NAME</span><span class="p">,</span> 
     <span class="c1"># gpu_memory_utilization=0.9,</span>
@@ -318,21 +316,21 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ
     <span class="c1"># limit_mm_per_prompt={&quot;image&quot;: 5}</span>
 <span class="p">)</span>
 
-<span class="c1"># Build messages</span>
+<span class="c1"># 构建消息</span>
 <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;(&lt;image&gt;./&lt;/image&gt;)</span><span class="se">\n</span><span class="s2">Please describe the content of this image&quot;</span><span class="p">,</span>
-    <span class="c1"># &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\n请描述这张图片的内容&quot;,</span>
+    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;(&lt;image&gt;./&lt;/image&gt;)</span><span class="se">\n</span><span class="s2">请描述这张图片的内容&quot;</span><span class="p">,</span>
+    <span class="c1"># &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\nPlease describe the content of this image&quot;,</span>
 <span class="p">}]</span>
 
-<span class="c1"># Apply chat template to the messages</span>
+<span class="c1"># 应用 chat template</span>
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Set stop token IDs</span>
+<span class="c1"># 设置 stop token IDs</span>
 <span class="n">stop_tokens</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;|im_end|&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;/s&gt;&#39;</span><span class="p">]</span>
 <span class="n">stop_token_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_tokens_to_ids</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">stop_tokens</span><span class="p">]</span>
 
-<span class="c1"># Set generation parameters</span>
+<span class="c1"># 采样参数</span>
 <span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span>
     <span class="n">stop_token_ids</span><span class="o">=</span><span class="n">stop_token_ids</span><span class="p">,</span>
     <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
@@ -344,7 +342,7 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ
     <span class="c1"># min_tokens=150,</span>
 <span class="p">)</span>
 
-<span class="c1"># Get model output</span>
+<span class="c1"># 推理</span>
 <span class="n">outputs</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">({</span>
     <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
     <span class="s2">&quot;multi_modal_data&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -354,35 +352,35 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ
 <span class="nb">print</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="method-2-use-the-pre-quantized-model">Method 2 (Use the pre-quantized model)</h2>
-<h3 id="1-download-the-model_1">1.Download the Model</h3>
+<h2 id="方法-2-直接用-awq-量化模型推理">方法 2（直接用 AWQ 量化模型推理）</h2>
+<h3 id="1-下载模型_1">1. 下载模型</h3>
 <!-- 下载模型
 https://huggingface.co/openbmb/MiniCPM-V-4_5
  -->
 
-<p>Download the MiniCPM-V 4.5 model from <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a></p>
+<p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a> 下载 MiniCPM-V 4.5 模型。</p>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5
 </code></pre></div>
 
-<h3 id="2-download-and-build-autoawq">2.Download and build AutoAWQ</h3>
-<p>Since the official AutoAWQ repository is no longer maintained, please download and build our fork instead.</p>
+<h3 id="2-从源码安装-autoawq">2. 从源码安装 AutoAWQ</h3>
+<p>官方 AutoAWQ 仓库已不再维护，请下载并从源码安装我们的 fork。</p>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/AutoAWQ.git
 <span class="nb">cd</span><span class="w"> </span>AutoAWQ
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 
-<h3 id="3-inference-script">3.Inference Script</h3>
-<p>Use the following script to directly use the AWQ quantized model for inference.</p>
+<h3 id="3-推理脚本">3. 推理脚本</h3>
+<p>直接使用 AWQ 量化模型推理：</p>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">TextStreamer</span>
 <span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="c1"># Quantized model name or path</span>
+<span class="c1"># 量化模型名称或本地路径</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_5-AWQ&quot;</span>
 <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span>
-<span class="c1"># List of image file paths</span>
+<span class="c1"># 图片文件路径</span>
 <span class="n">image_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/airplane.jpeg&#39;</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoAWQForCausalLM</span><span class="o">.</span><span class="n">from_quantized</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
@@ -394,34 +392,34 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
     <span class="n">msgs</span><span class="o">=</span><span class="p">[</span>
         <span class="p">{</span>
             <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;What is in this picture?&quot;</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;图中是什么？&quot;</span>
         <span class="p">}</span>
     <span class="p">],</span>
     <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span>
 <span class="p">)</span> <span class="c1"># 模型推理</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Output:&#39;</span><span class="p">,</span><span class="n">response</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;输出:&#39;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="method-3-quantize-the-model-yourself">Method 3 (Quantize the model yourself)</h2>
-<h3 id="1-download-the-model_2">1.Download the Model</h3>
+<h2 id="方法-3-自己进行-awq-量化">方法 3（自己进行 AWQ 量化）</h2>
+<h3 id="1-下载模型_2">1. 下载模型</h3>
 <!-- 下载模型
 https://huggingface.co/openbmb/MiniCPM-V-4_5
  -->
 
-<p>Download the MiniCPM-V 4.5 model from <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a></p>
+<p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a> 下载 MiniCPM-V 4.5 模型。</p>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5
 </code></pre></div>
 
-<h3 id="2-download-and-build-autoawq_1">2.Download and build AutoAWQ</h3>
-<p>Since the official AutoAWQ repository is no longer maintained, please download and build our fork instead.</p>
+<h3 id="2-从源码安装-autoawq_1">2. 从源码安装 AutoAWQ</h3>
+<p>官方 AutoAWQ 仓库已不再维护，请下载并从源码安装我们的 fork。</p>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/AutoAWQ.git
 <span class="nb">cd</span><span class="w"> </span>AutoAWQ
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 
-<h3 id="3-quantization-script">3.Quantization Script</h3>
-<p>Run the following quantization script (replace model_path and quant_path with the paths to the original model and the quantized model, respectively).</p>
+<h3 id="3-量化脚本">3. 量化脚本</h3>
+<p>执行下方量化脚本（按需替换 <code>model_path</code> 和 <code>quant_path</code> 为原始模型与量化模型保存路径）：</p>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span><span class="p">,</span> <span class="n">load_from_disk</span>
 <span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
@@ -429,56 +427,56 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 
-<span class="c1"># Set the path to the original model (can be a local path or model ID)</span>
+<span class="c1"># 原始模型路径（可以是本地路径或 HF 模型 ID）</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;/openbmb/MiniCPM-V-4_5&#39;</span>
 
-<span class="c1"># Path to save the quantized model</span>
+<span class="c1"># 量化模型保存路径</span>
 <span class="n">quant_path</span> <span class="o">=</span> <span class="s1">&#39;/model_quantized/minicpmv4_5_awq&#39;</span>
 
-<span class="c1"># Quantization configuration: 4-bit weights, group size 128, GEMM backend</span>
+<span class="c1"># 量化配置：4-bit 权重，group size 128，GEMM 后端</span>
 <span class="n">quant_config</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;zero_point&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;q_group_size&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span> <span class="s2">&quot;w_bit&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;GEMM&quot;</span> <span class="p">}</span> <span class="c1"># &quot;w_bit&quot;:4 or 8  </span>
 
 
-<span class="c1"># Load the original model and tokenizer</span>
+<span class="c1"># 加载原始模型与 tokenizer</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoAWQForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Copy files that exist in model_path but not in quant_path (excluding weight files)</span>
+<span class="c1"># 把 model_path 中存在但 quant_path 中没有的文件复制过去（跳过权重文件）</span>
 <span class="k">def</span> <span class="nf">copy_files_not_in_B</span><span class="p">(</span><span class="n">A_path</span><span class="p">,</span> <span class="n">B_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Copies files from directory A to directory B if they exist in A but not in B.</span>
+<span class="sd">    如果文件在 A 中存在但 B 中不存在，则从 A 拷贝到 B。</span>
 
-<span class="sd">    :param A_path: Path to the source directory (A).</span>
-<span class="sd">    :param B_path: Path to the destination directory (B).</span>
+<span class="sd">    :param A_path: 源目录 (A)</span>
+<span class="sd">    :param B_path: 目标目录 (B)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Ensure source directory exists</span>
+    <span class="c1"># 确保源目录存在</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">A_path</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The directory </span><span class="si">{</span><span class="n">A_path</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">B_path</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">B_path</span><span class="p">)</span>
 
-    <span class="c1"># List all files in directory A except weight files (e.g., .bin or safetensors)</span>
+    <span class="c1"># 列出 A 中所有文件，排除权重文件 (.bin / safetensors)</span>
     <span class="n">files_in_A</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">A_path</span><span class="p">)</span>
     <span class="n">files_in_A</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files_in_A</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s2">&quot;.bin&quot;</span> <span class="ow">in</span> <span class="n">file</span> <span class="ow">or</span> <span class="s2">&quot;safetensors&quot;</span> <span class="ow">in</span> <span class="n">file</span> <span class="p">)])</span>
-    <span class="c1"># List all files in directory B</span>
+    <span class="c1"># 列出 B 中所有文件</span>
     <span class="n">files_in_B</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">B_path</span><span class="p">))</span>
 
-    <span class="c1"># Determine which files need to be copied</span>
+    <span class="c1"># 计算需要复制的文件</span>
     <span class="n">files_to_copy</span> <span class="o">=</span> <span class="n">files_in_A</span> <span class="o">-</span> <span class="n">files_in_B</span>
 
-    <span class="c1"># Copy each missing file from A to B</span>
+    <span class="c1"># 逐个复制</span>
     <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files_to_copy</span><span class="p">:</span>
         <span class="n">src_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">A_path</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
         <span class="n">dst_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">B_path</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">src_file</span><span class="p">):</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">dst_file</span><span class="p">)</span>
 
-<span class="c1"># Define data loading methods</span>
-<span class="c1"># Load the Alpaca dataset</span>
+<span class="c1"># 数据加载方法</span>
+<span class="c1"># 加载 Alpaca 数据集</span>
 <span class="k">def</span> <span class="nf">load_alpaca</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;tatsu-lab/alpaca&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Convert each example into a chat-style prompt</span>
+    <span class="c1"># 把每条样本转换成 chat 风格的 prompt</span>
     <span class="k">def</span> <span class="nf">concatenate_data</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;instruction&#39;</span><span class="p">]:</span>
             <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
@@ -505,20 +503,20 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
     <span class="n">concatenated</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">concatenate_data</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">text</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">concatenated</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]][:</span><span class="mi">1024</span><span class="p">]</span>
 
-<span class="c1"># Load Wikitext dataset</span>
+<span class="c1"># 加载 Wikitext 数据集</span>
 <span class="k">def</span> <span class="nf">load_wikitext</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;wikitext&#39;</span><span class="p">,</span> <span class="s1">&#39;wikitext-2-raw-v1&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">text</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">]</span>
 
 
-<span class="c1"># Load calibration data</span>
+<span class="c1"># 加载校准数据</span>
 <span class="n">calib_data</span> <span class="o">=</span> <span class="n">load_alpaca</span><span class="p">()</span>
-<span class="c1"># Quantize</span>
+<span class="c1"># 量化</span>
 <span class="n">model</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">quant_config</span><span class="o">=</span><span class="n">quant_config</span><span class="p">,</span> <span class="n">calib_data</span><span class="o">=</span><span class="n">calib_data</span><span class="p">)</span>
 
 <span class="c1"># shutil.rmtree(quant_path, ignore_errors=True)</span>
 
-<span class="c1"># Save the quantized model</span>
+<span class="c1"># 保存量化模型</span>
 <span class="n">model</span><span class="o">.</span><span class="n">save_quantized</span><span class="p">(</span><span class="n">quant_path</span><span class="p">)</span>
 <span class="n">tokenizer</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">quant_path</span><span class="p">)</span>
 

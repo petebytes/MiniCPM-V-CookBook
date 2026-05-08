@@ -264,17 +264,15 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="object-recognition">Object Recognition</h1>
-<p>We can use MiniCPM-V-4_5 to perform object recognition tasks on images.</p>
+  <article><h1 id="物体识别">物体识别</h1>
+<p>可以用 MiniCPM-V-4_5 在图片上做物体识别任务。</p>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="c1"># sdpa or flash_attention_2, no eager</span>
+                                  <span class="c1"># sdpa 或 flash_attention_2，不要用 eager</span>
                                   <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
@@ -282,7 +280,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;./assets/single.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
 
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;What is the landform in the picture?&quot;</span>
+<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;图片中的地貌是什么？&quot;</span>
 <span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">question</span><span class="p">]}]</span>
 
 <span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
@@ -293,21 +291,21 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Image:
+<p>图片：
 <img alt="alt text" src="./assets/single.png"></p>
-<p>Result:</p>
+<p>结果：</p>
 <div class="code"><pre><span></span><code>The landform in the picture is a mountain range. The image shows steep cliffs, rugged terrain, and a winding path that ascends between two prominent rocky peaks covered with green vegetation. This type of landscape features high elevations and dramatic slopes characteristic of mountains.
 </code></pre></div>
 
-<h1 id="object-spot">Object Spot</h1>
-<p>We can also use MiniCPM-V-4_5 to perform object spotting tasks on images.</p>
+<h1 id="物体定位">物体定位</h1>
+<p>也可以用 MiniCPM-V-4_5 做物体定位任务。</p>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="c1"># sdpa or flash_attention_2, no eager</span>
+                                  <span class="c1"># sdpa 或 flash_attention_2，不要用 eager</span>
                                   <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
@@ -315,7 +313,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;./assets/multi_object.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
 
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;Identify food in the image and return their bounding box and Chinese and English name in JSON format.&quot;</span>
+<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;识别图片中的食物，以 JSON 格式返回它们的 bounding box 与中英文名称。&quot;</span>
 <span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">question</span><span class="p">]}]</span>
 
 <span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
@@ -326,9 +324,9 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Image:
+<p>图片：
 <img alt="alt text" src="./assets/multi_object.png"></p>
-<p>Result:</p>
+<p>结果：</p>
 <div class="code"><pre><span></span><code>{
   &quot;food_1&quot;: {
     &quot;bounding_box&quot;: &quot;&lt;box&gt;520 637 644 782&lt;/box&gt;&quot;,

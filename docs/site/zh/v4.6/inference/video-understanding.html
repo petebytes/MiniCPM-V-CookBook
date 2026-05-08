@@ -268,18 +268,16 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="video-understanding-minicpm-v-4-6">Video Understanding (MiniCPM-V 4.6)</h1>
+  <article><h1 id="视频理解-minicpm-v-4-6">视频理解（MiniCPM-V 4.6）</h1>
 <blockquote>
-<p>v4.6 keeps the video pipeline simple: the image processor is invoked frame-by-frame, with the per-video frame budget controlled by <code>max_slice_nums</code> on the processor. No special video backend is required.</p>
+<p>v4.6 的视频通路非常简洁：image processor 逐帧调用，单视频帧切片预算由 processor 上的 <code>max_slice_nums</code> 控制，<strong>无需</strong>特殊的视频后端。</p>
 </blockquote>
-<h2 id="initialize-model">Initialize model</h2>
+<h2 id="加载模型">加载模型</h2>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>  <span class="c1"># or &quot;openbmb/MiniCPM-V-4_6-Think&quot;</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>  <span class="c1"># 或 &quot;openbmb/MiniCPM-V-4_6-Think&quot;</span>
 
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
@@ -289,10 +287,10 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 </code></pre></div>
 
-<h2 id="video-frames">Video → frames</h2>
+<h2 id="视频-帧序列">视频 → 帧序列</h2>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">decord</span> <span class="kn">import</span> <span class="n">VideoReader</span><span class="p">,</span> <span class="n">cpu</span>
 
-<span class="n">MAX_NUM_FRAMES</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1"># reduce if you OOM on small GPUs</span>
+<span class="n">MAX_NUM_FRAMES</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1"># 显存吃紧时调小</span>
 
 <span class="k">def</span> <span class="nf">encode_video</span><span class="p">(</span><span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">uniform_sample</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
@@ -300,7 +298,7 @@ footer.page-footer a:hover { color: var(--primary); }
         <span class="k">return</span> <span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">gap</span> <span class="o">+</span> <span class="n">gap</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
 
     <span class="n">vr</span> <span class="o">=</span> <span class="n">VideoReader</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="n">ctx</span><span class="o">=</span><span class="n">cpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-    <span class="n">sample_fps</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">vr</span><span class="o">.</span><span class="n">get_avg_fps</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># roughly 1 fps</span>
+    <span class="n">sample_fps</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">vr</span><span class="o">.</span><span class="n">get_avg_fps</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># 约 1 fps</span>
     <span class="n">frame_idx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vr</span><span class="p">),</span> <span class="n">sample_fps</span><span class="p">))</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">frame_idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_NUM_FRAMES</span><span class="p">:</span>
         <span class="n">frame_idx</span> <span class="o">=</span> <span class="n">uniform_sample</span><span class="p">(</span><span class="n">frame_idx</span><span class="p">,</span> <span class="n">MAX_NUM_FRAMES</span><span class="p">)</span>
@@ -308,16 +306,16 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="k">return</span> <span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">]</span>
 </code></pre></div>
 
-<h2 id="chat-with-video">Chat with video</h2>
+<h2 id="视频对话">视频对话</h2>
 <div class="code"><pre><span></span><code><span class="n">video_path</span> <span class="o">=</span> <span class="s2">&quot;assets/badminton.mp4&quot;</span>
 <span class="n">frames</span> <span class="o">=</span> <span class="n">encode_video</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;num frames:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;帧数:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span>
 
 <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
     <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span> <span class="s2">&quot;video&quot;</span><span class="p">:</span> <span class="n">frames</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>  <span class="s2">&quot;text&quot;</span><span class="p">:</span>  <span class="s2">&quot;Describe the video&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>  <span class="s2">&quot;text&quot;</span><span class="p">:</span>  <span class="s2">&quot;描述这段视频&quot;</span><span class="p">},</span>
     <span class="p">],</span>
 <span class="p">}]</span>
 
@@ -327,7 +325,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="n">tokenize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-    <span class="c1"># tune frame slice budget if needed (lower = less memory)</span>
+    <span class="c1"># 需要时调整每个视频的切片预算（数值越小越省显存）</span>
     <span class="n">chat_template_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">max_slice_nums</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
@@ -341,10 +339,10 @@ footer.page-footer a:hover { color: var(--primary); }
 </code></pre></div>
 
 <blockquote>
-<p>If you hit GPU OOM:
-1. lower <code>MAX_NUM_FRAMES</code>,
-2. lower <code>max_slice_nums</code> (1 disables slicing entirely),
-3. or run in <code>bfloat16</code> with <code>attn_implementation="sdpa"</code>.</p>
+<p>如果遇到 GPU OOM：
+1. 调小 <code>MAX_NUM_FRAMES</code>；
+2. 调小 <code>max_slice_nums</code>（设为 1 完全关闭切片）；
+3. 用 <code>bfloat16</code> + <code>attn_implementation="sdpa"</code> 运行。</p>
 </blockquote></article>
 
   <footer class="page-footer">

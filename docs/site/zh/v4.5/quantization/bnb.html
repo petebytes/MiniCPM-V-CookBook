@@ -271,16 +271,14 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="bnb">BNB</h1>
+  <article><h1 id="bnb">BNB</h1>
 <p>:::{Note}
-<strong>Support:</strong> MiniCPM-V4.5 / MiniCPM-V4.0 / MiniCPM-V2.6 / MiniCPM-V2.5
+<strong>支持版本：</strong> MiniCPM-V4.5 / MiniCPM-V4.0 / MiniCPM-V2.6 / MiniCPM-V2.5
 :::</p>
-<h2 id="1-download-the-model">1.Download the Model</h2>
-<p>Download the MiniCPM-V-4_5 model from <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a> and extract it to your local directory.</p>
-<h2 id="2-quantization-script">2.Quantization Script</h2>
-<p>The following script loads the original model, quantizes it to 4-bit using bitsandbytes, and saves the quantized model.</p>
+<h2 id="1-下载模型">1. 下载模型</h2>
+<p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a> 下载 MiniCPM-V-4_5 模型，解压到本地目录。</p>
+<h2 id="2-量化脚本">2. 量化脚本</h2>
+<p>下方脚本会加载原始模型，使用 bitsandbytes 量化为 4-bit，并保存量化后的模型。</p>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">BitsAndBytesConfig</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
@@ -290,12 +288,12 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">(),</span> <span class="s2">&quot;CUDA is not available, but this code requires a GPU.&quot;</span>
 
-<span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span>  <span class="c1"># Select GPU</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;/model/MiniCPM-V-4_5&#39;</span> <span class="c1"># Model path</span>
-<span class="n">save_path</span> <span class="o">=</span> <span class="s1">&#39;./model/MiniCPM-V-4_5-int4&#39;</span> <span class="c1"># Path to save quantized model</span>
+<span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span>  <span class="c1"># 选择 GPU</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;/model/MiniCPM-V-4_5&#39;</span> <span class="c1"># 模型路径</span>
+<span class="n">save_path</span> <span class="o">=</span> <span class="s1">&#39;./model/MiniCPM-V-4_5-int4&#39;</span> <span class="c1"># 量化模型保存路径</span>
 <span class="n">image_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/airplane.jpeg&#39;</span>
 
-<span class="c1"># Quantization configuration</span>
+<span class="c1"># 量化配置</span>
 <span class="n">quantization_config</span> <span class="o">=</span> <span class="n">BitsAndBytesConfig</span><span class="p">(</span>
     <span class="n">load_in_4bit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">load_in_8bit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -324,31 +322,31 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="n">msgs</span><span class="o">=</span><span class="p">[</span>
         <span class="p">{</span>
             <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;What is in this picture?&quot;</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;图中是什么？&quot;</span>
         <span class="p">}</span>
     <span class="p">],</span>
     <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span>
 <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Output after quantization:&#39;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Inference time after quantization:&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GPU memory usage after quantization: </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">gpu_usage</span><span class="o">/</span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">GB&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;量化后输出：&#39;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;量化后推理耗时：&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;量化后 GPU 显存占用：</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">gpu_usage</span><span class="o">/</span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">GB&quot;</span><span class="p">)</span>
 
-<span class="c1"># Save the quantized model and tokenizer</span>
+<span class="c1"># 保存量化模型与 tokenizer</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">safe_serialization</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">tokenizer</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="3-expected-output">3.Expected Output</h2>
-<p>After quantization, you should see output similar to:</p>
-<div class="code"><pre><span></span><code>Output after quantization: The image depicts an Airbus A380-800 aircraft in mid-flight against a clear blue sky. The airplane is predominantly white with a distinctive blue tail fin featuring a red and white logo. The fuselage has the text &quot;Airbus A380-800&quot; written on it, and there are Chinese characters along the side of the aircraft. The landing gear is partially extended, indicating that the plane is either taking off or preparing to land. The engines are visible under the wings, and the overall design showcases the large size and advanced engineering of the Airbus A380 model.
-Inference time after quantization: 9.316158771514893
-GPU memory usage after quantization: 18.97GB
+<h2 id="3-预期输出">3. 预期输出</h2>
+<p>量化完成后大致会看到：</p>
+<div class="code"><pre><span></span><code>量化后输出： The image depicts an Airbus A380-800 aircraft in mid-flight against a clear blue sky. The airplane is predominantly white with a distinctive blue tail fin featuring a red and white logo. The fuselage has the text &quot;Airbus A380-800&quot; written on it, and there are Chinese characters along the side of the aircraft. The landing gear is partially extended, indicating that the plane is either taking off or preparing to land. The engines are visible under the wings, and the overall design showcases the large size and advanced engineering of the Airbus A380 model.
+量化后推理耗时： 9.316158771514893
+量化后 GPU 显存占用：18.97GB
 </code></pre></div>
 
-<p>The quantized model will be saved in the directory specified by <code>save_path</code> and can be used for further fine-tuning or inference.</p>
+<p>量化模型会保存到 <code>save_path</code> 指定的目录，可用于继续微调或推理。</p>
 <hr>
-<p>To customize the model path, image, or save path, modify the corresponding variables in the script.</p></article>
+<p>要自定义模型路径、图片或保存路径，修改脚本中对应的变量即可。</p></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

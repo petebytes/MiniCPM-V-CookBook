@@ -268,35 +268,33 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="single-image-minicpm-v-4-6">Single Image (MiniCPM-V 4.6)</h1>
+  <article><h1 id="单图问答-minicpm-v-4-6">单图问答（MiniCPM-V 4.6）</h1>
 <blockquote>
-<p>MiniCPM-V 4.6 is registered upstream in <code>transformers&gt;=5.7.0</code> as the standalone architecture <code>MiniCPMV4_6ForConditionalGeneration</code>, so the standard HuggingFace <code>Processor</code> + <code>model.generate</code> flow works out of the box.</p>
+<p>MiniCPM-V 4.6 已经在 <code>transformers&gt;=5.7.0</code> 中以独立架构 <code>MiniCPMV4_6ForConditionalGeneration</code> 注册，标准的 HuggingFace <code>Processor</code> + <code>model.generate</code> 流程开箱即用。</p>
 </blockquote>
-<h2 id="initialize-model">Initialize model</h2>
+<h2 id="加载模型">加载模型</h2>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
 
-<span class="c1"># Pick the variant you want:</span>
+<span class="c1"># 选择需要的 checkpoint：</span>
 <span class="c1">#   &quot;openbmb/MiniCPM-V-4_6&quot;        — Instruct</span>
-<span class="c1">#   &quot;openbmb/MiniCPM-V-4_6-Think&quot;  — Think (CoT)</span>
+<span class="c1">#   &quot;openbmb/MiniCPM-V-4_6-Think&quot;  — Think（思考模式）</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>
 
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
     <span class="n">model_path</span><span class="p">,</span>
     <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
-    <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;flash_attention_2&quot;</span>
+    <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>  <span class="c1"># 也可设为 &quot;flash_attention_2&quot;</span>
 <span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 </code></pre></div>
 
-<h2 id="chat-with-a-single-image">Chat with a single image</h2>
+<h2 id="单图对话">单图对话</h2>
 <div class="code"><pre><span></span><code><span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;./assets/single.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
 
-<span class="c1"># First round</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;What is the landform in the picture?&quot;</span>
+<span class="c1"># 第一轮</span>
+<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;图片中的地貌是什么？&quot;</span>
 <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
     <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -321,11 +319,11 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="second-round">Second round</h2>
+<h2 id="第二轮对话">第二轮对话</h2>
 <div class="code"><pre><span></span><code><span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">answer</span><span class="p">}]})</span>
 <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;What should I pay attention to when traveling here?&quot;</span><span class="p">}],</span>
+    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;去这里旅行需要注意什么？&quot;</span><span class="p">}],</span>
 <span class="p">})</span>
 
 <span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
@@ -344,10 +342,10 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="sample-image">Sample image</h2>
+<h2 id="示例图片">示例图片</h2>
 <p><img alt="alt text" src="./assets/single.png"></p>
-<h2 id="notes-on-the-think-variant">Notes on the Think variant</h2>
-<p>If <code>model_path</code> points to <code>openbmb/MiniCPM-V-4_6-Think</code>, the chat template prepends a <code>&lt;think&gt;\n</code> block to the assistant turn — the model returns <code>&lt;reasoning&gt;\n&lt;/think&gt;\n&lt;final answer&gt;</code>. To skip the leading <code>&lt;think&gt;</code> block, pass <code>enable_thinking=False</code>:</p>
+<h2 id="关于-think-版本的说明">关于 Think 版本的说明</h2>
+<p>如果 <code>model_path</code> 指向 <code>openbmb/MiniCPM-V-4_6-Think</code>，chat template 会在 assistant 起始位置插入一个 <code>&lt;think&gt;\n</code> 块——模型会先输出 <code>&lt;推理过程&gt;\n&lt;/think&gt;\n&lt;最终回答&gt;</code>。如需跳过开头的 <code>&lt;think&gt;</code> 块，传入 <code>enable_thinking=False</code>：</p>
 <div class="code"><pre><span></span><code><span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
     <span class="n">messages</span><span class="p">,</span>
     <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -358,7 +356,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 </code></pre></div>
 
-<p>The Instruct checkpoint never emits <code>&lt;think&gt;</code> blocks; pick the appropriate checkpoint for your task instead of toggling at request time.</p></article>
+<p>Instruct checkpoint 永远不会输出 <code>&lt;think&gt;</code> 块——按业务需求选择对应的 checkpoint，<strong>无需在请求级别切换</strong>。</p></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

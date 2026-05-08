@@ -271,10 +271,8 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="grounding">Grounding</h1>
-<h2 id="sample-code">Sample Code</h2>
+  <article><h1 id="视觉定位-grounding">视觉定位 Grounding</h1>
+<h2 id="示例代码">示例代码</h2>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -322,7 +320,7 @@ footer.page-footer a:hover { color: var(--primary); }
             <span class="n">max_inp_length</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span>
             <span class="n">use_image_id</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model output:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;模型输出:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
     <span class="n">bbox</span> <span class="o">=</span> <span class="n">extract_bbox_from_response</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
     <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">draw_bbox_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">image_with_box</span>
@@ -338,8 +336,8 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="n">image_with_box</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="show-case">show case</h2>
-<h3 id="airplane">airplane</h3>
+<h2 id="效果展示">效果展示</h2>
+<h3 id="飞机">飞机</h3>
 <div class="code"><pre><span></span><code><span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
 <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span>
 <span class="n">img_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/airplane.jpeg&#39;</span>
@@ -352,11 +350,11 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="n">image_with_box</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Original image:
+<p>原图：
 <img alt="alt text" src="./assets/airplane.jpeg"></p>
-<p>After grounding:
+<p>定位后：
 <img alt="alt text" src="./assets/airplane-grounding.jpeg"></p>
-<h3 id="doraemon">doraemon</h3>
+<h3 id="哆啦-a-梦">哆啦 A 梦</h3>
 <div class="code"><pre><span></span><code><span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
 <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span>
 <span class="n">img_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/doraemon.jpeg&#39;</span>
@@ -369,11 +367,11 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="n">image_with_box</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Original image:
+<p>原图：
 <img alt="alt text" src="./assets/doraemon.jpg"></p>
-<p>After grounding:
+<p>定位后：
 <img alt="alt text" src="./assets/doraemon-grounding.jpg"></p>
-<h3 id="multiple-objects">Multiple Objects</h3>
+<h3 id="多目标">多目标</h3>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -393,7 +391,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="n">name_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response_json</span><span class="p">:</span>
         <span class="n">bbox_str</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;box&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="c1"># remoeve &quot;&lt;box&gt;&quot; and &quot;&lt;/box&gt;&quot; if exists</span>
+        <span class="c1"># 去掉可能存在的 &quot;&lt;box&gt;&quot; / &quot;&lt;/box&gt;&quot;</span>
         <span class="n">bbox_str</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;/?box&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">bbox_str</span><span class="p">)</span>
         <span class="n">name_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_en&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_zh&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
         <span class="n">bbox</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
@@ -427,7 +425,7 @@ footer.page-footer a:hover { color: var(--primary); }
             <span class="n">max_inp_length</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span>
             <span class="n">use_image_id</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model output:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;模型输出:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
     <span class="n">bbox</span><span class="p">,</span> <span class="n">name_list</span> <span class="o">=</span> <span class="n">extract_bbox_from_json_response</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
     <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">draw_multiple_bboxes_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">name_list</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">image_with_box</span>
@@ -443,9 +441,9 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="n">image_with_box</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Original image:
+<p>原图：
 <img alt="alt text" src="./assets/doraemon.jpg"></p>
-<p>After grounding:
+<p>定位后：
 <img alt="alt text" src="./assets/doraemon_multi_grounding.jpg"></p></article>
 
   <footer class="page-footer">

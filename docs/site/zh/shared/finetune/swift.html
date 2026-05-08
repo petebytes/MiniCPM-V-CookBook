@@ -268,34 +268,32 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="swift">SWIFT</h1>
+  <article><h1 id="swift">SWIFT</h1>
 <p>:::{Note}
-<strong>Support:</strong> MiniCPM-V 2.6
+<strong>支持版本：</strong> MiniCPM-V 2.6
 :::</p>
-<p>SWIFT is an efficient and scalable framework for fine-tuning large pre-trained models with support for various parameter-efficient methods like LoRA, Adapter, and Prompt Tuning.</p>
-<h2 id="swift-install">SWIFT Install</h2>
-<p>You can quickly install SWIFT using bash commands.</p>
+<p>SWIFT 是一个高效、可扩展的大模型微调框架，支持 LoRA、Adapter、Prompt Tuning 等多种参数高效微调方法。</p>
+<h2 id="安装-swift">安装 SWIFT</h2>
+<p>可以用以下命令快速安装 SWIFT：</p>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/modelscope/swift.git
 <span class="nb">cd</span><span class="w"> </span>swift
 pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.[llm]&#39;</span>
 </code></pre></div>
 
-<h2 id="train">Train</h2>
-<h3 id="prepare-the-data">Prepare the data</h3>
-<p>You can refer to the format below to construct your dataset. Custom datasets support JSON and JSONL formats.</p>
+<h2 id="训练">训练</h2>
+<h3 id="准备数据">准备数据</h3>
+<p>可以参考下方格式准备自己的数据集。自定义数据集支持 JSON 与 JSONL 格式。</p>
 <div class="code"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;What does this picture describe?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This picture has a giant panda.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;images&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;local_image_path&quot;</span><span class="p">]}</span>
 <span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;What does this picture describe?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This picture has a giant panda.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">&quot;images&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;local_image_path&quot;</span><span class="p">]}</span>
 <span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Is bamboo tasty?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;It seems pretty tasty judging by the panda&#39;s expression.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;What&#39;s in this picture?&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;There&#39;s a giant panda in this picture.&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;What is the panda doing?&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Eating bamboo.&quot;</span><span class="p">]],</span><span class="w"> </span><span class="nt">&quot;images&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;image_url&quot;</span><span class="p">]}</span>
 </code></pre></div>
 
-<p>Alternatively, you can also use datasets from ModelScope, such as the image dataset <a href="https://modelscope.cn/datasets/modelscope/coco_2014_caption/summary">coco-en-mini</a> or the video dataset <a href="https://modelscope.cn/datasets/swift/VideoChatGPT">video-chatgpt</a>.</p>
-<h3 id="image-fine-tuning">Image Fine-tuning</h3>
-<p>We use the <code>coco-en-mini</code> dataset for fine-tuning, which involves describing the content of images. </p>
-<p>The following is the code configuration:</p>
-<div class="code"><pre><span></span><code><span class="c1"># By default, `lora_target_modules` will be set to all linear layers in `llm` and `resampler`</span>
+<p>也可以直接使用 ModelScope 上的数据集，例如图像数据集 <a href="https://modelscope.cn/datasets/modelscope/coco_2014_caption/summary">coco-en-mini</a> 或视频数据集 <a href="https://modelscope.cn/datasets/swift/VideoChatGPT">video-chatgpt</a>。</p>
+<h3 id="图像微调">图像微调</h3>
+<p>我们使用 <code>coco-en-mini</code> 数据集做微调，任务是描述图片内容。</p>
+<p>下面是脚本配置：</p>
+<div class="code"><pre><span></span><code><span class="c1"># 默认情况下，`lora_target_modules` 会被设置成 `llm` 与 `resampler` 中所有的 linear 层</span>
 <span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1,2,3<span class="w"> </span><span class="nv">NPROC_PER_NODE</span><span class="o">=</span><span class="m">4</span><span class="w"> </span>swift<span class="w"> </span>sft<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model_type<span class="w"> </span>minicpm-v-v2_6-chat<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model_id_or_path<span class="w"> </span>OpenBMB/MiniCPM-V-2_6<span class="w"> </span><span class="se">\</span>
@@ -304,21 +302,21 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="w">  </span>--deepspeed<span class="w"> </span>default-zero2
 </code></pre></div>
 
-<p>If you want to use a custom dataset, simply specify it as follows:</p>
+<p>如果想用自定义数据集，按下面方式指定即可：</p>
 <div class="code"><pre><span></span><code><span class="w">  </span>--dataset<span class="w"> </span>train.jsonl<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--val_dataset<span class="w"> </span>val.jsonl<span class="w"> </span><span class="se">\</span>
 </code></pre></div>
 
-<p>The inference script after fine-tuning is as follows:</p>
-<div class="code"><pre><span></span><code><span class="c1"># Set `--show_dataset_sample -1` to run full evaluation</span>
+<p>微调后的推理脚本如下：</p>
+<div class="code"><pre><span></span><code><span class="c1"># 设 `--show_dataset_sample -1` 跑完整评测</span>
 <span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>swift<span class="w"> </span>infer<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--ckpt_dir<span class="w"> </span>output/minicpm-v-v2_6-chat/vx-xxx/checkpoint-xxx<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--load_dataset_config<span class="w"> </span><span class="nb">true</span><span class="w"> </span>--merge_lora<span class="w"> </span><span class="nb">true</span>
 </code></pre></div>
 
-<h3 id="video-fine-tuning">Video Fine-tuning</h3>
-<p>We use the <code>video-chatgpt</code> dataset for fine-tuning, which involves describing the content of images. </p>
-<p>The following is the code configuration:</p>
+<h3 id="视频微调">视频微调</h3>
+<p>我们使用 <code>video-chatgpt</code> 数据集做微调，任务是描述视频内容。</p>
+<p>下面是脚本配置：</p>
 <div class="code"><pre><span></span><code><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1,2,3<span class="w"> </span><span class="nv">NPROC_PER_NODE</span><span class="o">=</span><span class="m">4</span><span class="w"> </span>swift<span class="w"> </span>sft<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model_type<span class="w"> </span>minicpm-v-v2_6-chat<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model_id_or_path<span class="w"> </span>OpenBMB/MiniCPM-V-2_6<span class="w"> </span><span class="se">\</span>
@@ -327,25 +325,25 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="w">  </span>--deepspeed<span class="w"> </span>default-zero2
 </code></pre></div>
 
-<p>If you want to use a custom dataset, simply specify it as follows:</p>
+<p>如果想用自定义数据集：</p>
 <div class="code"><pre><span></span><code><span class="w">  </span>--dataset<span class="w"> </span>train.jsonl<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--val_dataset<span class="w"> </span>val.jsonl<span class="w"> </span><span class="se">\</span>
 </code></pre></div>
 
-<p>Custom datasets support JSON and JSONL formats. Below is an example of the video dataset:</p>
+<p>自定义数据集支持 JSON 与 JSONL 格式。下面是视频数据集示例：</p>
 <div class="code"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;video&gt;Describe what is happening in this video.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A dog is playing with a ball in a park.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;videos&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;path/to/video1.mp4&quot;</span><span class="p">]}</span>
 <span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;What are the people doing in the video?&lt;video&gt;Can you see any vehicles?&lt;video&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;People are walking on the street, and there are cars and bicycles.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">&quot;videos&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;path/to/video2.mp4&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;path/to/video3.mp4&quot;</span><span class="p">]}</span>
 <span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Was there a red car in the previous video?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Yes, there was a red car parked near the sidewalk.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;What did you see in the video?&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;There was a car, a bicycle, and several pedestrians.&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;What time was it?&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;It seemed to be in the afternoon.&quot;</span><span class="p">]],</span><span class="w"> </span><span class="nt">&quot;videos&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]}</span>
 </code></pre></div>
 
-<p>The inference script after fine-tuning is as follows:</p>
+<p>微调后的推理脚本如下：</p>
 <div class="code"><pre><span></span><code><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>swift<span class="w"> </span>infer<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--ckpt_dir<span class="w"> </span>output/minicpm-v-v2_6-chat/vx-xxx/checkpoint-xxx<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--load_dataset_config<span class="w"> </span><span class="nb">true</span><span class="w"> </span>--merge_lora<span class="w"> </span><span class="nb">true</span>
 </code></pre></div>
 
-<h2 id="infer">Infer</h2>
-<p>Run the bash code will download the model of MiniCPM-V 2.6 and run the inference</p>
+<h2 id="推理">推理</h2>
+<p>下面这段命令会下载 MiniCPM-V 2.6 模型并直接推理：</p>
 <div class="code"><pre><span></span><code><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>swift<span class="w"> </span>infer<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model_type<span class="w"> </span>minicpm-v-v2_6-chat<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--model_id_or_path<span class="w"> </span>OpenBMB/MiniCPM-V-2_6

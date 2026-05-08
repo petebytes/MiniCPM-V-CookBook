@@ -268,27 +268,25 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h3 id="lora-finetuning">LoRA finetuning</h3>
-<p>The LoRA allows light-weight model tuning with only a small subset of parameters updated. We provide the LoRA implementation based on <code>peft</code>. To launch your training, run the following script:</p>
-<p>You can find and review the training script here: <a href="./finetune_lora.sh">finetune_lora.sh</a></p>
-<div class="code"><pre><span></span><code><span class="nv">MODEL</span><span class="o">=</span><span class="s2">&quot;MiniCPM-o-2_6&quot;</span><span class="w"> </span><span class="c1"># or &quot;openbmb/MiniCPM-V-4&quot;, &quot;openbmb/MiniCPM-V-2_6&quot;, &quot;openbmb/MiniCPM-Llama3-V-2_5&quot;, &quot;openbmb/MiniCPM-V-2&quot;</span>
-<span class="nv">DATA</span><span class="o">=</span><span class="s2">&quot;path/to/trainging_data&quot;</span><span class="w"> </span><span class="c1"># json file</span>
-<span class="nv">EVAL_DATA</span><span class="o">=</span><span class="s2">&quot;path/to/test_data&quot;</span><span class="w"> </span><span class="c1"># json file</span>
-<span class="nv">LLM_TYPE</span><span class="o">=</span><span class="s2">&quot;qwen&quot;</span><span class="w"> </span><span class="c1"># if use openbmb/MiniCPM-V-2, please set LLM_TYPE=minicpm, if use openbmb/MiniCPM-Llama3-V-2_5, please set LLM_TYPE=&quot;llama3&quot;,</span>
-<span class="c1"># if use openbmb/MiniCPM-o-2_6 or openbmb/MiniCPM-V-2_6, please set LLM_TYPE=qwen</span>
-<span class="c1"># if use openbmb/MiniCPM-V-4, please set LLM_TYPE=llama</span>
+  <article><h3 id="lora-微调">LoRA 微调</h3>
+<p>LoRA 是轻量级的微调方法，只更新少量参数。我们基于 <code>peft</code> 提供了 LoRA 实现。</p>
+<p>训练脚本可在此查看：<a href="./finetune_lora.sh">finetune_lora.sh</a></p>
+<div class="code"><pre><span></span><code><span class="nv">MODEL</span><span class="o">=</span><span class="s2">&quot;MiniCPM-o-2_6&quot;</span><span class="w"> </span><span class="c1"># 或 &quot;openbmb/MiniCPM-V-4&quot;、&quot;openbmb/MiniCPM-V-2_6&quot;、&quot;openbmb/MiniCPM-Llama3-V-2_5&quot;、&quot;openbmb/MiniCPM-V-2&quot;</span>
+<span class="nv">DATA</span><span class="o">=</span><span class="s2">&quot;path/to/trainging_data&quot;</span><span class="w"> </span><span class="c1"># json 文件</span>
+<span class="nv">EVAL_DATA</span><span class="o">=</span><span class="s2">&quot;path/to/test_data&quot;</span><span class="w"> </span><span class="c1"># json 文件</span>
+<span class="nv">LLM_TYPE</span><span class="o">=</span><span class="s2">&quot;qwen&quot;</span><span class="w"> </span><span class="c1"># 使用 openbmb/MiniCPM-V-2 时设为 minicpm；使用 openbmb/MiniCPM-Llama3-V-2_5 时设为 &quot;llama3&quot;；</span>
+<span class="c1"># 使用 openbmb/MiniCPM-o-2_6 或 openbmb/MiniCPM-V-2_6 时设为 qwen；</span>
+<span class="c1"># 使用 openbmb/MiniCPM-V-4 时设为 llama</span>
 </code></pre></div>
 
-<p>To launch your training, run the following script:</p>
+<p>启动训练：</p>
 <div class="code"><pre><span></span><code>sh finetune_lora.sh
 </code></pre></div>
 
-<p>After training, you could load the model with the path to the adapter. We advise you to use absolute path for your pretrained model. This is because LoRA only saves the adapter and the absolute path in the adapter configuration json file is used for finding out the pretrained model to load.</p>
+<p>训练完成后，可通过 adapter 路径加载模型。建议为预训练模型使用绝对路径，因为 LoRA 仅保存 adapter，adapter config json 中的绝对路径用于定位预训练模型。</p>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">peft</span> <span class="kn">import</span> <span class="n">PeftModel</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span>
-<span class="n">model_type</span><span class="o">=</span>  <span class="s2">&quot;openbmb/MiniCPM-o-2_6&quot;</span> <span class="c1"># or &quot;openbmb/MiniCPM-V-4&quot;, &quot;openbmb/MiniCPM-V-2_6&quot;, &quot;openbmb/MiniCPM-Llama3-V-2_5&quot;, &quot;openbmb/MiniCPM-V-2&quot;</span>
+<span class="n">model_type</span><span class="o">=</span>  <span class="s2">&quot;openbmb/MiniCPM-o-2_6&quot;</span> <span class="c1"># 或 &quot;openbmb/MiniCPM-V-4&quot;、&quot;openbmb/MiniCPM-V-2_6&quot;、&quot;openbmb/MiniCPM-Llama3-V-2_5&quot;、&quot;openbmb/MiniCPM-V-2&quot;</span>
 <span class="n">path_to_adapter</span><span class="o">=</span><span class="s2">&quot;path_to_your_fine_tuned_checkpoint&quot;</span>
 
 <span class="n">model</span> <span class="o">=</span>  <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>

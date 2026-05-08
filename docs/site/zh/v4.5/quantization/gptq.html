@@ -271,15 +271,13 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><div class="admonition admonition-note"><p class="admonition-title">提示</p>
-<p>该文档暂时只有英文版本，正在翻译中。</p></div>
-<h1 id="gptq">GPTQ</h1>
+  <article><h1 id="gptq">GPTQ</h1>
 <p>::::{Note}
-<strong>Support:</strong> MiniCPM-V 4.5
+<strong>支持版本：</strong> MiniCPM-V 4.5
 ::::</p>
-<h2 id="method-1-use-the-pre-quantized-model">Method 1 (Use the pre-quantized model)</h2>
-<h3 id="1-download-the-model">1.Download the Model</h3>
-<p>Download the 4-bit GPTQ-quantized MiniCPM-V-4_5 from one of:</p>
+<h2 id="方法-1-用预量化模型">方法 1（用预量化模型）</h2>
+<h3 id="1-下载模型">1. 下载模型</h3>
+<p>从下面任一来源获取 4-bit GPTQ 量化的 MiniCPM-V-4_5：</p>
 <ul>
 <li><strong>HuggingFace</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ">https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ</a></li>
 <li><strong>ModelScope</strong> — <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_5-GPTQ">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_5-GPTQ</a></li>
@@ -287,28 +285,28 @@ footer.page-footer a:hover { color: var(--primary); }
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ
 </code></pre></div>
 
-<h3 id="2-run-with-vllm">2.Run with vllm</h3>
+<h3 id="2-用-vllm-运行">2. 用 vLLM 运行</h3>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
 <span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
 
 
-<span class="c1"># Quantized model name or path</span>
+<span class="c1"># 量化模型名称或本地路径</span>
 <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_5-GPTQ&quot;</span>
 
-<span class="c1"># List of image file paths</span>
+<span class="c1"># 图片文件列表</span>
 <span class="n">IMAGES</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;image.png&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
-<span class="c1"># Open and convert image</span>
+<span class="c1"># 加载并转换图片</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">IMAGES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
 
-<span class="c1"># Initialize tokenizer</span>
+<span class="c1"># 初始化 tokenizer</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Initialize LLM</span>
+<span class="c1"># 初始化 LLM</span>
 <span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="n">MODEL_NAME</span><span class="p">,</span> 
     <span class="c1"># gpu_memory_utilization=0.9,</span>
@@ -318,21 +316,21 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="c1"># limit_mm_per_prompt={&quot;image&quot;: 5}</span>
 <span class="p">)</span>
 
-<span class="c1"># Build messages</span>
+<span class="c1"># 构建消息</span>
 <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;(&lt;image&gt;./&lt;/image&gt;)</span><span class="se">\n</span><span class="s2">Please describe the content of this image&quot;</span><span class="p">,</span>
-    <span class="c1"># &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\n请描述这张图片的内容&quot;,</span>
+    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;(&lt;image&gt;./&lt;/image&gt;)</span><span class="se">\n</span><span class="s2">请描述这张图片的内容&quot;</span><span class="p">,</span>
+    <span class="c1"># &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\nPlease describe the content of this image&quot;,</span>
 <span class="p">}]</span>
 
-<span class="c1"># Apply chat template to the messages</span>
+<span class="c1"># 应用 chat template</span>
 <span class="n">prompt</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Set stop token IDs</span>
+<span class="c1"># 设置 stop token IDs</span>
 <span class="n">stop_tokens</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;|im_end|&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;/s&gt;&#39;</span><span class="p">]</span>
 <span class="n">stop_token_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_tokens_to_ids</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">stop_tokens</span><span class="p">]</span>
 
-<span class="c1"># Set generation parameters</span>
+<span class="c1"># 采样参数</span>
 <span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span>
     <span class="n">stop_token_ids</span><span class="o">=</span><span class="n">stop_token_ids</span><span class="p">,</span>
     <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
@@ -340,7 +338,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># Get model output</span>
+<span class="c1"># 推理</span>
 <span class="n">outputs</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">({</span>
     <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
     <span class="s2">&quot;multi_modal_data&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -350,50 +348,50 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="nb">print</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div>
 
-<h2 id="method-2-quantize-the-model-yourself">Method 2 (Quantize the model yourself)</h2>
-<h3 id="1-download-the-model_1">1.Download the Model</h3>
+<h2 id="方法-2-自己进行-gptq-量化">方法 2（自己进行 GPTQ 量化）</h2>
+<h3 id="1-下载模型_1">1. 下载模型</h3>
 <!-- 下载模型
 https://huggingface.co/openbmb/MiniCPM-V-4_5
  -->
 
-<p>Download the MiniCPM-V 4.5 model from <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a></p>
+<p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a> 下载 MiniCPM-V 4.5 模型。</p>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5
 </code></pre></div>
 
-<h3 id="2-install-autogptq-and-patch-qwen3-minicpm-v-4_5">2.Install AutoGPTQ and patch Qwen3 (MiniCPM-V-4_5)</h3>
-<p>Clone an AutoGPTQ source tree (for example <code>https://github.com/AutoGPTQ/AutoGPTQ</code>), apply the edits below, then install from source. The cookbook script sets <code>llm.config.model_type = "qwen3"</code> and uses <code>Qwen3GPTQForCausalLM</code>; Qwen3 layers may return a hidden state tensor instead of a tuple, so <code>_base.py</code> must tolerate both.</p>
-<p>Touch these paths under the AutoGPTQ repo:</p>
+<h3 id="2-安装-autogptq-并为-qwen3-minicpm-v-4_5-打补丁">2. 安装 AutoGPTQ 并为 Qwen3 (MiniCPM-V-4_5) 打补丁</h3>
+<p>clone 一份 AutoGPTQ 源码（如 <code>https://github.com/AutoGPTQ/AutoGPTQ</code>），按下方修改后从源码安装。本 cookbook 的脚本会把 <code>llm.config.model_type</code> 设为 <code>"qwen3"</code> 并使用 <code>Qwen3GPTQForCausalLM</code>；Qwen3 的 layer 可能直接返回 hidden state tensor 而不是 tuple，所以 <code>_base.py</code> 也需要兼容这两种情况。</p>
+<p>需要修改 AutoGPTQ 仓库中的以下路径：</p>
 <table>
 <thead>
 <tr>
-<th>Change</th>
-<th>File</th>
+<th>修改</th>
+<th>文件</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>New file</td>
+<td>新增文件</td>
 <td><code>auto_gptq/modeling/qwen3.py</code></td>
 </tr>
 <tr>
-<td>Register class + <code>model_type</code></td>
+<td>注册类 + <code>model_type</code></td>
 <td><code>auto_gptq/modeling/auto.py</code></td>
 </tr>
 <tr>
-<td>Export</td>
+<td>导出</td>
 <td><code>auto_gptq/modeling/__init__.py</code></td>
 </tr>
 <tr>
-<td>Allow <code>model_type == "qwen3"</code> in checks</td>
+<td>让校验通过 <code>model_type == "qwen3"</code></td>
 <td><code>auto_gptq/modeling/_const.py</code></td>
 </tr>
 <tr>
-<td>Layer forward return value</td>
+<td>兼容 layer forward 返回值</td>
 <td><code>auto_gptq/modeling/_base.py</code></td>
 </tr>
 </tbody>
 </table>
-<h4 id="2-1-add-auto_gptq-modeling-qwen3-py">2.1 Add <code>auto_gptq/modeling/qwen3.py</code></h4>
+<h4 id="2-1-新增-auto_gptq-modeling-qwen3-py">2.1 新增 <code>auto_gptq/modeling/qwen3.py</code></h4>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">._base</span> <span class="kn">import</span> <span class="n">BaseGPTQForCausalLM</span>
 
 
@@ -412,24 +410,24 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Qwen3GPTQForCausalLM&quot;</span><span class="p">]</span>
 </code></pre></div>
 
-<h4 id="2-2-edit-auto_gptq-modeling-auto-py">2.2 Edit <code>auto_gptq/modeling/auto.py</code></h4>
-<p>With the other <code>from .xxx import ...</code> lines at the top of the file, add:</p>
+<h4 id="2-2-修改-auto_gptq-modeling-auto-py">2.2 修改 <code>auto_gptq/modeling/auto.py</code></h4>
+<p>在文件顶部其它 <code>from .xxx import ...</code> 行旁加上：</p>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">.qwen3</span> <span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
 </code></pre></div>
 
-<p>In <code>GPTQ_CAUSAL_LM_MODEL_MAP</code>, add:</p>
+<p>并在 <code>GPTQ_CAUSAL_LM_MODEL_MAP</code> 中加：</p>
 <div class="code"><pre><span></span><code>    <span class="s2">&quot;qwen3&quot;</span><span class="p">:</span> <span class="n">Qwen3GPTQForCausalLM</span><span class="p">,</span>
 </code></pre></div>
 
-<h4 id="2-3-edit-auto_gptq-modeling-__init__-py">2.3 Edit <code>auto_gptq/modeling/__init__.py</code></h4>
-<p>Add the export next to the other modeling imports:</p>
+<h4 id="2-3-修改-auto_gptq-modeling-__init__-py">2.3 修改 <code>auto_gptq/modeling/__init__.py</code></h4>
+<p>在其它 modeling 导入旁追加：</p>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">.qwen3</span> <span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
 </code></pre></div>
 
-<h4 id="2-4-edit-auto_gptq-modeling-_const-py">2.4 Edit <code>auto_gptq/modeling/_const.py</code></h4>
-<p>In the <code>SUPPORTED_MODELS</code> list, append the string <code>"qwen3"</code> (keep valid Python list syntax, e.g. a trailing comma on the previous entry).</p>
-<h4 id="2-5-edit-auto_gptq-modeling-_base-py">2.5 Edit <code>auto_gptq/modeling/_base.py</code></h4>
-<p>In <code>BaseGPTQForCausalLM.quantize</code>, locate the inner loop that calls <code>layer(*layer_input, **additional_layer_inputs)</code> and feeds the result into <code>move_to_device</code>. Replace the single <code>[0]</code> indexing with logic that accepts either a tuple/list (use first element) or a bare tensor:</p>
+<h4 id="2-4-修改-auto_gptq-modeling-_const-py">2.4 修改 <code>auto_gptq/modeling/_const.py</code></h4>
+<p>在 <code>SUPPORTED_MODELS</code> 列表中追加字符串 <code>"qwen3"</code>（注意保持有效的 Python 列表语法，例如前一项加逗号）。</p>
+<h4 id="2-5-修改-auto_gptq-modeling-_base-py">2.5 修改 <code>auto_gptq/modeling/_base.py</code></h4>
+<p>在 <code>BaseGPTQForCausalLM.quantize</code> 中找到调用 <code>layer(*layer_input, **additional_layer_inputs)</code> 并把结果传给 <code>move_to_device</code> 的内层循环。把原来直接 <code>[0]</code> 取值的写法替换为既能处理 tuple/list（取第一个元素）也能直接处理 tensor 的逻辑：</p>
 <div class="code"><pre><span></span><code>                <span class="n">raw_output</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="o">*</span><span class="n">layer_input</span><span class="p">,</span> <span class="o">**</span><span class="n">additional_layer_inputs</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_output</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
                     <span class="n">raw_output</span> <span class="o">=</span> <span class="n">raw_output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -439,16 +437,16 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5
                 <span class="p">)</span>
 </code></pre></div>
 
-<p>(Remove the old pattern that assumed <code>layer(...)[0]</code> always exists.)</p>
-<h4 id="2-6-install-from-source">2.6 Install from source</h4>
+<p>（删除原来假设 <code>layer(...)[0]</code> 一定存在的写法。）</p>
+<h4 id="2-6-从源码安装">2.6 从源码安装</h4>
 <div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>AutoGPTQ
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 
-<p>If extension build fails, follow AutoGPTQ’s README for your CUDA / PyTorch version.</p>
-<h3 id="3-quantization-script">3.Quantization Script</h3>
-<p>The following script extracts the LLM backbone (Qwen3) from MiniCPM-V-4_5, quantizes it to 4-bit using GPTQ, and reassembles the full model with the original multimodal components.</p>
-<p>Run the following quantization script (replace <code>MODEL_PATH</code> and <code>OUTPUT_PATH</code> with the paths to the original model and the quantized model, respectively).</p>
+<p>如果扩展构建失败，按 AutoGPTQ README 安装对应 CUDA / PyTorch 版本依赖。</p>
+<h3 id="3-量化脚本">3. 量化脚本</h3>
+<p>下方脚本会从 MiniCPM-V-4_5 中提取 LLM backbone（Qwen3），用 GPTQ 量化为 4-bit，再把量化后的权重与原始多模态部分重新组装。</p>
+<p>执行下方脚本（按需替换 <code>MODEL_PATH</code> 与 <code>OUTPUT_PATH</code>）：</p>
 <div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -462,7 +460,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 
 
 <span class="k">def</span> <span class="nf">_ensure_hf_dynamic_module_cache</span><span class="p">(</span><span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pre-copy all .py files so transitive relative imports are available.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;提前复制所有 .py 文件，确保间接相对导入能解析。&quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">transformers.dynamic_module_utils</span> <span class="kn">import</span> <span class="p">(</span>
         <span class="n">HF_MODULES_CACHE</span><span class="p">,</span>
         <span class="n">TRANSFORMERS_DYNAMIC_MODULE_NAME</span><span class="p">,</span>
@@ -496,7 +494,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 
 
 <span class="k">def</span> <span class="nf">prepare_calibration_data</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">max_length</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare calibration data from Alpaca dataset.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;从 Alpaca 数据集准备校准数据。&quot;&quot;&quot;</span>
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;tatsu-lab/alpaca&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">))))</span>
 
@@ -566,7 +564,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">llm_temp_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">gptq_model</span><span class="o">.</span><span class="n">save_quantized</span><span class="p">(</span><span class="n">llm_temp_dir</span><span class="p">,</span> <span class="n">use_safetensors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="c1"># Copy non-weight files from original model</span>
+    <span class="c1"># 把原始模型中的非权重文件复制过来</span>
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">):</span>
         <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
         <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
@@ -579,7 +577,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
         <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dst</span><span class="p">):</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
 
-    <span class="c1"># Combine quantized LLM weights with original multimodal weights</span>
+    <span class="c1"># 把量化后的 LLM 权重和原始多模态权重组合</span>
     <span class="kn">from</span> <span class="nn">safetensors.torch</span> <span class="kn">import</span> <span class="n">load_file</span> <span class="k">as</span> <span class="n">safe_load</span><span class="p">,</span> <span class="n">save_file</span> <span class="k">as</span> <span class="n">safe_save</span>
 
     <span class="n">quantized_llm_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">llm_temp_dir</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.safetensors&quot;</span><span class="p">)]</span>
@@ -600,7 +598,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">non_llm_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">combined_sd</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="n">MAX_SHARD_SIZE_BYTES</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span>  <span class="c1"># 4GB per shard</span>
+    <span class="n">MAX_SHARD_SIZE_BYTES</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span>  <span class="c1"># 每分片 4GB</span>
     <span class="n">sorted_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">combined_sd</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
     <span class="n">shards</span> <span class="o">=</span> <span class="p">[]</span>
@@ -640,7 +638,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="s2">&quot;model.safetensors.index.json&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-    <span class="c1"># Save config with quantization info</span>
+    <span class="c1"># 保存带量化信息的 config</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">AutoConfig</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">config_dict</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
     <span class="n">config_dict</span><span class="p">[</span><span class="s2">&quot;quantization_config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
