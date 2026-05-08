@@ -238,7 +238,7 @@ We provide training methods serving different needs as following:
     <tr>
       <td>GPTQ</td>
       <td><a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/gptq/minicpm-v4_5_gptq_quantize.md">GPTQ Doc</a></td>
-      <td>—</td>
+      <td><a href="https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ">openbmb/MiniCPM-V-4_5-GPTQ</a></td>
       <td>—</td>
       <td>—</td>
     </tr>
