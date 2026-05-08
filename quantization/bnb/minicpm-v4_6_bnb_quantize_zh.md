@@ -6,7 +6,7 @@
 
 ## 1. 下载模型
 
-从 [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4_6) 下载 MiniCPM-V-4_6 模型（Think 版本为 `openbmb/MiniCPM-V-4_6-Think`），解压到本地目录。
+从 [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4_6) 下载 MiniCPM-V-4_6 模型（Thinking 版本为 `openbmb/MiniCPM-V-4_6-Thinking`），解压到本地目录。
 
 ## 2. 量化脚本
 

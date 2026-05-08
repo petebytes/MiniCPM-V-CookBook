@@ -279,7 +279,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <span class="c1"># 选择需要的 checkpoint：</span>
 <span class="c1">#   &quot;openbmb/MiniCPM-V-4_6&quot;        — Instruct</span>
-<span class="c1">#   &quot;openbmb/MiniCPM-V-4_6-Think&quot;  — Think（思考模式）</span>
+<span class="c1">#   &quot;openbmb/MiniCPM-V-4_6-Thinking&quot;  — Thinking（思考模式）</span>
 <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>
 
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
@@ -344,8 +344,8 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <h2 id="示例图片">示例图片</h2>
 <p><img alt="alt text" src="./assets/single.png"></p>
-<h2 id="关于-think-版本的说明">关于 Think 版本的说明</h2>
-<p>如果 <code>model_path</code> 指向 <code>openbmb/MiniCPM-V-4_6-Think</code>，chat template 会在 assistant 起始位置插入一个 <code>&lt;think&gt;\n</code> 块——模型会先输出 <code>&lt;推理过程&gt;\n&lt;/think&gt;\n&lt;最终回答&gt;</code>。如需跳过开头的 <code>&lt;think&gt;</code> 块，传入 <code>enable_thinking=False</code>：</p>
+<h2 id="关于-thinking-版本的说明">关于 Thinking 版本的说明</h2>
+<p>如果 <code>model_path</code> 指向 <code>openbmb/MiniCPM-V-4_6-Thinking</code>，chat template 会在 assistant 起始位置插入一个 <code>&lt;think&gt;\n</code> 块——模型会先输出 <code>&lt;推理过程&gt;\n&lt;/think&gt;\n&lt;最终回答&gt;</code>。如需跳过开头的 <code>&lt;think&gt;</code> 块，传入 <code>enable_thinking=False</code>：</p>
 <div class="code"><pre><span></span><code><span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
     <span class="n">messages</span><span class="p">,</span>
     <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

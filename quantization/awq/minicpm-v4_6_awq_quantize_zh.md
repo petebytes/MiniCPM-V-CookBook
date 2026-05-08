@@ -1,7 +1,7 @@
 # AWQ
 
 ::::{Note}
-**支持版本：** MiniCPM-V 4.6（Instruct & Think）/ MiniCPM-V 4.5
+**支持版本：** MiniCPM-V 4.6（Instruct & Thinking）/ MiniCPM-V 4.5
 ::::
 
 > MiniCPM-V 使用的 AutoAWQ 工作流位于 [`tc-mb/AutoAWQ`](https://github.com/tc-mb/AutoAWQ)（上游 `casper-hansen/AutoAWQ` 已停止维护）。
@@ -16,7 +16,7 @@
 git clone https://huggingface.co/openbmb/MiniCPM-V-4_6-AWQ
 ```
 
-（Think 版本发布后将是 `openbmb/MiniCPM-V-4_6-Think-AWQ`。）
+（Thinking 版本发布后将是 `openbmb/MiniCPM-V-4_6-Thinking-AWQ`。）
 
 ### 2. 用 vLLM 运行
 

@@ -5,9 +5,9 @@ MiniCPM-V 4.6 提供 **两个独立的 checkpoint**：
 | 版本          | HuggingFace ID                                                                                   | 魔搭社区 ID                                                                                       |
 | ------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | Instruct      | [openbmb/MiniCPM-V-4_6](https://huggingface.co/openbmb/MiniCPM-V-4_6)                            | [OpenBMB/MiniCPM-V-4_6](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6)                       |
-| Think（思考） | [openbmb/MiniCPM-V-4_6-Think](https://huggingface.co/openbmb/MiniCPM-V-4_6-Think)                | [OpenBMB/MiniCPM-V-4_6-Think](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Think)           |
+| Thinking（思考） | [openbmb/MiniCPM-V-4_6-Thinking](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking)                | [OpenBMB/MiniCPM-V-4_6-Thinking](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking)           |
 
-> 与 v4.5 通过 `enable_thinking` 切换模式不同，v4.6 将 instruct 与 think 拆分为 **两个独立 checkpoint**，按需选择即可。
+> 与 v4.5 通过 `enable_thinking` 切换模式不同，v4.6 将 instruct 与 thinking 拆分为 **两个独立 checkpoint**，按需选择即可。
 
 ## 1. 环境准备
 
@@ -59,7 +59,7 @@ vllm serve <模型路径> \
 ```
 
 **参数说明：**
-- `<模型路径>`：MiniCPM-V-4_6 的本地路径，或 HuggingFace ID `openbmb/MiniCPM-V-4_6` / `openbmb/MiniCPM-V-4_6-Think`
+- `<模型路径>`：MiniCPM-V-4_6 的本地路径，或 HuggingFace ID `openbmb/MiniCPM-V-4_6` / `openbmb/MiniCPM-V-4_6-Thinking`
 - `--api-key`：API 访问密钥
 - `--max-model-len`：最大上下文长度。v4.6 backbone 最长支持 256K，部署时按需设置即可
 - `--gpu_memory_utilization`：GPU 显存使用率
@@ -142,12 +142,12 @@ extra_body = {
 
 ### 2.4 思考模式
 
-如果部署的是 **`openbmb/MiniCPM-V-4_6-Think`** 模型，chat template 会默认在 assistant 起始位置插入 `<think>` 块；模型先输出推理过程，再以 `</think>` 分隔后给出回答。可通过 `chat_template_kwargs` 跳过：
+如果部署的是 **`openbmb/MiniCPM-V-4_6-Thinking`** 模型，chat template 会默认在 assistant 起始位置插入 `<think>` 块；模型先输出推理过程，再以 `</think>` 分隔后给出回答。可通过 `chat_template_kwargs` 跳过：
 
 ```python
 extra_body = {
     "stop_token_ids": [248044, 248046],
-    # 在 Think 模型上跳过开头的 <think> 块
+    # 在 Thinking 模型上跳过开头的 <think> 块
     "chat_template_kwargs": {"enable_thinking": False},
 }
 ```
@@ -296,7 +296,7 @@ print(outputs[0].outputs[0].text)
 
 ## 注意事项
 
-1. **模型路径**：将示例中的 `<模型路径>` 替换为本地路径，或 `openbmb/MiniCPM-V-4_6` / `openbmb/MiniCPM-V-4_6-Think`。
+1. **模型路径**：将示例中的 `<模型路径>` 替换为本地路径，或 `openbmb/MiniCPM-V-4_6` / `openbmb/MiniCPM-V-4_6-Thinking`。
 2. **停止符**：v4.6 采用 Qwen3.5 词表，正确的 `stop_token_ids` 为 `[248044, 248046]`（v4.5 用的是 `[1, 151645]`）。
 3. **API 密钥**：客户端密钥需与 `vllm serve` 启动时一致。
 4. **显存配置**：根据硬件调整 `--gpu_memory_utilization` / `--max-model-len` / `--max-num-batched-tokens`。v4.6 backbone 最长支持 256K，但通常无需开满。

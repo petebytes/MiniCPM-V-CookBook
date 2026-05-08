@@ -4,7 +4,7 @@
 
 ## 最新动态
 
-- 🎉 **MiniCPM-V 4.6** 发布 —— Instruct 与 Think 双版本，Qwen3.5 hybrid backbone，256K 上下文，重构后的视觉 merger 结构。
+- 🎉 **MiniCPM-V 4.6** 发布 —— Instruct 与 Thinking 双版本，Qwen3.5 hybrid backbone，256K 上下文，重构后的视觉 merger 结构。
   - 推理：[单图问答](v4.6/inference/single-image.html) · [多图问答](v4.6/inference/multi-images.html) · [视频](v4.6/inference/video-understanding.html) · [OCR](v4.6/inference/ocr.html) · [PDF 解析](v4.6/inference/pdf-parse.html) · [Grounding](v4.6/inference/grounding.html)
   - 部署：[vLLM](v4.6/deployment/vllm.html) · [SGLang](v4.6/deployment/sglang.html) · [llama.cpp](v4.6/deployment/llamacpp.html) · [Ollama](v4.6/deployment/ollama.html)
   - 量化：[GGUF](v4.6/quantization/gguf.html) · [BNB](v4.6/quantization/bnb.html) · [AWQ](v4.6/quantization/awq.html)

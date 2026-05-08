@@ -6,7 +6,7 @@
 
 - **两个独立 checkpoint，统一架构。** 与 4.5（一份模型 + `enable_thinking` 切换）不同，4.6 拆为两个独立 checkpoint，按需选用。
   - [`openbmb/MiniCPM-V-4_6`](https://huggingface.co/openbmb/MiniCPM-V-4_6) —— Instruct
-  - [`openbmb/MiniCPM-V-4_6-Think`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Think) —— Think（思考）
+  - [`openbmb/MiniCPM-V-4_6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking) —— Thinking（思考）
 - **Qwen3.5 hybrid backbone。** 线性注意力与全注意力混合，最长支持 **256K** 上下文。
 - **NaViT 风格视觉塔。** 用 merger 替换原有 resampler，结构更高效，GGUF 转换流程也大大简化。
 - **transformers 独立架构。** 在 `transformers >= 5.7.0` 中以 `MiniCPMV4_6ForConditionalGeneration` 注册，标准 `AutoProcessor` + `AutoModelForImageTextToText` 即可使用。
@@ -20,7 +20,7 @@ import torch
 from PIL import Image
 from transformers import AutoProcessor, AutoModelForImageTextToText
 
-model_path = "openbmb/MiniCPM-V-4_6"   # 或 MiniCPM-V-4_6-Think
+model_path = "openbmb/MiniCPM-V-4_6"   # 或 MiniCPM-V-4_6-Thinking
 processor = AutoProcessor.from_pretrained(model_path)
 model = AutoModelForImageTextToText.from_pretrained(
     model_path, torch_dtype=torch.bfloat16, attn_implementation="sdpa",
@@ -78,7 +78,7 @@ python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
 
 | 主题 | v4.5 | v4.6 |
 | :--- | :--- | :--- |
-| 思考模式 | 单模型，请求级 `enable_thinking` 切换 | **两个独立 checkpoint**（Instruct、Think） |
+| 思考模式 | 单模型，请求级 `enable_thinking` 切换 | **两个独立 checkpoint**（Instruct、Thinking） |
 | LM Backbone | Qwen3 | **Qwen3.5 hybrid**（线性 + 全注意力） |
 | 最大上下文 | 32K | **256K** |
 | 视觉塔 | Perceiver resampler | **NaViT 风格 merger** |

@@ -8,7 +8,7 @@
 MiniCPM-V 4.6 ships as two checkpoints:
 
 - **Instruct** — [`openbmb/MiniCPM-V-4_6`](https://huggingface.co/openbmb/MiniCPM-V-4_6)
-- **Think (CoT)** — [`openbmb/MiniCPM-V-4_6-Think`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Think)
+- **Thinking** — [`openbmb/MiniCPM-V-4_6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking)
 
 ## 1. Installing SGLang
 
@@ -59,10 +59,10 @@ Or specify a local path:
 python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4_6 --port 30000 --trust-remote-code
 ```
 
-To serve the Think variant, swap the model id:
+To serve the Thinking variant, swap the model id:
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Think --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Thinking --port 30000 --trust-remote-code
 ```
 
 ## 3. Calling the Service

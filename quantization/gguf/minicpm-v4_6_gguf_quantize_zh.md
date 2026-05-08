@@ -12,7 +12,7 @@
 按需选择 checkpoint：
 
 - **Instruct** — HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6> · 魔搭：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6>
-- **Think** — HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6-Think> · 魔搭：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Think>
+- **Thinking** — HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking> · 魔搭：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking>
 
 ### 2. 转换为 GGUF
 

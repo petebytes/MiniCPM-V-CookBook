@@ -285,14 +285,14 @@ footer.page-footer a:hover { color: var(--primary); }
 <td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6">OpenBMB/MiniCPM-V-4_6</a></td>
 </tr>
 <tr>
-<td>Think（思考）</td>
-<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Think">openbmb/MiniCPM-V-4_6-Think</a></td>
-<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Think">OpenBMB/MiniCPM-V-4_6-Think</a></td>
+<td>Thinking（思考）</td>
+<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking">openbmb/MiniCPM-V-4_6-Thinking</a></td>
+<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking">OpenBMB/MiniCPM-V-4_6-Thinking</a></td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>与 v4.5 通过 <code>enable_thinking</code> 切换模式不同，v4.6 将 instruct 与 think 拆分为 <strong>两个独立 checkpoint</strong>，按需选择即可。</p>
+<p>与 v4.5 通过 <code>enable_thinking</code> 切换模式不同，v4.6 将 instruct 与 thinking 拆分为 <strong>两个独立 checkpoint</strong>，按需选择即可。</p>
 </blockquote>
 <h2 id="1-环境准备">1. 环境准备</h2>
 <h3 id="1-1-安装-vllm-推荐-从-pr-分支安装">1.1 安装 vLLM（推荐：从 PR 分支安装）</h3>
@@ -336,7 +336,7 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 </code></pre></div>
 
 <p><strong>参数说明：</strong>
-- <code>&lt;模型路径&gt;</code>：MiniCPM-V-4_6 的本地路径，或 HuggingFace ID <code>openbmb/MiniCPM-V-4_6</code> / <code>openbmb/MiniCPM-V-4_6-Think</code>
+- <code>&lt;模型路径&gt;</code>：MiniCPM-V-4_6 的本地路径，或 HuggingFace ID <code>openbmb/MiniCPM-V-4_6</code> / <code>openbmb/MiniCPM-V-4_6-Thinking</code>
 - <code>--api-key</code>：API 访问密钥
 - <code>--max-model-len</code>：最大上下文长度。v4.6 backbone 最长支持 256K，部署时按需设置即可
 - <code>--gpu_memory_utilization</code>：GPU 显存使用率</p>
@@ -412,10 +412,10 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 </code></pre></div>
 
 <h3 id="2-4-思考模式">2.4 思考模式</h3>
-<p>如果部署的是 <strong><code>openbmb/MiniCPM-V-4_6-Think</code></strong> 模型，chat template 会默认在 assistant 起始位置插入 <code>&lt;think&gt;</code> 块；模型先输出推理过程，再以 <code>&lt;/think&gt;</code> 分隔后给出回答。可通过 <code>chat_template_kwargs</code> 跳过：</p>
+<p>如果部署的是 <strong><code>openbmb/MiniCPM-V-4_6-Thinking</code></strong> 模型，chat template 会默认在 assistant 起始位置插入 <code>&lt;think&gt;</code> 块；模型先输出推理过程，再以 <code>&lt;/think&gt;</code> 分隔后给出回答。可通过 <code>chat_template_kwargs</code> 跳过：</p>
 <div class="code"><pre><span></span><code><span class="n">extra_body</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;stop_token_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">248044</span><span class="p">,</span> <span class="mi">248046</span><span class="p">],</span>
-    <span class="c1"># 在 Think 模型上跳过开头的 &lt;think&gt; 块</span>
+    <span class="c1"># 在 Thinking 模型上跳过开头的 &lt;think&gt; 块</span>
     <span class="s2">&quot;chat_template_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enable_thinking&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -554,7 +554,7 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;模型路径&gt;<sp
 
 <h2 id="注意事项">注意事项</h2>
 <ol>
-<li><strong>模型路径</strong>：将示例中的 <code>&lt;模型路径&gt;</code> 替换为本地路径，或 <code>openbmb/MiniCPM-V-4_6</code> / <code>openbmb/MiniCPM-V-4_6-Think</code>。</li>
+<li><strong>模型路径</strong>：将示例中的 <code>&lt;模型路径&gt;</code> 替换为本地路径，或 <code>openbmb/MiniCPM-V-4_6</code> / <code>openbmb/MiniCPM-V-4_6-Thinking</code>。</li>
 <li><strong>停止符</strong>：v4.6 采用 Qwen3.5 词表，正确的 <code>stop_token_ids</code> 为 <code>[248044, 248046]</code>（v4.5 用的是 <code>[1, 151645]</code>）。</li>
 <li><strong>API 密钥</strong>：客户端密钥需与 <code>vllm serve</code> 启动时一致。</li>
 <li><strong>显存配置</strong>：根据硬件调整 <code>--gpu_memory_utilization</code> / <code>--max-model-len</code> / <code>--max-num-batched-tokens</code>。v4.6 backbone 最长支持 256K，但通常无需开满。</li>

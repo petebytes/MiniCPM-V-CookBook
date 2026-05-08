@@ -5,7 +5,7 @@ MiniCPM-V 4.6 ships as **two separate checkpoints**:
 | Variant       | HuggingFace ID                                                                                   | ModelScope ID                                                                                     |
 | ------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | Instruct      | [openbmb/MiniCPM-V-4_6](https://huggingface.co/openbmb/MiniCPM-V-4_6)                            | [OpenBMB/MiniCPM-V-4_6](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6)                       |
-| Think (CoT)   | [openbmb/MiniCPM-V-4_6-Think](https://huggingface.co/openbmb/MiniCPM-V-4_6-Think)                | [OpenBMB/MiniCPM-V-4_6-Think](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Think)           |
+| Thinking   | [openbmb/MiniCPM-V-4_6-Thinking](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking)                | [OpenBMB/MiniCPM-V-4_6-Thinking](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking)           |
 
 > Unlike v4.5 (which switched modes via `enable_thinking`), v4.6 ships think and instruct as **independent checkpoints** — pick the one that matches your use case.
 
@@ -59,7 +59,7 @@ vllm serve <model_path> \
 ```
 
 **Parameter Description:**
-- `<model_path>`: Local path to MiniCPM-V-4_6, or the HuggingFace ID `openbmb/MiniCPM-V-4_6` / `openbmb/MiniCPM-V-4_6-Think`
+- `<model_path>`: Local path to MiniCPM-V-4_6, or the HuggingFace ID `openbmb/MiniCPM-V-4_6` / `openbmb/MiniCPM-V-4_6-Thinking`
 - `--api-key`: API access key
 - `--max-model-len`: Maximum context length. v4.6 supports up to 256K, but start small to fit GPU memory
 - `--gpu_memory_utilization`: GPU memory utilization rate
@@ -140,14 +140,14 @@ extra_body = {
 }
 ```
 
-### 2.4 Think (CoT) Mode
+### 2.4 Thinking Mode
 
-If you serve the **`openbmb/MiniCPM-V-4_6-Think`** checkpoint, the chat template injects a `<think>` block by default and the assistant returns reasoning followed by `</think>` then the final answer. You can shortcut the template via `chat_template_kwargs`:
+If you serve the **`openbmb/MiniCPM-V-4_6-Thinking`** checkpoint, the chat template injects a `<think>` block by default and the assistant returns reasoning followed by `</think>` then the final answer. You can shortcut the template via `chat_template_kwargs`:
 
 ```python
 extra_body = {
     "stop_token_ids": [248044, 248046],
-    # disable the leading <think> block on a Think model
+    # disable the leading <think> block on a Thinking model
     "chat_template_kwargs": {"enable_thinking": False},
 }
 ```
@@ -295,7 +295,7 @@ print(outputs[0].outputs[0].text)
 
 ## Notes
 
-1. **Model Path**: replace `<model_path>` with your local path or one of `openbmb/MiniCPM-V-4_6` / `openbmb/MiniCPM-V-4_6-Think`.
+1. **Model Path**: replace `<model_path>` with your local path or one of `openbmb/MiniCPM-V-4_6` / `openbmb/MiniCPM-V-4_6-Thinking`.
 2. **Stop Tokens**: v4.6 uses the Qwen3.5 vocabulary; the correct `stop_token_ids` are `[248044, 248046]` (v4.5 used `[1, 151645]`).
 3. **API Key**: ensure the key passed to `vllm serve` matches the client.
 4. **Memory**: tune `--gpu_memory_utilization`, `--max-model-len`, and `--max-num-batched-tokens` for your hardware. v4.6 supports up to 256K context, but you typically don't need it.

@@ -276,7 +276,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <ul>
 <li><strong>Two checkpoints, one architecture.</strong> Unlike 4.5 (one model, two modes via <code>enable_thinking</code>), 4.6 ships two independent checkpoints — pick whichever matches your use case.</li>
 <li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6"><code>openbmb/MiniCPM-V-4_6</code></a> — Instruct</li>
-<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Think"><code>openbmb/MiniCPM-V-4_6-Think</code></a> — Think (CoT)</li>
+<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking"><code>openbmb/MiniCPM-V-4_6-Thinking</code></a> — Thinking</li>
 <li><strong>Qwen3.5 hybrid backbone.</strong> Mixed linear / full-attention layers, with up to <strong>256K</strong> context window.</li>
 <li><strong>NaViT-style vision tower.</strong> Replaces the resampler with a more efficient merger structure — simpler GGUF conversion, fewer surgery scripts.</li>
 <li><strong>Standalone transformers architecture.</strong> Registered as <code>MiniCPMV4_6ForConditionalGeneration</code> in <code>transformers &gt;= 5.7.0</code>. Standard <code>AutoProcessor</code> + <code>AutoModelForImageTextToText</code> flow works out of the box.</li>
@@ -287,7 +287,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>   <span class="c1"># or MiniCPM-V-4_6-Think</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>   <span class="c1"># or MiniCPM-V-4_6-Thinking</span>
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
     <span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span> <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>
@@ -348,7 +348,7 @@ python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/pa
 <tr>
 <td style="text-align: left;">Thinking mode</td>
 <td style="text-align: left;">One model, switch via <code>enable_thinking</code></td>
-<td style="text-align: left;"><strong>Two separate checkpoints</strong> (<code>Instruct</code>, <code>Think</code>)</td>
+<td style="text-align: left;"><strong>Two separate checkpoints</strong> (<code>Instruct</code>, <code>Thinking</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;">LM backbone</td>

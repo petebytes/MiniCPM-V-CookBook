@@ -299,14 +299,14 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 <li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf</a></li>
 <li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf</a></li>
 </ul>
-<p>The Think variant is published separately at:</p>
+<p>The Thinking variant is published separately at:</p>
 <ul>
-<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Think-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-Think-gguf</a></li>
+<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf</a></li>
 </ul>
 <h3 id="option-2-convert-from-pytorch-model">Option 2: Convert from PyTorch model</h3>
 <p>Download the PyTorch checkpoint:</p>
 <ul>
-<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">https://huggingface.co/openbmb/MiniCPM-V-4_6</a> (or <code>MiniCPM-V-4_6-Think</code>)</li>
+<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">https://huggingface.co/openbmb/MiniCPM-V-4_6</a> (or <code>MiniCPM-V-4_6-Thinking</code>)</li>
 <li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6</a></li>
 </ul>
 <p>Run the standard <code>convert_hf_to_gguf.py</code> from the <code>llama.cpp</code> repo:</p>
@@ -350,18 +350,18 @@ python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/pa
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>-i
 </code></pre></div>
 
-<p>If you're running the <strong>Think</strong> checkpoint, you can control the reasoning budget through <code>--jinja</code> + <code>--reasoning-budget</code>:</p>
-<div class="code"><pre><span></span><code><span class="c1"># Allow unlimited thinking (Think model)</span>
+<p>If you're running the <strong>Thinking</strong> checkpoint, you can control the reasoning budget through <code>--jinja</code> + <code>--reasoning-budget</code>:</p>
+<div class="code"><pre><span></span><code><span class="c1"># Allow unlimited thinking (Thinking model)</span>
 ./llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Think/MiniCPM-V-4_6-Think-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Think/mmproj-MiniCPM-V-4_6-Think-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>--jinja<span class="w"> </span>--reasoning-budget<span class="w"> </span>-1<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;What is in the image?&quot;</span>
 
-<span class="c1"># Skip the leading &lt;think&gt; block on a Think model</span>
+<span class="c1"># Skip the leading &lt;think&gt; block on a Thinking model</span>
 ./llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Think/MiniCPM-V-4_6-Think-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Think/mmproj-MiniCPM-V-4_6-Think-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>--jinja<span class="w"> </span>--reasoning-budget<span class="w"> </span><span class="m">0</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;What is in the image?&quot;</span>
 </code></pre></div>

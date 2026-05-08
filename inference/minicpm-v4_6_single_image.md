@@ -11,7 +11,7 @@ from transformers import AutoProcessor, AutoModelForImageTextToText
 
 # Pick the variant you want:
 #   "openbmb/MiniCPM-V-4_6"        — Instruct
-#   "openbmb/MiniCPM-V-4_6-Think"  — Think (CoT)
+#   "openbmb/MiniCPM-V-4_6-Thinking"  — Thinking
 model_path = "openbmb/MiniCPM-V-4_6"
 
 processor = AutoProcessor.from_pretrained(model_path)
@@ -82,9 +82,9 @@ print(answer)
 
 ![alt text](./assets/single.png)
 
-## Notes on the Think variant
+## Notes on the Thinking variant
 
-If `model_path` points to `openbmb/MiniCPM-V-4_6-Think`, the chat template prepends a `<think>\n` block to the assistant turn — the model returns `<reasoning>\n</think>\n<final answer>`. To skip the leading `<think>` block, pass `enable_thinking=False`:
+If `model_path` points to `openbmb/MiniCPM-V-4_6-Thinking`, the chat template prepends a `<think>\n` block to the assistant turn — the model returns `<reasoning>\n</think>\n<final answer>`. To skip the leading `<think>` block, pass `enable_thinking=False`:
 
 ```python
 inputs = processor.apply_chat_template(

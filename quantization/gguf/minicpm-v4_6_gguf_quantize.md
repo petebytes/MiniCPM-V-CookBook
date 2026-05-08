@@ -12,7 +12,7 @@ The resulting GGUFs are meant to be used with [`llama.cpp`](../../deployment/lla
 Pick the variant you want to quantize:
 
 - **Instruct** — HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6> · ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6>
-- **Think** — HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6-Think> · ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Think>
+- **Thinking** — HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking> · ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking>
 
 ### 2. Convert to GGUF
 

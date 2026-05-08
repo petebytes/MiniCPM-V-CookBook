@@ -299,14 +299,14 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 <li>HuggingFace：<a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf</a></li>
 <li>魔搭社区：<a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf</a></li>
 </ul>
-<p>Think 版本在以下仓库单独发布：</p>
+<p>Thinking 版本在以下仓库单独发布：</p>
 <ul>
-<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Think-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-Think-gguf</a></li>
+<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf</a></li>
 </ul>
 <h3 id="方法二-从-pytorch-模型转换">方法二：从 PyTorch 模型转换</h3>
 <p>下载 PyTorch 模型：</p>
 <ul>
-<li>HuggingFace：<a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">https://huggingface.co/openbmb/MiniCPM-V-4_6</a>（或 <code>MiniCPM-V-4_6-Think</code>）</li>
+<li>HuggingFace：<a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">https://huggingface.co/openbmb/MiniCPM-V-4_6</a>（或 <code>MiniCPM-V-4_6-Thinking</code>）</li>
 <li>魔搭社区：<a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6</a></li>
 </ul>
 <p>用 <code>llama.cpp</code> 仓库自带的标准脚本 <code>convert_hf_to_gguf.py</code> 直接转换：</p>
@@ -350,18 +350,18 @@ python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/pa
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>-i
 </code></pre></div>
 
-<p>部署 <strong>Think</strong> 模型时，可通过 <code>--jinja</code> + <code>--reasoning-budget</code> 控制思考预算：</p>
-<div class="code"><pre><span></span><code><span class="c1"># Think 模型 - 不限制思考输出</span>
+<p>部署 <strong>Thinking</strong> 模型时，可通过 <code>--jinja</code> + <code>--reasoning-budget</code> 控制思考预算：</p>
+<div class="code"><pre><span></span><code><span class="c1"># Thinking 模型 - 不限制思考输出</span>
 ./llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Think/MiniCPM-V-4_6-Think-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Think/mmproj-MiniCPM-V-4_6-Think-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>--jinja<span class="w"> </span>--reasoning-budget<span class="w"> </span>-1<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;图中有什么？&quot;</span>
 
-<span class="c1"># Think 模型 - 跳过开头的 &lt;think&gt; 块（直接出答案）</span>
+<span class="c1"># Thinking 模型 - 跳过开头的 &lt;think&gt; 块（直接出答案）</span>
 ./llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Think/MiniCPM-V-4_6-Think-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Think/mmproj-MiniCPM-V-4_6-Think-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>--jinja<span class="w"> </span>--reasoning-budget<span class="w"> </span><span class="m">0</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;图中有什么？&quot;</span>
 </code></pre></div>

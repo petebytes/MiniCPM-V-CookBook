@@ -8,7 +8,7 @@
 MiniCPM-V 4.6 提供两个 checkpoint：
 
 - **Instruct** — [`openbmb/MiniCPM-V-4_6`](https://huggingface.co/openbmb/MiniCPM-V-4_6)
-- **Think（思考）** — [`openbmb/MiniCPM-V-4_6-Think`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Think)
+- **Thinking（思考）** — [`openbmb/MiniCPM-V-4_6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking)
 
 ## 1. SGLang 安装
 
@@ -59,10 +59,10 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6 --port 30000 -
 python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4_6 --port 30000 --trust-remote-code
 ```
 
-部署 Think 模型只需替换 model id：
+部署 Thinking 模型只需替换 model id：
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Think --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Thinking --port 30000 --trust-remote-code
 ```
 
 ## 3. 调用服务接口

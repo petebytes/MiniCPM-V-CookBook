@@ -276,7 +276,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <ul>
 <li><strong>两个独立 checkpoint，统一架构。</strong> 与 4.5（一份模型 + <code>enable_thinking</code> 切换）不同，4.6 拆为两个独立 checkpoint，按需选用。</li>
 <li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6"><code>openbmb/MiniCPM-V-4_6</code></a> —— Instruct</li>
-<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Think"><code>openbmb/MiniCPM-V-4_6-Think</code></a> —— Think（思考）</li>
+<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking"><code>openbmb/MiniCPM-V-4_6-Thinking</code></a> —— Thinking（思考）</li>
 <li><strong>Qwen3.5 hybrid backbone。</strong> 线性注意力与全注意力混合，最长支持 <strong>256K</strong> 上下文。</li>
 <li><strong>NaViT 风格视觉塔。</strong> 用 merger 替换原有 resampler，结构更高效，GGUF 转换流程也大大简化。</li>
 <li><strong>transformers 独立架构。</strong> 在 <code>transformers &gt;= 5.7.0</code> 中以 <code>MiniCPMV4_6ForConditionalGeneration</code> 注册，标准 <code>AutoProcessor</code> + <code>AutoModelForImageTextToText</code> 即可使用。</li>
@@ -287,7 +287,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>   <span class="c1"># 或 MiniCPM-V-4_6-Think</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>   <span class="c1"># 或 MiniCPM-V-4_6-Thinking</span>
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
     <span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span> <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>
@@ -348,7 +348,7 @@ python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/pa
 <tr>
 <td style="text-align: left;">思考模式</td>
 <td style="text-align: left;">单模型，请求级 <code>enable_thinking</code> 切换</td>
-<td style="text-align: left;"><strong>两个独立 checkpoint</strong>（Instruct、Think）</td>
+<td style="text-align: left;"><strong>两个独立 checkpoint</strong>（Instruct、Thinking）</td>
 </tr>
 <tr>
 <td style="text-align: left;">LM Backbone</td>

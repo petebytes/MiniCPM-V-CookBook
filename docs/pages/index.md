@@ -4,7 +4,7 @@ Cook up amazing multimodal AI applications effortlessly with **MiniCPM-V** and *
 
 ## What's new
 
-- 🎉 **MiniCPM-V 4.6** released — Instruct + Think variants, Qwen3.5 hybrid backbone, 256K context, simplified vision merger.
+- 🎉 **MiniCPM-V 4.6** released — Instruct + Thinking variants, Qwen3.5 hybrid backbone, 256K context, simplified vision merger.
   - Inference: [Single-image QA](v4.6/inference/single-image.html) · [Multi-image QA](v4.6/inference/multi-images.html) · [Video](v4.6/inference/video-understanding.html) · [OCR](v4.6/inference/ocr.html) · [PDF](v4.6/inference/pdf-parse.html) · [Grounding](v4.6/inference/grounding.html)
   - Deployment: [vLLM](v4.6/deployment/vllm.html) · [SGLang](v4.6/deployment/sglang.html) · [llama.cpp](v4.6/deployment/llamacpp.html) · [Ollama](v4.6/deployment/ollama.html)
   - Quantization: [GGUF](v4.6/quantization/gguf.html) · [BNB](v4.6/quantization/bnb.html) · [AWQ](v4.6/quantization/awq.html)

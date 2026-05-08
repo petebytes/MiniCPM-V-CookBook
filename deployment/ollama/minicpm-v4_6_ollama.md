@@ -41,8 +41,8 @@ Once the OpenBMB-published model lands on the Ollama registry, run:
 
 ```bash
 ./ollama run openbmb/minicpm-v4.6
-# or, for the Think variant
-./ollama run openbmb/minicpm-v4.6-think
+# or, for the Thinking variant
+./ollama run openbmb/minicpm-v4.6-thinking
 ```
 
 ### Command line
@@ -79,7 +79,7 @@ with open(image_path, 'rb') as image_file:
 - HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf>
 - ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf>
 
-(Or `openbmb/MiniCPM-V-4_6-Think-gguf` for the Think variant.)
+(Or `openbmb/MiniCPM-V-4_6-Thinking-gguf` for the Thinking variant.)
 
 ### Create a ModelFile
 

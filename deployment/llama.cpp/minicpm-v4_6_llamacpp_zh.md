@@ -39,15 +39,15 @@ cmake --build build --config Release
 - HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf>
 - 魔搭社区：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf>
 
-Think 版本在以下仓库单独发布：
+Thinking 版本在以下仓库单独发布：
 
-- <https://huggingface.co/openbmb/MiniCPM-V-4_6-Think-gguf>
+- <https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf>
 
 ### 方法二：从 PyTorch 模型转换
 
 下载 PyTorch 模型：
 
-- HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6>（或 `MiniCPM-V-4_6-Think`）
+- HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6>（或 `MiniCPM-V-4_6-Thinking`）
 - 魔搭社区：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6>
 
 用 `llama.cpp` 仓库自带的标准脚本 `convert_hf_to_gguf.py` 直接转换：
@@ -95,20 +95,20 @@ cd build/bin/
     --image xx.jpg -i
 ```
 
-部署 **Think** 模型时，可通过 `--jinja` + `--reasoning-budget` 控制思考预算：
+部署 **Thinking** 模型时，可通过 `--jinja` + `--reasoning-budget` 控制思考预算：
 
 ```bash
-# Think 模型 - 不限制思考输出
+# Thinking 模型 - 不限制思考输出
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6-Think/MiniCPM-V-4_6-Think-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6-Think/mmproj-MiniCPM-V-4_6-Think-F16.gguf \
+    -m  /path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg --jinja --reasoning-budget -1 -p "图中有什么？"
 
-# Think 模型 - 跳过开头的 <think> 块（直接出答案）
+# Thinking 模型 - 跳过开头的 <think> 块（直接出答案）
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6-Think/MiniCPM-V-4_6-Think-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6-Think/mmproj-MiniCPM-V-4_6-Think-F16.gguf \
+    -m  /path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg --jinja --reasoning-budget 0 -p "图中有什么？"
 ```

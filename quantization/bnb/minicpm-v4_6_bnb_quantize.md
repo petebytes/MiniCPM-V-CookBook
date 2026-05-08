@@ -6,7 +6,7 @@
 
 ## 1. Download the Model
 
-Download the MiniCPM-V-4_6 model from [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4_6) (or `openbmb/MiniCPM-V-4_6-Think` for the think variant) and extract it to a local directory.
+Download the MiniCPM-V-4_6 model from [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4_6) (or `openbmb/MiniCPM-V-4_6-Thinking` for the think variant) and extract it to a local directory.
 
 ## 2. Quantization Script
 

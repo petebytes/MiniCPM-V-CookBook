@@ -278,7 +278,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <p>MiniCPM-V 4.6 提供两个 checkpoint：</p>
 <ul>
 <li><strong>Instruct</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6"><code>openbmb/MiniCPM-V-4_6</code></a></li>
-<li><strong>Think（思考）</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Think"><code>openbmb/MiniCPM-V-4_6-Think</code></a></li>
+<li><strong>Thinking（思考）</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking"><code>openbmb/MiniCPM-V-4_6-Thinking</code></a></li>
 </ul>
 <h2 id="1-sglang-安装">1. SGLang 安装</h2>
 <h3 id="从-pr-分支源码安装">从 PR 分支源码安装</h3>
@@ -314,8 +314,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>/your/local/MiniCPM-V-4_6<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
 </code></pre></div>
 
-<p>部署 Think 模型只需替换 model id：</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-V-4_6-Think<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
+<p>部署 Thinking 模型只需替换 model id：</p>
+<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-V-4_6-Thinking<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
 </code></pre></div>
 
 <h2 id="3-调用服务接口">3. 调用服务接口</h2>

@@ -1,7 +1,7 @@
 # AWQ
 
 ::::{Note}
-**Support:** MiniCPM-V 4.6 (Instruct & Think) / MiniCPM-V 4.5
+**Support:** MiniCPM-V 4.6 (Instruct & Thinking) / MiniCPM-V 4.5
 ::::
 
 > The AutoAWQ workflow used by MiniCPM-V is hosted at [`tc-mb/AutoAWQ`](https://github.com/tc-mb/AutoAWQ) (the upstream `casper-hansen/AutoAWQ` is no longer maintained).
@@ -16,7 +16,7 @@
 git clone https://huggingface.co/openbmb/MiniCPM-V-4_6-AWQ
 ```
 
-(Or `openbmb/MiniCPM-V-4_6-Think-AWQ` for the Think variant once published.)
+(Or `openbmb/MiniCPM-V-4_6-Thinking-AWQ` for the Thinking variant once published.)
 
 ### 2. Run with vLLM
 

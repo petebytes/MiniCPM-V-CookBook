@@ -41,8 +41,8 @@ OpenBMB 在 Ollama registry 上发布的模型可直接运行：
 
 ```bash
 ./ollama run openbmb/minicpm-v4.6
-# 或 Think 版本
-./ollama run openbmb/minicpm-v4.6-think
+# 或 Thinking 版本
+./ollama run openbmb/minicpm-v4.6-thinking
 ```
 
 ### 命令行
@@ -80,7 +80,7 @@ with open(image_path, 'rb') as image_file:
 - HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf>
 - 魔搭社区：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf>
 
-（Think 版本：`openbmb/MiniCPM-V-4_6-Think-gguf`）
+（Thinking 版本：`openbmb/MiniCPM-V-4_6-Thinking-gguf`）
 
 ### 创建 ModelFile
 

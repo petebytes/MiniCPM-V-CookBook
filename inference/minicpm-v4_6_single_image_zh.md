@@ -11,7 +11,7 @@ from transformers import AutoProcessor, AutoModelForImageTextToText
 
 # 选择需要的 checkpoint：
 #   "openbmb/MiniCPM-V-4_6"        — Instruct
-#   "openbmb/MiniCPM-V-4_6-Think"  — Think（思考模式）
+#   "openbmb/MiniCPM-V-4_6-Thinking"  — Thinking（思考模式）
 model_path = "openbmb/MiniCPM-V-4_6"
 
 processor = AutoProcessor.from_pretrained(model_path)
@@ -82,9 +82,9 @@ print(answer)
 
 ![alt text](./assets/single.png)
 
-## 关于 Think 版本的说明
+## 关于 Thinking 版本的说明
 
-如果 `model_path` 指向 `openbmb/MiniCPM-V-4_6-Think`，chat template 会在 assistant 起始位置插入一个 `<think>\n` 块——模型会先输出 `<推理过程>\n</think>\n<最终回答>`。如需跳过开头的 `<think>` 块，传入 `enable_thinking=False`：
+如果 `model_path` 指向 `openbmb/MiniCPM-V-4_6-Thinking`，chat template 会在 assistant 起始位置插入一个 `<think>\n` 块——模型会先输出 `<推理过程>\n</think>\n<最终回答>`。如需跳过开头的 `<think>` 块，传入 `enable_thinking=False`：
 
 ```python
 inputs = processor.apply_chat_template(

@@ -39,15 +39,15 @@ Download the language model file (e.g., `MiniCPM-V-4_6-Q4_K_M.gguf`) and the vis
 - HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf>
 - ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf>
 
-The Think variant is published separately at:
+The Thinking variant is published separately at:
 
-- <https://huggingface.co/openbmb/MiniCPM-V-4_6-Think-gguf>
+- <https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf>
 
 ### Option 2: Convert from PyTorch model
 
 Download the PyTorch checkpoint:
 
-- HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6> (or `MiniCPM-V-4_6-Think`)
+- HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6> (or `MiniCPM-V-4_6-Thinking`)
 - ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6>
 
 Run the standard `convert_hf_to_gguf.py` from the `llama.cpp` repo:
@@ -95,20 +95,20 @@ cd build/bin/
     --image xx.jpg -i
 ```
 
-If you're running the **Think** checkpoint, you can control the reasoning budget through `--jinja` + `--reasoning-budget`:
+If you're running the **Thinking** checkpoint, you can control the reasoning budget through `--jinja` + `--reasoning-budget`:
 
 ```bash
-# Allow unlimited thinking (Think model)
+# Allow unlimited thinking (Thinking model)
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6-Think/MiniCPM-V-4_6-Think-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6-Think/mmproj-MiniCPM-V-4_6-Think-F16.gguf \
+    -m  /path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg --jinja --reasoning-budget -1 -p "What is in the image?"
 
-# Skip the leading <think> block on a Think model
+# Skip the leading <think> block on a Thinking model
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6-Think/MiniCPM-V-4_6-Think-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6-Think/mmproj-MiniCPM-V-4_6-Think-F16.gguf \
+    -m  /path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg --jinja --reasoning-budget 0 -p "What is in the image?"
 ```

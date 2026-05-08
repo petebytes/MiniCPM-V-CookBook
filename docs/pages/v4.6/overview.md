@@ -6,7 +6,7 @@
 
 - **Two checkpoints, one architecture.** Unlike 4.5 (one model, two modes via `enable_thinking`), 4.6 ships two independent checkpoints — pick whichever matches your use case.
   - [`openbmb/MiniCPM-V-4_6`](https://huggingface.co/openbmb/MiniCPM-V-4_6) — Instruct
-  - [`openbmb/MiniCPM-V-4_6-Think`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Think) — Think (CoT)
+  - [`openbmb/MiniCPM-V-4_6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking) — Thinking
 - **Qwen3.5 hybrid backbone.** Mixed linear / full-attention layers, with up to **256K** context window.
 - **NaViT-style vision tower.** Replaces the resampler with a more efficient merger structure — simpler GGUF conversion, fewer surgery scripts.
 - **Standalone transformers architecture.** Registered as `MiniCPMV4_6ForConditionalGeneration` in `transformers >= 5.7.0`. Standard `AutoProcessor` + `AutoModelForImageTextToText` flow works out of the box.
@@ -20,7 +20,7 @@ import torch
 from PIL import Image
 from transformers import AutoProcessor, AutoModelForImageTextToText
 
-model_path = "openbmb/MiniCPM-V-4_6"   # or MiniCPM-V-4_6-Think
+model_path = "openbmb/MiniCPM-V-4_6"   # or MiniCPM-V-4_6-Thinking
 processor = AutoProcessor.from_pretrained(model_path)
 model = AutoModelForImageTextToText.from_pretrained(
     model_path, torch_dtype=torch.bfloat16, attn_implementation="sdpa",
@@ -78,7 +78,7 @@ See the [llama.cpp guide](deployment/llamacpp.html) for full details.
 
 | Topic | v4.5 | v4.6 |
 | :--- | :--- | :--- |
-| Thinking mode | One model, switch via `enable_thinking` | **Two separate checkpoints** (`Instruct`, `Think`) |
+| Thinking mode | One model, switch via `enable_thinking` | **Two separate checkpoints** (`Instruct`, `Thinking`) |
 | LM backbone | Qwen3 | **Qwen3.5 hybrid** (linear + full attention) |
 | Max context | 32K | **256K** |
 | Vision tower | Perceiver resampler | **NaViT-style merger** |

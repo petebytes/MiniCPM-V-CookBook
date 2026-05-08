@@ -50,4 +50,4 @@ print(answer)
 
 ![alt text](./assets/ocr.png)
 
-> 对于中文密集或文本密集的页面，**Think** checkpoint（`openbmb/MiniCPM-V-4_6-Think`）通常能输出更忠实的转写结果，因为它会先分析版式再回答。Instruct checkpoint 速度更快，对于短文本 / 已经截好的文字图片通常已经够用。
+> 对于中文密集或文本密集的页面，**Thinking** checkpoint（`openbmb/MiniCPM-V-4_6-Thinking`）通常能输出更忠实的转写结果，因为它会先分析版式再回答。Instruct checkpoint 速度更快，对于短文本 / 已经截好的文字图片通常已经够用。
