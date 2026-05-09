@@ -271,7 +271,7 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-v4-5-vllm-deployment-guide">MiniCPM-V4.5 vLLM Deployment Guide</h1>
+  <article><h1 id="minicpm-v-4-5-vllm-deployment-guide">MiniCPM-V 4.5 vLLM Deployment Guide</h1>
 <h2 id="1-environment-setup">1. Environment Setup</h2>
 <h3 id="1-1-install-vllm">1.1 Install vLLM</h3>
 <div class="code"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">vllm</span><span class="o">==</span><span class="m">0</span>.10.2
@@ -287,7 +287,7 @@ footer.page-footer a:hover { color: var(--primary); }
 </code></pre></div>
 
 <p><strong>Parameter Description:</strong>
-- <code>&lt;model_path&gt;</code>: Specify the local path to your MiniCPM-V4.5 model
+- <code>&lt;model_path&gt;</code>: Specify the local path to your MiniCPM-V 4.5 model
 - <code>--api-key</code>: Set the API access key
 - <code>--max-model-len</code>: Set the maximum model length
 - <code>--gpu_memory_utilization</code>: GPU memory utilization rate</p>
@@ -378,7 +378,7 @@ footer.page-footer a:hover { color: var(--primary); }
 </code></pre></div>
 
 <h3 id="2-4-thinking-and-non-thinking-modes">2.4 Thinking and Non-Thinking Modes</h3>
-<p>The <code>MiniCPM-V4.5</code> model supports thinking before replying, and the thinking mode can be turned on and off by setting the <code>opanai</code> request parameters.</p>
+<p>The <code>MiniCPM-V 4.5</code> model supports thinking before replying, and the thinking mode can be turned on and off by setting the <code>opanai</code> request parameters.</p>
 <ul>
 <li><code>"chat_template_kwargs": {"enable_thinking": True}</code></li>
 </ul>
@@ -424,7 +424,7 @@ footer.page-footer a:hover { color: var(--primary); }
 </code></pre></div>
 
 <h3 id="2-5-high-frame-rate-and-long-video-understanding-mode">2.5 High frame rate and long video understanding mode</h3>
-<p>The <code>MiniCPM-V4.5</code> model supports efficient high frame rate and long video understanding.</p>
+<p>The <code>MiniCPM-V 4.5</code> model supports efficient high frame rate and long video understanding.</p>
 <p><strong>Environment variables need to be set</strong> to specify the corresponding video loading backend</p>
 <ul>
 <li><code>VLLM_VIDEO_LOADER_BACKEND=enhanced_opencv</code></li>
@@ -580,7 +580,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="p">)</span>
 
     <span class="n">ai_message</span> <span class="o">=</span> <span class="n">chat_response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MiniCPM-V4.5:&quot;</span><span class="p">,</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MiniCPM-V 4.5:&quot;</span><span class="p">,</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
 
     <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
         <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span>
@@ -660,7 +660,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <h2 id="notes">Notes</h2>
 <ol>
-<li><strong>Model Path</strong>: Replace all <code>&lt;model_path&gt;</code> in the examples with the actual MiniCPM-V4.5 model path</li>
+<li><strong>Model Path</strong>: Replace all <code>&lt;model_path&gt;</code> in the examples with the actual MiniCPM-V 4.5 model path</li>
 <li><strong>API Key</strong>: Ensure the API key when launching the service matches the key in the client code</li>
 <li><strong>File Paths</strong>: Adjust image and video file paths according to your actual situation</li>
 <li><strong>Memory Configuration</strong>: Adjust the <code>--gpu_memory_utilization</code> parameter appropriately based on GPU memory</li>

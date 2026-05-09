@@ -1,11 +1,11 @@
-# MiniCPM-o4.5 vLLM 部署指南
+# MiniCPM-o 4.5 vLLM 部署指南
 
 ## 1. 环境准备
 
 ### 1.1 安装 vLLM
 
 > [!NOTE]
-> MiniCPM-o4.5 的支持已经合入 vLLM 官方仓库（[PR #33431](https://github.com/vllm-project/vllm/pull/33431)），并从 vLLM **v0.16.0** 起正式发布。
+> MiniCPM-o 4.5 的支持已经合入 vLLM 官方仓库（[PR #33431](https://github.com/vllm-project/vllm/pull/33431)），并从 vLLM **v0.16.0** 起正式发布。
 >
 > 现在可以直接通过 PyPI 安装官方 vLLM，无需再从 `tc-mb/vllm` 的 `Support-MiniCPM-o-4.5` 分支编译（代码合入官方后，该分支已删除）。
 
@@ -65,7 +65,7 @@ vllm serve <模型路径>  --dtype auto --max-model-len 2048 --api-key token-abc
 ```
 
 **参数说明：**
-- `<模型路径>`：指定 MiniCPM-o4.5 模型的本地路径
+- `<模型路径>`：指定 MiniCPM-o 4.5 模型的本地路径
 - `--api-key`：设置 API 访问密钥
 - `--max-model-len`：设置最大模型长度
 - `--gpu_memory_utilization`：GPU 内存使用率
@@ -307,7 +307,7 @@ while True:
     )
 
     ai_message = chat_response.choices[0].message
-    print("MiniCPM-o4.5:", ai_message.content)
+    print("MiniCPM-o 4.5:", ai_message.content)
     
     messages.append({
         "role": "assistant",
@@ -389,7 +389,7 @@ print(outputs[0].outputs[0].text)
 
 ## 注意事项
 
-1. **模型路径**：需将所有示例中的 `<模型路径>` 替换为实际的 MiniCPM-o4.5 模型路径
+1. **模型路径**：需将所有示例中的 `<模型路径>` 替换为实际的 MiniCPM-o 4.5 模型路径
 2. **API 密钥**：确保启动服务时的 API 密钥与客户端代码中的密钥保持一致
 3. **文件路径**：需根据实际情况调整图片、视频、音频文件的路径
 4. **内存配置**：应根据 GPU 内存情况合理调整 `--gpu_memory_utilization` 参数

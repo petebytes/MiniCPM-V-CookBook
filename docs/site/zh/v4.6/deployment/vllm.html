@@ -268,7 +268,7 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-v4-6-vllm-部署指南">MiniCPM-V4.6 vLLM 部署指南</h1>
+  <article><h1 id="minicpm-v-4-6-vllm-部署指南">MiniCPM-V 4.6 vLLM 部署指南</h1>
 <p>MiniCPM-V 4.6 提供 <strong>两个独立的 checkpoint</strong>：</p>
 <table>
 <thead>
@@ -495,7 +495,7 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;模型路径&gt;<sp
     <span class="p">)</span>
 
     <span class="n">ai_message</span> <span class="o">=</span> <span class="n">chat_response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MiniCPM-V4.6:&quot;</span><span class="p">,</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MiniCPM-V 4.6:&quot;</span><span class="p">,</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
 
     <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">})</span>
 </code></pre></div>

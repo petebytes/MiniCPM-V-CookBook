@@ -1,4 +1,4 @@
-# MiniCPM-V4 vLLM 部署指南
+# MiniCPM-V 4 vLLM 部署指南
 
 ## 1. 环境准备
 
@@ -22,7 +22,7 @@ vllm serve <模型路径>  --dtype auto --max-model-len 2048 --api-key token-abc
 ```
 
 **参数说明：**
-- `<模型路径>`：指定 MiniCPM-V4 模型的本地路径
+- `<模型路径>`：指定 MiniCPM-V 4 模型的本地路径
 - `--api-key`：设置 API 访问密钥
 - `--max-model-len`：设置最大模型长度
 - `--gpu_memory_utilization`：GPU 内存使用率
@@ -214,7 +214,7 @@ while True:
     )
 
     ai_message = chat_response.choices[0].message
-    print("MiniCPM-V4:", ai_message.content)
+    print("MiniCPM-V 4:", ai_message.content)
     
     messages.append({
         "role": "assistant",
@@ -296,7 +296,7 @@ print(outputs[0].outputs[0].text)
 
 ## 注意事项
 
-1. **模型路径**：需将所有示例中的 `<模型路径>` 替换为实际的 MiniCPM-V4 模型路径
+1. **模型路径**：需将所有示例中的 `<模型路径>` 替换为实际的 MiniCPM-V 4 模型路径
 2. **API 密钥**：确保启动服务时的 API 密钥与客户端代码中的密钥保持一致
 3. **文件路径**：需根据实际情况调整图片、视频文件的路径
 4. **内存配置**：应根据 GPU 内存情况合理调整 `--gpu_memory_utilization` 参数

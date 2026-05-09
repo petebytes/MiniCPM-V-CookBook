@@ -1,7 +1,7 @@
 # GPTQ
 
 :::{Note}
-**Support:** MiniCPM-V4.0
+**Support:** MiniCPM-V 4.0
 :::
 
 ## Method 1 (Use the pre-quantized model)

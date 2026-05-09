@@ -268,7 +268,7 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-v4-6-vllm-deployment-guide">MiniCPM-V4.6 vLLM Deployment Guide</h1>
+  <article><h1 id="minicpm-v-4-6-vllm-deployment-guide">MiniCPM-V 4.6 vLLM Deployment Guide</h1>
 <p>MiniCPM-V 4.6 ships as <strong>two separate checkpoints</strong>:</p>
 <table>
 <thead>
@@ -495,7 +495,7 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;model_path&gt;<span
     <span class="p">)</span>
 
     <span class="n">ai_message</span> <span class="o">=</span> <span class="n">chat_response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MiniCPM-V4.6:&quot;</span><span class="p">,</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MiniCPM-V 4.6:&quot;</span><span class="p">,</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
 
     <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">})</span>
 </code></pre></div>

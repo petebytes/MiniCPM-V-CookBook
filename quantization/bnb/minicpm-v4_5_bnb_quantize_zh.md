@@ -1,7 +1,7 @@
 # BNB
 
 :::{Note}
-**支持版本：** MiniCPM-V4.5 / MiniCPM-V4.0 / MiniCPM-V2.6 / MiniCPM-V2.5
+**支持版本：** MiniCPM-V 4.5 / MiniCPM-V 4.0 / MiniCPM-V 2.6 / MiniCPM-V 2.5
 :::
 
 

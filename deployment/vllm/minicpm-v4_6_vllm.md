@@ -1,4 +1,4 @@
-# MiniCPM-V4.6 vLLM Deployment Guide
+# MiniCPM-V 4.6 vLLM Deployment Guide
 
 MiniCPM-V 4.6 ships as **two separate checkpoints**:
 
@@ -235,7 +235,7 @@ while True:
     )
 
     ai_message = chat_response.choices[0].message
-    print("MiniCPM-V4.6:", ai_message.content)
+    print("MiniCPM-V 4.6:", ai_message.content)
 
     messages.append({"role": "assistant", "content": ai_message.content})
 ```

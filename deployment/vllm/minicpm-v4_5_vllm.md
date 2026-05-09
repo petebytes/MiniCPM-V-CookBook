@@ -1,4 +1,4 @@
-# MiniCPM-V4.5 vLLM Deployment Guide
+# MiniCPM-V 4.5 vLLM Deployment Guide
 
 ## 1. Environment Setup
 
@@ -21,7 +21,7 @@ pip install vllm[video]
 vllm serve <model_path>  --dtype auto --max-model-len 2048 --api-key token-abc123 --gpu_memory_utilization 0.9 --trust-remote-code --max-num-batched-tokens 2048
 ```
 **Parameter Description:**
-- `<model_path>`: Specify the local path to your MiniCPM-V4.5 model
+- `<model_path>`: Specify the local path to your MiniCPM-V 4.5 model
 - `--api-key`: Set the API access key
 - `--max-model-len`: Set the maximum model length
 - `--gpu_memory_utilization`: GPU memory utilization rate
@@ -118,7 +118,7 @@ print("Chat response content:", chat_response.choices[0].message.content)
 
 ### 2.4 Thinking and Non-Thinking Modes
 
-The `MiniCPM-V4.5` model supports thinking before replying, and the thinking mode can be turned on and off by setting the `opanai` request parameters.
+The `MiniCPM-V 4.5` model supports thinking before replying, and the thinking mode can be turned on and off by setting the `opanai` request parameters.
 
 - `"chat_template_kwargs": {"enable_thinking": True}`
 
@@ -167,7 +167,7 @@ print("Chat response content:", chat_response.choices[0].message.content)
 
 ### 2.5 High frame rate and long video understanding mode
 
-The `MiniCPM-V4.5` model supports efficient high frame rate and long video understanding.
+The `MiniCPM-V 4.5` model supports efficient high frame rate and long video understanding.
 
 **Environment variables need to be set** to specify the corresponding video loading backend
  
@@ -339,7 +339,7 @@ while True:
     )
 
     ai_message = chat_response.choices[0].message
-    print("MiniCPM-V4.5:", ai_message.content)
+    print("MiniCPM-V 4.5:", ai_message.content)
     
     messages.append({
         "role": "assistant",
@@ -421,7 +421,7 @@ print(outputs[0].outputs[0].text)
 
 ## Notes
 
-1. **Model Path**: Replace all `<model_path>` in the examples with the actual MiniCPM-V4.5 model path
+1. **Model Path**: Replace all `<model_path>` in the examples with the actual MiniCPM-V 4.5 model path
 2. **API Key**: Ensure the API key when launching the service matches the key in the client code
 3. **File Paths**: Adjust image and video file paths according to your actual situation
 4. **Memory Configuration**: Adjust the `--gpu_memory_utilization` parameter appropriately based on GPU memory

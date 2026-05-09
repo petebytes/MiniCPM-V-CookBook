@@ -264,12 +264,12 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-o4-5-vllm-deployment-guide">MiniCPM-o4.5 vLLM Deployment Guide</h1>
+  <article><h1 id="minicpm-o-4-5-vllm-deployment-guide">MiniCPM-o 4.5 vLLM Deployment Guide</h1>
 <h2 id="1-environment-setup">1. Environment Setup</h2>
 <h3 id="1-1-install-vllm">1.1 Install vLLM</h3>
 <div class="admonition admonition-note" markdown="0">
 <p class="admonition-title">Note</p>
-<p>MiniCPM-o4.5 support has been merged into the official vLLM (<a href="https://github.com/vllm-project/vllm/pull/33431">PR #33431</a>) and is included starting from vLLM <strong>v0.16.0</strong>.</p>
+<p>MiniCPM-o 4.5 support has been merged into the official vLLM (<a href="https://github.com/vllm-project/vllm/pull/33431">PR #33431</a>) and is included starting from vLLM <strong>v0.16.0</strong>.</p>
 <p>You can now install vLLM directly from PyPI — there is no longer a need to build from the <code>tc-mb/vllm</code> <code>Support-MiniCPM-o-4.5</code> branch (which has been removed since the code was upstreamed).</p>
 </div>
 
@@ -317,7 +317,7 @@ pip<span class="w"> </span>install<span class="w"> </span>vllm<span class="o">[<
 </code></pre></div>
 
 <p><strong>Parameter Description:</strong>
-- <code>&lt;model_path&gt;</code>: Specify the local path to your MiniCPM-o4.5 model
+- <code>&lt;model_path&gt;</code>: Specify the local path to your MiniCPM-o 4.5 model
 - <code>--api-key</code>: Set the API access key
 - <code>--max-model-len</code>: Set the maximum model length
 - <code>--gpu_memory_utilization</code>: GPU memory utilization rate</p>
@@ -545,7 +545,7 @@ pip<span class="w"> </span>install<span class="w"> </span>vllm<span class="o">[<
     <span class="p">)</span>
 
     <span class="n">ai_message</span> <span class="o">=</span> <span class="n">chat_response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MiniCPM-o4.5:&quot;</span><span class="p">,</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MiniCPM-o 4.5:&quot;</span><span class="p">,</span> <span class="n">ai_message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
 
     <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
         <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span>
@@ -625,7 +625,7 @@ pip<span class="w"> </span>install<span class="w"> </span>vllm<span class="o">[<
 
 <h2 id="notes">Notes</h2>
 <ol>
-<li><strong>Model Path</strong>: Replace all <code>&lt;model_path&gt;</code> in the examples with the actual MiniCPM-o4.5 model path</li>
+<li><strong>Model Path</strong>: Replace all <code>&lt;model_path&gt;</code> in the examples with the actual MiniCPM-o 4.5 model path</li>
 <li><strong>API Key</strong>: Ensure the API key when launching the service matches the key in the client code</li>
 <li><strong>File Paths</strong>: Adjust image, video, and audio file paths according to your actual situation</li>
 <li><strong>Memory Configuration</strong>: Adjust the <code>--gpu_memory_utilization</code> parameter appropriately based on GPU memory</li>

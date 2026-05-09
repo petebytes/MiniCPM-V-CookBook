@@ -1,4 +1,4 @@
-# MiniCPM-V4.6 vLLM 部署指南
+# MiniCPM-V 4.6 vLLM 部署指南
 
 MiniCPM-V 4.6 提供 **两个独立的 checkpoint**：
 
@@ -235,7 +235,7 @@ while True:
     )
 
     ai_message = chat_response.choices[0].message
-    print("MiniCPM-V4.6:", ai_message.content)
+    print("MiniCPM-V 4.6:", ai_message.content)
 
     messages.append({"role": "assistant", "content": ai_message.content})
 ```
