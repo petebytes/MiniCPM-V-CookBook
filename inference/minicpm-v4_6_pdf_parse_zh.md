@@ -6,7 +6,7 @@
 import torch
 from transformers import AutoProcessor, AutoModelForImageTextToText
 
-model_path = "openbmb/MiniCPM-V-4_6"
+model_path = "openbmb/MiniCPM-V-4.6"
 
 processor = AutoProcessor.from_pretrained(model_path)
 model = AutoModelForImageTextToText.from_pretrained(

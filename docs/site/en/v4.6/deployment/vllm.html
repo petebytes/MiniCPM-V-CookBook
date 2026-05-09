@@ -281,13 +281,13 @@ footer.page-footer a:hover { color: var(--primary); }
 <tbody>
 <tr>
 <td>Instruct</td>
-<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">openbmb/MiniCPM-V-4_6</a></td>
-<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6">OpenBMB/MiniCPM-V-4_6</a></td>
+<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4.6">openbmb/MiniCPM-V-4.6</a></td>
+<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6">OpenBMB/MiniCPM-V-4.6</a></td>
 </tr>
 <tr>
 <td>Thinking</td>
-<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking">openbmb/MiniCPM-V-4_6-Thinking</a></td>
-<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking">OpenBMB/MiniCPM-V-4_6-Thinking</a></td>
+<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking">openbmb/MiniCPM-V-4.6-Thinking</a></td>
+<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-Thinking">OpenBMB/MiniCPM-V-4.6-Thinking</a></td>
 </tr>
 </tbody>
 </table>
@@ -336,7 +336,7 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 </code></pre></div>
 
 <p><strong>Parameter Description:</strong>
-- <code>&lt;model_path&gt;</code>: Local path to MiniCPM-V-4_6, or the HuggingFace ID <code>openbmb/MiniCPM-V-4_6</code> / <code>openbmb/MiniCPM-V-4_6-Thinking</code>
+- <code>&lt;model_path&gt;</code>: Local path to MiniCPM-V-4.6, or the HuggingFace ID <code>openbmb/MiniCPM-V-4.6</code> / <code>openbmb/MiniCPM-V-4.6-Thinking</code>
 - <code>--api-key</code>: API access key
 - <code>--max-model-len</code>: Maximum context length. v4.6 supports up to 256K, but start small to fit GPU memory
 - <code>--gpu_memory_utilization</code>: GPU memory utilization rate</p>
@@ -412,7 +412,7 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 </code></pre></div>
 
 <h3 id="2-4-thinking-mode">2.4 Thinking Mode</h3>
-<p>If you serve the <strong><code>openbmb/MiniCPM-V-4_6-Thinking</code></strong> checkpoint, the chat template injects a <code>&lt;think&gt;</code> block by default and the assistant returns reasoning followed by <code>&lt;/think&gt;</code> then the final answer. You can shortcut the template via <code>chat_template_kwargs</code>:</p>
+<p>If you serve the <strong><code>openbmb/MiniCPM-V-4.6-Thinking</code></strong> checkpoint, the chat template injects a <code>&lt;think&gt;</code> block by default and the assistant returns reasoning followed by <code>&lt;/think&gt;</code> then the final answer. You can shortcut the template via <code>chat_template_kwargs</code>:</p>
 <div class="code"><pre><span></span><code><span class="n">extra_body</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;stop_token_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">248044</span><span class="p">,</span> <span class="mi">248046</span><span class="p">],</span>
     <span class="c1"># disable the leading &lt;think&gt; block on a Thinking model</span>
@@ -507,7 +507,7 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;model_path&gt;<span
 
 <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;&lt;model_path&gt;&quot;</span>
 <span class="c1"># Or directly:</span>
-<span class="c1"># MODEL_NAME = &quot;openbmb/MiniCPM-V-4_6&quot;</span>
+<span class="c1"># MODEL_NAME = &quot;openbmb/MiniCPM-V-4.6&quot;</span>
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;./assets/airplane.jpeg&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">)</span>
@@ -553,7 +553,7 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;model_path&gt;<span
 
 <h2 id="notes">Notes</h2>
 <ol>
-<li><strong>Model Path</strong>: replace <code>&lt;model_path&gt;</code> with your local path or one of <code>openbmb/MiniCPM-V-4_6</code> / <code>openbmb/MiniCPM-V-4_6-Thinking</code>.</li>
+<li><strong>Model Path</strong>: replace <code>&lt;model_path&gt;</code> with your local path or one of <code>openbmb/MiniCPM-V-4.6</code> / <code>openbmb/MiniCPM-V-4.6-Thinking</code>.</li>
 <li><strong>Stop Tokens</strong>: v4.6 uses the Qwen3.5 vocabulary; the correct <code>stop_token_ids</code> are <code>[248044, 248046]</code> (v4.5 used <code>[1, 151645]</code>).</li>
 <li><strong>API Key</strong>: ensure the key passed to <code>vllm serve</code> matches the client.</li>
 <li><strong>Memory</strong>: tune <code>--gpu_memory_utilization</code>, <code>--max-model-len</code>, and <code>--max-num-batched-tokens</code> for your hardware. v4.6 supports up to 256K context, but you typically don't need it.</li>

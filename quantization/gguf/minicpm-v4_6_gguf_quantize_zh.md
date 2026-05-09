@@ -11,8 +11,8 @@
 
 按需选择 checkpoint：
 
-- **Instruct** — HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6> · 魔搭：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6>
-- **Thinking** — HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking> · 魔搭：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking>
+- **Instruct** — HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4.6> · 魔搭：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6>
+- **Thinking** — HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking> · 魔搭：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-Thinking>
 
 ### 2. 转换为 GGUF
 
@@ -20,14 +20,14 @@
 
 ```bash
 # 步骤 1：将语言模型 + 视觉 merger 转为 F16 GGUF
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
-    --outfile /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf \
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --outfile /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf \
     --outtype f16
 
 # 步骤 2：转换视觉 projector（mmproj）
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
     --mmproj \
-    --outfile /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+    --outfile /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 ```
 
 `convert_hf_to_gguf.py` 会从 `config.json` 自动识别 `MiniCPMV4_6ForConditionalGeneration`。
@@ -38,8 +38,8 @@ python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
 
 ```bash
 ./llama-quantize \
-    /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf \
-    /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf \
+    /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf \
+    /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf \
     Q4_K_M
 ```
 

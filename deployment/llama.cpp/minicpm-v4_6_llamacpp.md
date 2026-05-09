@@ -34,34 +34,34 @@ cmake --build build --config Release
 
 ### Option 1: Download official GGUF files
 
-Download the language model file (e.g., `MiniCPM-V-4_6-Q4_K_M.gguf`) and the vision projector (`mmproj-MiniCPM-V-4_6-F16.gguf`) from:
+Download the language model file (e.g., `MiniCPM-V-4.6-Q4_K_M.gguf`) and the vision projector (`mmproj-MiniCPM-V-4.6-F16.gguf`) from:
 
-- HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf>
-- ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf>
+- HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf>
+- ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf>
 
 The Thinking variant is published separately at:
 
-- <https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf>
+- <https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking-gguf>
 
 ### Option 2: Convert from PyTorch model
 
 Download the PyTorch checkpoint:
 
-- HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6> (or `MiniCPM-V-4_6-Thinking`)
-- ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6>
+- HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4.6> (or `MiniCPM-V-4.6-Thinking`)
+- ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6>
 
 Run the standard `convert_hf_to_gguf.py` from the `llama.cpp` repo:
 
 ```bash
 # 1) Convert the language model + vision merger to GGUF
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
-    --outfile /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf \
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --outfile /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf \
     --outtype f16
 
 # 2) Convert the vision projector (mmproj)
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
     --mmproj \
-    --outfile /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+    --outfile /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 ```
 
 `convert_hf_to_gguf.py` autodetects `MiniCPMV4_6ForConditionalGeneration` from `config.json` and emits both the LM and the vision tower.
@@ -75,22 +75,22 @@ cd build/bin/
 
 # F16 weights
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg -p "What is in the image?"
 
 # Quantized INT4 weights
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg -p "What is in the image?"
 
 # Interactive mode
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg -i
 ```
@@ -100,15 +100,15 @@ If you're running the **Thinking** checkpoint, you can control the reasoning bud
 ```bash
 # Allow unlimited thinking (Thinking model)
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6-Thinking/MiniCPM-V-4.6-Thinking-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6-Thinking/mmproj-MiniCPM-V-4.6-Thinking-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg --jinja --reasoning-budget -1 -p "What is in the image?"
 
 # Skip the leading <think> block on a Thinking model
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6-Thinking/MiniCPM-V-4.6-Thinking-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6-Thinking/mmproj-MiniCPM-V-4.6-Thinking-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg --jinja --reasoning-budget 0 -p "What is in the image?"
 ```

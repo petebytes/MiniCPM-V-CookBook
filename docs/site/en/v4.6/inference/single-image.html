@@ -278,9 +278,9 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
 
 <span class="c1"># Pick the variant you want:</span>
-<span class="c1">#   &quot;openbmb/MiniCPM-V-4_6&quot;        — Instruct</span>
-<span class="c1">#   &quot;openbmb/MiniCPM-V-4_6-Thinking&quot;  — Thinking</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>
+<span class="c1">#   &quot;openbmb/MiniCPM-V-4.6&quot;        — Instruct</span>
+<span class="c1">#   &quot;openbmb/MiniCPM-V-4.6-Thinking&quot;  — Thinking</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6&quot;</span>
 
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
@@ -345,7 +345,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <h2 id="sample-image">Sample image</h2>
 <p><img alt="alt text" src="./assets/single.png"></p>
 <h2 id="notes-on-the-thinking-variant">Notes on the Thinking variant</h2>
-<p>If <code>model_path</code> points to <code>openbmb/MiniCPM-V-4_6-Thinking</code>, the chat template prepends a <code>&lt;think&gt;\n</code> block to the assistant turn — the model returns <code>&lt;reasoning&gt;\n&lt;/think&gt;\n&lt;final answer&gt;</code>. To skip the leading <code>&lt;think&gt;</code> block, pass <code>enable_thinking=False</code>:</p>
+<p>If <code>model_path</code> points to <code>openbmb/MiniCPM-V-4.6-Thinking</code>, the chat template prepends a <code>&lt;think&gt;\n</code> block to the assistant turn — the model returns <code>&lt;reasoning&gt;\n&lt;/think&gt;\n&lt;final answer&gt;</code>. To skip the leading <code>&lt;think&gt;</code> block, pass <code>enable_thinking=False</code>:</p>
 <div class="code"><pre><span></span><code><span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
     <span class="n">messages</span><span class="p">,</span>
     <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

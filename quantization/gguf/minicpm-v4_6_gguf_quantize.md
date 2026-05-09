@@ -11,8 +11,8 @@ The resulting GGUFs are meant to be used with [`llama.cpp`](../../deployment/lla
 
 Pick the variant you want to quantize:
 
-- **Instruct** — HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6> · ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6>
-- **Thinking** — HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking> · ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking>
+- **Instruct** — HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4.6> · ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6>
+- **Thinking** — HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking> · ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-Thinking>
 
 ### 2. Convert to GGUF
 
@@ -20,14 +20,14 @@ Run from the root of a `llama.cpp` checkout (release `b9049` or later):
 
 ```bash
 # Step 1 — convert the language model + vision merger to F16 GGUF
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
-    --outfile /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf \
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --outfile /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf \
     --outtype f16
 
 # Step 2 — convert the vision projector (mmproj)
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
     --mmproj \
-    --outfile /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+    --outfile /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 ```
 
 `convert_hf_to_gguf.py` autodetects `MiniCPMV4_6ForConditionalGeneration` from `config.json`.
@@ -38,8 +38,8 @@ Once you have the F16 LM GGUF, quantize it with `llama-quantize`:
 
 ```bash
 ./llama-quantize \
-    /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf \
-    /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf \
+    /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf \
+    /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf \
     Q4_K_M
 ```
 

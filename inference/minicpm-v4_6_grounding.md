@@ -68,7 +68,7 @@ def model_infer_and_draw(img_path, question, model, processor):
     return response, bbox, draw_bbox_on_image(image, bbox)
 
 
-model_path = "openbmb/MiniCPM-V-4_6"
+model_path = "openbmb/MiniCPM-V-4.6"
 img_path = "./assets/airplane.jpeg"
 question = "Please provide the bounding box coordinate of the region this sentence describes: <ref>airplane</ref>"
 
@@ -122,7 +122,7 @@ def draw_multiple_bboxes(image: Image.Image, bboxes, names):
     return image
 
 
-model_path = "openbmb/MiniCPM-V-4_6"
+model_path = "openbmb/MiniCPM-V-4.6"
 img_path = "./assets/doraemon.jpg"
 question = (
     "Identify all characters in the image and return their bounding boxes "

@@ -6,7 +6,7 @@
 
 ## 1. 下载模型
 
-从 [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4_6) 下载 MiniCPM-V-4_6 模型（Thinking 版本为 `openbmb/MiniCPM-V-4_6-Thinking`），解压到本地目录。
+从 [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4.6) 下载 MiniCPM-V-4.6 模型（Thinking 版本为 `openbmb/MiniCPM-V-4.6-Thinking`），解压到本地目录。
 
 ## 2. 量化脚本
 
@@ -28,8 +28,8 @@ from PIL import Image
 assert torch.cuda.is_available(), "CUDA is not available, but this code requires a GPU."
 
 device = "cuda"
-model_path = "/model/MiniCPM-V-4_6"  # 原始模型路径
-save_path = "./model/MiniCPM-V-4_6-int4"  # 量化模型保存路径
+model_path = "/model/MiniCPM-V-4.6"  # 原始模型路径
+save_path = "./model/MiniCPM-V-4.6-int4"  # 量化模型保存路径
 image_path = "./assets/airplane.jpeg"
 
 # 4-bit 量化配置

@@ -34,34 +34,34 @@ cmake --build build --config Release
 
 ### 方法一：下载官方 GGUF 文件
 
-从仓库中下载语言模型文件（如 `MiniCPM-V-4_6-Q4_K_M.gguf`）与视觉模型文件（`mmproj-MiniCPM-V-4_6-F16.gguf`）：
+从仓库中下载语言模型文件（如 `MiniCPM-V-4.6-Q4_K_M.gguf`）与视觉模型文件（`mmproj-MiniCPM-V-4.6-F16.gguf`）：
 
-- HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf>
-- 魔搭社区：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf>
+- HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf>
+- 魔搭社区：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf>
 
 Thinking 版本在以下仓库单独发布：
 
-- <https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf>
+- <https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking-gguf>
 
 ### 方法二：从 PyTorch 模型转换
 
 下载 PyTorch 模型：
 
-- HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4_6>（或 `MiniCPM-V-4_6-Thinking`）
-- 魔搭社区：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6>
+- HuggingFace：<https://huggingface.co/openbmb/MiniCPM-V-4.6>（或 `MiniCPM-V-4.6-Thinking`）
+- 魔搭社区：<https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6>
 
 用 `llama.cpp` 仓库自带的标准脚本 `convert_hf_to_gguf.py` 直接转换：
 
 ```bash
 # 1) 将语言模型 + 视觉 merger 转为 GGUF
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
-    --outfile /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf \
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --outfile /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf \
     --outtype f16
 
 # 2) 转换视觉 projector（mmproj）
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
     --mmproj \
-    --outfile /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+    --outfile /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 ```
 
 `convert_hf_to_gguf.py` 会从 `config.json` 自动识别 `MiniCPMV4_6ForConditionalGeneration`，同时输出 LM 与视觉塔。
@@ -75,22 +75,22 @@ cd build/bin/
 
 # F16 版本
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg -p "请描述这张图片"
 
 # INT4 量化版本
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg -p "请描述这张图片"
 
 # 交互模式
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg -i
 ```
@@ -100,15 +100,15 @@ cd build/bin/
 ```bash
 # Thinking 模型 - 不限制思考输出
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6-Thinking/MiniCPM-V-4.6-Thinking-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6-Thinking/mmproj-MiniCPM-V-4.6-Thinking-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg --jinja --reasoning-budget -1 -p "图中有什么？"
 
 # Thinking 模型 - 跳过开头的 <think> 块（直接出答案）
 ./llama-mtmd-cli \
-    -m  /path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf \
-    --mmproj /path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf \
+    -m  /path/to/MiniCPM-V-4.6-Thinking/MiniCPM-V-4.6-Thinking-Q4_K_M.gguf \
+    --mmproj /path/to/MiniCPM-V-4.6-Thinking/mmproj-MiniCPM-V-4.6-Thinking-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
     --image xx.jpg --jinja --reasoning-budget 0 -p "图中有什么？"
 ```

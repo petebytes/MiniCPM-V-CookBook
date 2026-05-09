@@ -277,8 +277,8 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <p>MiniCPM-V 4.6 提供两个 checkpoint：</p>
 <ul>
-<li><strong>Instruct</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6"><code>openbmb/MiniCPM-V-4_6</code></a></li>
-<li><strong>Thinking（思考）</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking"><code>openbmb/MiniCPM-V-4_6-Thinking</code></a></li>
+<li><strong>Instruct</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6"><code>openbmb/MiniCPM-V-4.6</code></a></li>
+<li><strong>Thinking（思考）</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking"><code>openbmb/MiniCPM-V-4.6-Thinking</code></a></li>
 </ul>
 <h2 id="1-sglang-安装">1. SGLang 安装</h2>
 <h3 id="从-pr-分支源码安装">从 PR 分支源码安装</h3>
@@ -307,15 +307,15 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <p>如有问题请参考 <a href="https://docs.sglang.ai/start/install.html">SGLang 官方安装文档</a>。</p>
 <h2 id="2-启动推理服务">2. 启动推理服务</h2>
 <p>默认情况下，会从 Hugging Face Hub 下载模型文件：</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-V-4_6<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
+<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-V-4.6<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
 </code></pre></div>
 
 <p>也可以在 <code>--model-path</code> 后指定本地路径：</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>/your/local/MiniCPM-V-4_6<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
+<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>/your/local/MiniCPM-V-4.6<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
 </code></pre></div>
 
 <p>部署 Thinking 模型只需替换 model id：</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-V-4_6-Thinking<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
+<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-V-4.6-Thinking<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
 </code></pre></div>
 
 <h2 id="3-调用服务接口">3. 调用服务接口</h2>
@@ -326,7 +326,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 curl -s http://localhost:30000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "MiniCPM-V-4_6",
+    "model": "MiniCPM-V-4.6",
     "messages": [
       {
         "role": "user",
@@ -350,7 +350,7 @@ curl -s http://localhost:30000/v1/chat/completions \
 from openai import OpenAI</p>
 <p>client = OpenAI(base_url="http://localhost:30000/v1", api_key="None")</p>
 <p>response = client.chat.completions.create(
-    model="MiniCPM-V-4_6",
+    model="MiniCPM-V-4.6",
     messages=[
         {
             "role": "user",

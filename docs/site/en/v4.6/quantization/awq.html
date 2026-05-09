@@ -278,16 +278,16 @@ footer.page-footer a:hover { color: var(--primary); }
 </blockquote>
 <h2 id="method-1-use-the-pre-quantized-model-with-vllm">Method 1 — Use the pre-quantized model with vLLM</h2>
 <h3 id="1-download-the-pre-quantized-model">1. Download the pre-quantized model</h3>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_6-AWQ
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4.6-AWQ
 </code></pre></div>
 
-<p>(Or <code>openbmb/MiniCPM-V-4_6-Thinking-AWQ</code> for the Thinking variant once published.)</p>
+<p>(Or <code>openbmb/MiniCPM-V-4.6-Thinking-AWQ</code> for the Thinking variant once published.)</p>
 <h3 id="2-run-with-vllm">2. Run with vLLM</h3>
 <div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span>
 <span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
 
-<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6-AWQ&quot;</span>
+<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6-AWQ&quot;</span>
 <span class="n">IMAGES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;image.png&quot;</span><span class="p">]</span>
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">IMAGES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
@@ -331,7 +331,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <h2 id="method-2-run-the-awq-checkpoint-with-autoawq-directly">Method 2 — Run the AWQ checkpoint with AutoAWQ directly</h2>
 <h3 id="1-download-the-model">1. Download the model</h3>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_6-AWQ
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4.6-AWQ
 </code></pre></div>
 
 <h3 id="2-build-autoawq-from-source">2. Build AutoAWQ from source</h3>
@@ -346,7 +346,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span>
 <span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6-AWQ&quot;</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6-AWQ&quot;</span>
 <span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;./assets/airplane.jpeg&quot;</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoAWQForCausalLM</span><span class="o">.</span><span class="n">from_quantized</span><span class="p">(</span>
@@ -383,7 +383,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 
 <h2 id="method-3-quantize-the-model-yourself">Method 3 — Quantize the model yourself</h2>
 <h3 id="1-download-the-original-model">1. Download the original model</h3>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_6
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4.6
 </code></pre></div>
 
 <h3 id="2-build-autoawq-from-source_1">2. Build AutoAWQ from source</h3>
@@ -400,7 +400,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
 <span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/openbmb/MiniCPM-V-4_6&quot;</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/openbmb/MiniCPM-V-4.6&quot;</span>
 <span class="n">quant_path</span> <span class="o">=</span> <span class="s2">&quot;/model_quantized/minicpmv4_6_awq&quot;</span>
 
 <span class="c1"># AWQ config — 4-bit weights, group size 128, GEMM backend</span>

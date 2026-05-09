@@ -332,17 +332,17 @@ git<span class="w"> </span>checkout<span class="w"> </span>MIniCPM-V
 <p><strong>If the method above fails, please follow the steps below to load v4.6 GGUFs manually.</strong></p>
 <h3 id="download-gguf-model">Download GGUF Model</h3>
 <ul>
-<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf</a></li>
-<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf</a></li>
+<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf">https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf</a></li>
+<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf</a></li>
 </ul>
-<p>(Or <code>openbmb/MiniCPM-V-4_6-Thinking-gguf</code> for the Thinking variant.)</p>
+<p>(Or <code>openbmb/MiniCPM-V-4.6-Thinking-gguf</code> for the Thinking variant.)</p>
 <h3 id="create-a-modelfile">Create a ModelFile</h3>
 <div class="code"><pre><span></span><code>vim<span class="w"> </span>minicpmv4.6.Modelfile
 </code></pre></div>
 
 <p>ModelFile content:</p>
-<div class="code"><pre><span></span><code>FROM ./MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf
-FROM ./MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+<div class="code"><pre><span></span><code>FROM ./MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf
+FROM ./MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 
 TEMPLATE &quot;&quot;&quot;{{- if .Messages }}{{- range $i, $_ := .Messages }}{{- $last := eq (len (slice $.Messages $i)) 1 -}}&lt;|im_start|&gt;{{ .Role }}{{ .Content }}{{- if $last }}{{- if (ne .Role &quot;assistant&quot;) }}&lt;|im_end|&gt;&lt;|im_start|&gt;assistant{{ end }}{{- else }}&lt;|im_end|&gt;{{ end }}{{- end }}{{- else }}{{- if .System }}&lt;|im_start|&gt;system{{ .System }}&lt;|im_end|&gt;{{ end }}{{ if .Prompt }}&lt;|im_start|&gt;user{{ .Prompt }}&lt;|im_end|&gt;{{ end }}&lt;|im_start|&gt;assistant{{ end }}{{ .Response }}{{ if .Response }}&lt;|im_end|&gt;{{ end }}&quot;&quot;&quot;
 

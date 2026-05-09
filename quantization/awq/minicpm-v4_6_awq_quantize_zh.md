@@ -13,10 +13,10 @@
 ### 1. 下载预量化模型
 
 ```bash
-git clone https://huggingface.co/openbmb/MiniCPM-V-4_6-AWQ
+git clone https://huggingface.co/openbmb/MiniCPM-V-4.6-AWQ
 ```
 
-（Thinking 版本发布后将是 `openbmb/MiniCPM-V-4_6-Thinking-AWQ`。）
+（Thinking 版本发布后将是 `openbmb/MiniCPM-V-4.6-Thinking-AWQ`。）
 
 ### 2. 用 vLLM 运行
 
@@ -25,7 +25,7 @@ from PIL import Image
 from transformers import AutoProcessor
 from vllm import LLM, SamplingParams
 
-MODEL_NAME = "openbmb/MiniCPM-V-4_6-AWQ"
+MODEL_NAME = "openbmb/MiniCPM-V-4.6-AWQ"
 IMAGES = ["image.png"]
 
 image = Image.open(IMAGES[0]).convert("RGB")
@@ -72,7 +72,7 @@ print(outputs[0].outputs[0].text)
 ### 1. 下载模型
 
 ```bash
-git clone https://huggingface.co/openbmb/MiniCPM-V-4_6-AWQ
+git clone https://huggingface.co/openbmb/MiniCPM-V-4.6-AWQ
 ```
 
 ### 2. 从源码安装 AutoAWQ
@@ -91,7 +91,7 @@ from PIL import Image
 from transformers import AutoProcessor
 from awq import AutoAWQForCausalLM
 
-model_path = "openbmb/MiniCPM-V-4_6-AWQ"
+model_path = "openbmb/MiniCPM-V-4.6-AWQ"
 image_path = "./assets/airplane.jpeg"
 
 model = AutoAWQForCausalLM.from_quantized(
@@ -131,7 +131,7 @@ print("输出:", response)
 ### 1. 下载原始模型
 
 ```bash
-git clone https://huggingface.co/openbmb/MiniCPM-V-4_6
+git clone https://huggingface.co/openbmb/MiniCPM-V-4.6
 ```
 
 ### 2. 从源码安装 AutoAWQ
@@ -152,7 +152,7 @@ from datasets import load_dataset
 from transformers import AutoTokenizer
 from awq import AutoAWQForCausalLM
 
-model_path = "/openbmb/MiniCPM-V-4_6"
+model_path = "/openbmb/MiniCPM-V-4.6"
 quant_path = "/model_quantized/minicpmv4_6_awq"
 
 # AWQ 配置 — 4-bit 权重，group size 128，GEMM 后端
