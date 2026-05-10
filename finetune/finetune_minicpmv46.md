@@ -182,7 +182,9 @@ https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift
 - Output example:
 
 ```text
-The respective coordinates of people: 82 638, 175 638, 264 648, 347 652, 439 629, 537 626, 620 632, 708 628, 796 616, 915 632. So the total count is 10.
+Q: Carefully observe the image. Are there any people in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
+
+A: The respective coordinates of people: 82 638, 175 638, 264 648, 347 652, 439 629, 537 626, 620 632, 708 628, 796 616, 915 632. So the total count is 10.
 ```
 
 ## 3 Fine-Tuning with Llama-Factory
@@ -335,5 +337,7 @@ https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama
 - Output example:
 
 ```text
-The respective coordinates of airplanes: 131 802, 208 602, 275 442, 337 277, 358 699, 428 523, 497 333, 587 602, 667 375, 865 393. So the total count is 10.
+Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
+
+A: The respective coordinates of airplanes: 131 802, 208 602, 275 442, 337 277, 358 699, 428 523, 497 333, 587 602, 667 375, 865 393. So the total count is 10.
 ```
