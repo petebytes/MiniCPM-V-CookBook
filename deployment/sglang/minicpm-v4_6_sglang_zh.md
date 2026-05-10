@@ -7,8 +7,8 @@
 
 MiniCPM-V 4.6 提供两个 checkpoint：
 
-- **Instruct** — [`openbmb/MiniCPM-V-4_6`](https://huggingface.co/openbmb/MiniCPM-V-4_6)
-- **Thinking（思考）** — [`openbmb/MiniCPM-V-4_6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking)
+- **Instruct** — [`openbmb/MiniCPM-V-4.6`](https://huggingface.co/openbmb/MiniCPM-V-4.6)
+- **Thinking（思考）** — [`openbmb/MiniCPM-V-4.6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking)
 
 ## 1. SGLang 安装
 
@@ -50,19 +50,19 @@ pip install flashinfer -i https://flashinfer.ai/whl/cu121/torch2.4/
 默认情况下，会从 Hugging Face Hub 下载模型文件：
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6 --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6 --port 30000 --trust-remote-code
 ```
 
 也可以在 `--model-path` 后指定本地路径：
 
 ```bash
-python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4_6 --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4.6 --port 30000 --trust-remote-code
 ```
 
 部署 Thinking 模型只需替换 model id：
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Thinking --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --port 30000 --trust-remote-code
 ```
 
 ## 3. 调用服务接口
@@ -73,7 +73,7 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Thinking --por
     curl -s http://localhost:30000/v1/chat/completions \
       -H "Content-Type: application/json" \
       -d '{
-        "model": "MiniCPM-V-4_6",
+        "model": "MiniCPM-V-4.6",
         "messages": [
           {
             "role": "user",
@@ -100,7 +100,7 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Thinking --por
     client = OpenAI(base_url="http://localhost:30000/v1", api_key="None")
 
     response = client.chat.completions.create(
-        model="MiniCPM-V-4_6",
+        model="MiniCPM-V-4.6",
         messages=[
             {
                 "role": "user",

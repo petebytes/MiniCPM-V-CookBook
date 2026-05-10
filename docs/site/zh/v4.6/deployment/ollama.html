@@ -333,17 +333,17 @@ git<span class="w"> </span>checkout<span class="w"> </span>MIniCPM-V
 <p><strong>若上述方式无法运行，请按下面的步骤手动加载 v4.6 GGUF 权重。</strong></p>
 <h3 id="获取-gguf-模型">获取 GGUF 模型</h3>
 <ul>
-<li>HuggingFace：<a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf</a></li>
-<li>魔搭社区：<a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf</a></li>
+<li>HuggingFace：<a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf">https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf</a></li>
+<li>魔搭社区：<a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf</a></li>
 </ul>
-<p>（Thinking 版本：<code>openbmb/MiniCPM-V-4_6-Thinking-gguf</code>）</p>
+<p>（Thinking 版本：<code>openbmb/MiniCPM-V-4.6-Thinking-gguf</code>）</p>
 <h3 id="创建-modelfile">创建 ModelFile</h3>
 <div class="code"><pre><span></span><code>vim<span class="w"> </span>minicpmv4.6.Modelfile
 </code></pre></div>
 
 <p>ModelFile 的内容如下：</p>
-<div class="code"><pre><span></span><code>FROM ./MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf
-FROM ./MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+<div class="code"><pre><span></span><code>FROM ./MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf
+FROM ./MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 
 TEMPLATE &quot;&quot;&quot;{{- if .Messages }}{{- range $i, $_ := .Messages }}{{- $last := eq (len (slice $.Messages $i)) 1 -}}&lt;|im_start|&gt;{{ .Role }}{{ .Content }}{{- if $last }}{{- if (ne .Role &quot;assistant&quot;) }}&lt;|im_end|&gt;&lt;|im_start|&gt;assistant{{ end }}{{- else }}&lt;|im_end|&gt;{{ end }}{{- end }}{{- else }}{{- if .System }}&lt;|im_start|&gt;system{{ .System }}&lt;|im_end|&gt;{{ end }}{{ if .Prompt }}&lt;|im_start|&gt;user{{ .Prompt }}&lt;|im_end|&gt;{{ end }}&lt;|im_start|&gt;assistant{{ end }}{{ .Response }}{{ if .Response }}&lt;|im_end|&gt;{{ end }}&quot;&quot;&quot;
 

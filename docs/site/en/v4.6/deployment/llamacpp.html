@@ -294,31 +294,31 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 
 <h2 id="2-gguf-files">2. GGUF files</h2>
 <h3 id="option-1-download-official-gguf-files">Option 1: Download official GGUF files</h3>
-<p>Download the language model file (e.g., <code>MiniCPM-V-4_6-Q4_K_M.gguf</code>) and the vision projector (<code>mmproj-MiniCPM-V-4_6-F16.gguf</code>) from:</p>
+<p>Download the language model file (e.g., <code>MiniCPM-V-4.6-Q4_K_M.gguf</code>) and the vision projector (<code>mmproj-MiniCPM-V-4.6-F16.gguf</code>) from:</p>
 <ul>
-<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf</a></li>
-<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf</a></li>
+<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf">https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf</a></li>
+<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf</a></li>
 </ul>
 <p>The Thinking variant is published separately at:</p>
 <ul>
-<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf">https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking-gguf</a></li>
+<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking-gguf">https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking-gguf</a></li>
 </ul>
 <h3 id="option-2-convert-from-pytorch-model">Option 2: Convert from PyTorch model</h3>
 <p>Download the PyTorch checkpoint:</p>
 <ul>
-<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">https://huggingface.co/openbmb/MiniCPM-V-4_6</a> (or <code>MiniCPM-V-4_6-Thinking</code>)</li>
-<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6</a></li>
+<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6">https://huggingface.co/openbmb/MiniCPM-V-4.6</a> (or <code>MiniCPM-V-4.6-Thinking</code>)</li>
+<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6</a></li>
 </ul>
 <p>Run the standard <code>convert_hf_to_gguf.py</code> from the <code>llama.cpp</code> repo:</p>
 <div class="code"><pre><span></span><code><span class="c1"># 1) Convert the language model + vision merger to GGUF</span>
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4_6<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--outtype<span class="w"> </span>f16
 
 <span class="c1"># 2) Convert the vision projector (mmproj)</span>
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4_6<span class="w"> </span><span class="se">\</span>
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--mmproj<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 </code></pre></div>
 
 <p><code>convert_hf_to_gguf.py</code> autodetects <code>MiniCPMV4_6ForConditionalGeneration</code> from <code>config.json</code> and emits both the LM and the vision tower.</p>
@@ -330,22 +330,22 @@ python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/pa
 
 <span class="c1"># F16 weights</span>
 ./llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;What is in the image?&quot;</span>
 
 <span class="c1"># Quantized INT4 weights</span>
 ./llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;What is in the image?&quot;</span>
 
 <span class="c1"># Interactive mode</span>
 ./llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>-i
 </code></pre></div>
@@ -353,15 +353,15 @@ python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/pa
 <p>If you're running the <strong>Thinking</strong> checkpoint, you can control the reasoning budget through <code>--jinja</code> + <code>--reasoning-budget</code>:</p>
 <div class="code"><pre><span></span><code><span class="c1"># Allow unlimited thinking (Thinking model)</span>
 ./llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4.6-Thinking/MiniCPM-V-4.6-Thinking-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4.6-Thinking/mmproj-MiniCPM-V-4.6-Thinking-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>--jinja<span class="w"> </span>--reasoning-budget<span class="w"> </span>-1<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;What is in the image?&quot;</span>
 
 <span class="c1"># Skip the leading &lt;think&gt; block on a Thinking model</span>
 ./llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4_6-Thinking/MiniCPM-V-4_6-Thinking-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4_6-Thinking/mmproj-MiniCPM-V-4_6-Thinking-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w">  </span>/path/to/MiniCPM-V-4.6-Thinking/MiniCPM-V-4.6-Thinking-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/MiniCPM-V-4.6-Thinking/mmproj-MiniCPM-V-4.6-Thinking-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>--jinja<span class="w"> </span>--reasoning-budget<span class="w"> </span><span class="m">0</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;What is in the image?&quot;</span>
 </code></pre></div>

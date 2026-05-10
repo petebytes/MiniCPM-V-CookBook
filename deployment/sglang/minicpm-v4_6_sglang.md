@@ -7,8 +7,8 @@
 
 MiniCPM-V 4.6 ships as two checkpoints:
 
-- **Instruct** — [`openbmb/MiniCPM-V-4_6`](https://huggingface.co/openbmb/MiniCPM-V-4_6)
-- **Thinking** — [`openbmb/MiniCPM-V-4_6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking)
+- **Instruct** — [`openbmb/MiniCPM-V-4.6`](https://huggingface.co/openbmb/MiniCPM-V-4.6)
+- **Thinking** — [`openbmb/MiniCPM-V-4.6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking)
 
 ## 1. Installing SGLang
 
@@ -50,19 +50,19 @@ For more details, see the [official SGLang installation docs](https://docs.sglan
 By default the server downloads weights from the HuggingFace Hub:
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6 --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6 --port 30000 --trust-remote-code
 ```
 
 Or specify a local path:
 
 ```bash
-python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4_6 --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4.6 --port 30000 --trust-remote-code
 ```
 
 To serve the Thinking variant, swap the model id:
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Thinking --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --port 30000 --trust-remote-code
 ```
 
 ## 3. Calling the Service
@@ -73,7 +73,7 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Thinking --por
     curl -s http://localhost:30000/v1/chat/completions \
       -H "Content-Type: application/json" \
       -d '{
-        "model": "MiniCPM-V-4_6",
+        "model": "MiniCPM-V-4.6",
         "messages": [
           {
             "role": "user",
@@ -100,7 +100,7 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4_6-Thinking --por
     client = OpenAI(base_url="http://localhost:30000/v1", api_key="None")
 
     response = client.chat.completions.create(
-        model="MiniCPM-V-4_6",
+        model="MiniCPM-V-4.6",
         messages=[
             {
                 "role": "user",

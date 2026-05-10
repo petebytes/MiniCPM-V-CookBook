@@ -7,7 +7,7 @@ import torch
 from PIL import Image
 from transformers import AutoProcessor, AutoModelForImageTextToText
 
-model_path = "openbmb/MiniCPM-V-4_6"
+model_path = "openbmb/MiniCPM-V-4.6"
 
 processor = AutoProcessor.from_pretrained(model_path)
 model = AutoModelForImageTextToText.from_pretrained(
@@ -50,4 +50,4 @@ print(answer)
 
 ![alt text](./assets/ocr.png)
 
-> For Chinese-heavy or dense text pages, the **Thinking** checkpoint (`openbmb/MiniCPM-V-4_6-Thinking`) often produces more faithful transcriptions because it inspects the layout before answering. The Instruct checkpoint is faster and usually sufficient for short / well-cropped text.
+> For Chinese-heavy or dense text pages, the **Thinking** checkpoint (`openbmb/MiniCPM-V-4.6-Thinking`) often produces more faithful transcriptions because it inspects the layout before answering. The Instruct checkpoint is faster and usually sufficient for short / well-cropped text.

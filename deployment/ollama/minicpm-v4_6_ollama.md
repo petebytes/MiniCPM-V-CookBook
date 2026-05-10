@@ -76,10 +76,10 @@ with open(image_path, 'rb') as image_file:
 
 ### Download GGUF Model
 
-- HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf>
-- ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-gguf>
+- HuggingFace: <https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf>
+- ModelScope: <https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf>
 
-(Or `openbmb/MiniCPM-V-4_6-Thinking-gguf` for the Thinking variant.)
+(Or `openbmb/MiniCPM-V-4.6-Thinking-gguf` for the Thinking variant.)
 
 ### Create a ModelFile
 
@@ -90,8 +90,8 @@ vim minicpmv4.6.Modelfile
 ModelFile content:
 
 ```plaintext
-FROM ./MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf
-FROM ./MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+FROM ./MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf
+FROM ./MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 
 TEMPLATE """{{- if .Messages }}{{- range $i, $_ := .Messages }}{{- $last := eq (len (slice $.Messages $i)) 1 -}}<|im_start|>{{ .Role }}{{ .Content }}{{- if $last }}{{- if (ne .Role "assistant") }}<|im_end|><|im_start|>assistant{{ end }}{{- else }}<|im_end|>{{ end }}{{- end }}{{- else }}{{- if .System }}<|im_start|>system{{ .System }}<|im_end|>{{ end }}{{ if .Prompt }}<|im_start|>user{{ .Prompt }}<|im_end|>{{ end }}<|im_start|>assistant{{ end }}{{ .Response }}{{ if .Response }}<|im_end|>{{ end }}"""
 

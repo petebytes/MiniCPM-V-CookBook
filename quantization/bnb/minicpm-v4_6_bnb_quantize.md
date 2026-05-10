@@ -6,7 +6,7 @@
 
 ## 1. Download the Model
 
-Download the MiniCPM-V-4_6 model from [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4_6) (or `openbmb/MiniCPM-V-4_6-Thinking` for the think variant) and extract it to a local directory.
+Download the MiniCPM-V-4.6 model from [HuggingFace](https://huggingface.co/openbmb/MiniCPM-V-4.6) (or `openbmb/MiniCPM-V-4.6-Thinking` for the think variant) and extract it to a local directory.
 
 ## 2. Quantization Script
 
@@ -28,8 +28,8 @@ from PIL import Image
 assert torch.cuda.is_available(), "CUDA is not available, but this code requires a GPU."
 
 device = "cuda"
-model_path = "/model/MiniCPM-V-4_6"  # Original model path
-save_path = "./model/MiniCPM-V-4_6-int4"  # Path to save quantized model
+model_path = "/model/MiniCPM-V-4.6"  # Original model path
+save_path = "./model/MiniCPM-V-4.6-int4"  # Path to save quantized model
 image_path = "./assets/airplane.jpeg"
 
 # 4-bit quantization configuration

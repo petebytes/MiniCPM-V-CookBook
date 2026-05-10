@@ -279,28 +279,28 @@ footer.page-footer a:hover { color: var(--primary); }
 <h3 id="1-download-the-pytorch-model">1. Download the PyTorch model</h3>
 <p>Pick the variant you want to quantize:</p>
 <ul>
-<li><strong>Instruct</strong> — HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">https://huggingface.co/openbmb/MiniCPM-V-4_6</a> · ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6</a></li>
-<li><strong>Thinking</strong> — HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking">https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking</a> · ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking</a></li>
+<li><strong>Instruct</strong> — HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6">https://huggingface.co/openbmb/MiniCPM-V-4.6</a> · ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6</a></li>
+<li><strong>Thinking</strong> — HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking">https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking</a> · ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-Thinking">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-Thinking</a></li>
 </ul>
 <h3 id="2-convert-to-gguf">2. Convert to GGUF</h3>
 <p>Run from the root of a <code>llama.cpp</code> checkout (release <code>b9049</code> or later):</p>
 <div class="code"><pre><span></span><code><span class="c1"># Step 1 — convert the language model + vision merger to F16 GGUF</span>
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4_6<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--outtype<span class="w"> </span>f16
 
 <span class="c1"># Step 2 — convert the vision projector (mmproj)</span>
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4_6<span class="w"> </span><span class="se">\</span>
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--mmproj<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 </code></pre></div>
 
 <p><code>convert_hf_to_gguf.py</code> autodetects <code>MiniCPMV4_6ForConditionalGeneration</code> from <code>config.json</code>.</p>
 <h3 id="3-quantize-to-int4">3. Quantize to INT4</h3>
 <p>Once you have the F16 LM GGUF, quantize it with <code>llama-quantize</code>:</p>
 <div class="code"><pre><span></span><code>./llama-quantize<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>Q4_K_M
 </code></pre></div>
 

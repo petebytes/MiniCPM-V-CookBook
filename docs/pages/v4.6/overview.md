@@ -5,8 +5,8 @@
 ## What's new in 4.6
 
 - **Two checkpoints, one architecture.** Unlike 4.5 (one model, two modes via `enable_thinking`), 4.6 ships two independent checkpoints — pick whichever matches your use case.
-  - [`openbmb/MiniCPM-V-4_6`](https://huggingface.co/openbmb/MiniCPM-V-4_6) — Instruct
-  - [`openbmb/MiniCPM-V-4_6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking) — Thinking
+  - [`openbmb/MiniCPM-V-4.6`](https://huggingface.co/openbmb/MiniCPM-V-4.6) — Instruct
+  - [`openbmb/MiniCPM-V-4.6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking) — Thinking
 - **Qwen3.5 hybrid backbone.** Mixed linear / full-attention layers, with up to **256K** context window.
 - **NaViT-style vision tower.** Replaces the resampler with a more efficient merger structure — simpler GGUF conversion, fewer surgery scripts.
 - **Standalone transformers architecture.** Registered as `MiniCPMV4_6ForConditionalGeneration` in `transformers >= 5.7.0`. Standard `AutoProcessor` + `AutoModelForImageTextToText` flow works out of the box.
@@ -20,7 +20,7 @@ import torch
 from PIL import Image
 from transformers import AutoProcessor, AutoModelForImageTextToText
 
-model_path = "openbmb/MiniCPM-V-4_6"   # or MiniCPM-V-4_6-Thinking
+model_path = "openbmb/MiniCPM-V-4.6"   # or MiniCPM-V-4.6-Thinking
 processor = AutoProcessor.from_pretrained(model_path)
 model = AutoModelForImageTextToText.from_pretrained(
     model_path, torch_dtype=torch.bfloat16, attn_implementation="sdpa",
@@ -48,7 +48,7 @@ git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/vllm.git
 cd vllm
 MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v
 
-vllm serve openbmb/MiniCPM-V-4_6 --trust-remote-code --max-model-len 8192
+vllm serve openbmb/MiniCPM-V-4.6 --trust-remote-code --max-model-len 8192
 ```
 
 See the [vLLM guide](deployment/vllm.html) for full details.
@@ -61,14 +61,14 @@ git clone https://github.com/ggml-org/llama.cpp.git && cd llama.cpp
 cmake -B build && cmake --build build --config Release
 
 # convert with the standard script (no surgery script needed for v4.6!)
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
-    --outfile /path/to/MiniCPM-V-4_6-F16.gguf --outtype f16
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
-    --mmproj --outfile /path/to/mmproj-MiniCPM-V-4_6-F16.gguf
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --outfile /path/to/MiniCPM-V-4.6-F16.gguf --outtype f16
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --mmproj --outfile /path/to/mmproj-MiniCPM-V-4.6-F16.gguf
 
 ./build/bin/llama-mtmd-cli \
-    -m /path/to/MiniCPM-V-4_6-F16.gguf \
-    --mmproj /path/to/mmproj-MiniCPM-V-4_6-F16.gguf \
+    -m /path/to/MiniCPM-V-4.6-F16.gguf \
+    --mmproj /path/to/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --image example.jpg -p "Describe the image."
 ```
 

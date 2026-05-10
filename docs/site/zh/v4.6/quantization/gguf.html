@@ -279,28 +279,28 @@ footer.page-footer a:hover { color: var(--primary); }
 <h3 id="1-下载-pytorch-模型">1. 下载 PyTorch 模型</h3>
 <p>按需选择 checkpoint：</p>
 <ul>
-<li><strong>Instruct</strong> — HuggingFace：<a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">https://huggingface.co/openbmb/MiniCPM-V-4_6</a> · 魔搭：<a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6</a></li>
-<li><strong>Thinking</strong> — HuggingFace：<a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking">https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking</a> · 魔搭：<a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking</a></li>
+<li><strong>Instruct</strong> — HuggingFace：<a href="https://huggingface.co/openbmb/MiniCPM-V-4.6">https://huggingface.co/openbmb/MiniCPM-V-4.6</a> · 魔搭：<a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6</a></li>
+<li><strong>Thinking</strong> — HuggingFace：<a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking">https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking</a> · 魔搭：<a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-Thinking">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-Thinking</a></li>
 </ul>
 <h3 id="2-转换为-gguf">2. 转换为 GGUF</h3>
 <p>在 <code>llama.cpp</code>（release <code>b9049</code> 及之后）的仓库根目录下执行：</p>
 <div class="code"><pre><span></span><code><span class="c1"># 步骤 1：将语言模型 + 视觉 merger 转为 F16 GGUF</span>
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4_6<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--outtype<span class="w"> </span>f16
 
 <span class="c1"># 步骤 2：转换视觉 projector（mmproj）</span>
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4_6<span class="w"> </span><span class="se">\</span>
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--mmproj<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4_6/mmproj-MiniCPM-V-4_6-F16.gguf
+<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 </code></pre></div>
 
 <p><code>convert_hf_to_gguf.py</code> 会从 <code>config.json</code> 自动识别 <code>MiniCPMV4_6ForConditionalGeneration</code>。</p>
 <h3 id="3-int4-量化">3. INT4 量化</h3>
 <p>得到 F16 的语言模型 GGUF 后，使用 <code>llama-quantize</code> 进行量化：</p>
 <div class="code"><pre><span></span><code>./llama-quantize<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>/path/to/MiniCPM-V-4_6/MiniCPM-V-4_6-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>/path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>Q4_K_M
 </code></pre></div>
 

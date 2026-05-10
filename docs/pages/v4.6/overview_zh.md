@@ -5,8 +5,8 @@
 ## 4.6 新特性
 
 - **两个独立 checkpoint，统一架构。** 与 4.5（一份模型 + `enable_thinking` 切换）不同，4.6 拆为两个独立 checkpoint，按需选用。
-  - [`openbmb/MiniCPM-V-4_6`](https://huggingface.co/openbmb/MiniCPM-V-4_6) —— Instruct
-  - [`openbmb/MiniCPM-V-4_6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking) —— Thinking（思考）
+  - [`openbmb/MiniCPM-V-4.6`](https://huggingface.co/openbmb/MiniCPM-V-4.6) —— Instruct
+  - [`openbmb/MiniCPM-V-4.6-Thinking`](https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking) —— Thinking（思考）
 - **Qwen3.5 hybrid backbone。** 线性注意力与全注意力混合，最长支持 **256K** 上下文。
 - **NaViT 风格视觉塔。** 用 merger 替换原有 resampler，结构更高效，GGUF 转换流程也大大简化。
 - **transformers 独立架构。** 在 `transformers >= 5.7.0` 中以 `MiniCPMV4_6ForConditionalGeneration` 注册，标准 `AutoProcessor` + `AutoModelForImageTextToText` 即可使用。
@@ -20,7 +20,7 @@ import torch
 from PIL import Image
 from transformers import AutoProcessor, AutoModelForImageTextToText
 
-model_path = "openbmb/MiniCPM-V-4_6"   # 或 MiniCPM-V-4_6-Thinking
+model_path = "openbmb/MiniCPM-V-4.6"   # 或 MiniCPM-V-4.6-Thinking
 processor = AutoProcessor.from_pretrained(model_path)
 model = AutoModelForImageTextToText.from_pretrained(
     model_path, torch_dtype=torch.bfloat16, attn_implementation="sdpa",
@@ -48,7 +48,7 @@ git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/vllm.git
 cd vllm
 MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v
 
-vllm serve openbmb/MiniCPM-V-4_6 --trust-remote-code --max-model-len 8192
+vllm serve openbmb/MiniCPM-V-4.6 --trust-remote-code --max-model-len 8192
 ```
 
 详见 [vLLM 部署指南](deployment/vllm.html)。
@@ -61,14 +61,14 @@ git clone https://github.com/ggml-org/llama.cpp.git && cd llama.cpp
 cmake -B build && cmake --build build --config Release
 
 # 用标准脚本转换（v4.6 不再需要 surgery 脚本！）
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
-    --outfile /path/to/MiniCPM-V-4_6-F16.gguf --outtype f16
-python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4_6 \
-    --mmproj --outfile /path/to/mmproj-MiniCPM-V-4_6-F16.gguf
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --outfile /path/to/MiniCPM-V-4.6-F16.gguf --outtype f16
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --mmproj --outfile /path/to/mmproj-MiniCPM-V-4.6-F16.gguf
 
 ./build/bin/llama-mtmd-cli \
-    -m /path/to/MiniCPM-V-4_6-F16.gguf \
-    --mmproj /path/to/mmproj-MiniCPM-V-4_6-F16.gguf \
+    -m /path/to/MiniCPM-V-4.6-F16.gguf \
+    --mmproj /path/to/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --image example.jpg -p "请描述这张图片"
 ```
 

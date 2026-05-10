@@ -275,8 +275,8 @@ footer.page-footer a:hover { color: var(--primary); }
 <h2 id="what-s-new-in-4-6">What's new in 4.6</h2>
 <ul>
 <li><strong>Two checkpoints, one architecture.</strong> Unlike 4.5 (one model, two modes via <code>enable_thinking</code>), 4.6 ships two independent checkpoints — pick whichever matches your use case.</li>
-<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6"><code>openbmb/MiniCPM-V-4_6</code></a> — Instruct</li>
-<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking"><code>openbmb/MiniCPM-V-4_6-Thinking</code></a> — Thinking</li>
+<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4.6"><code>openbmb/MiniCPM-V-4.6</code></a> — Instruct</li>
+<li><a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking"><code>openbmb/MiniCPM-V-4.6-Thinking</code></a> — Thinking</li>
 <li><strong>Qwen3.5 hybrid backbone.</strong> Mixed linear / full-attention layers, with up to <strong>256K</strong> context window.</li>
 <li><strong>NaViT-style vision tower.</strong> Replaces the resampler with a more efficient merger structure — simpler GGUF conversion, fewer surgery scripts.</li>
 <li><strong>Standalone transformers architecture.</strong> Registered as <code>MiniCPMV4_6ForConditionalGeneration</code> in <code>transformers &gt;= 5.7.0</code>. Standard <code>AutoProcessor</code> + <code>AutoModelForImageTextToText</code> flow works out of the box.</li>
@@ -287,7 +287,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_6&quot;</span>   <span class="c1"># or MiniCPM-V-4_6-Thinking</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6&quot;</span>   <span class="c1"># or MiniCPM-V-4.6-Thinking</span>
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
     <span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span> <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>
@@ -313,7 +313,7 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 <span class="nb">cd</span><span class="w"> </span>vllm
 <span class="nv">MAX_JOBS</span><span class="o">=</span><span class="m">6</span><span class="w"> </span><span class="nv">VLLM_USE_PRECOMPILED</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--editable<span class="w"> </span>.<span class="w"> </span>-v
 
-vllm<span class="w"> </span>serve<span class="w"> </span>openbmb/MiniCPM-V-4_6<span class="w"> </span>--trust-remote-code<span class="w"> </span>--max-model-len<span class="w"> </span><span class="m">8192</span>
+vllm<span class="w"> </span>serve<span class="w"> </span>openbmb/MiniCPM-V-4.6<span class="w"> </span>--trust-remote-code<span class="w"> </span>--max-model-len<span class="w"> </span><span class="m">8192</span>
 </code></pre></div>
 
 <p>See the <a href="deployment/vllm.html">vLLM guide</a> for full details.</p>
@@ -323,14 +323,14 @@ git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ggml-
 cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
 
 <span class="c1"># convert with the standard script (no surgery script needed for v4.6!)</span>
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4_6<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4_6-F16.gguf<span class="w"> </span>--outtype<span class="w"> </span>f16
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4_6<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>--outfile<span class="w"> </span>/path/to/mmproj-MiniCPM-V-4_6-F16.gguf
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4.6-F16.gguf<span class="w"> </span>--outtype<span class="w"> </span>f16
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>--outfile<span class="w"> </span>/path/to/mmproj-MiniCPM-V-4.6-F16.gguf
 
 ./build/bin/llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w"> </span>/path/to/MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/mmproj-MiniCPM-V-4_6-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w"> </span>/path/to/MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/mmproj-MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--image<span class="w"> </span>example.jpg<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;Describe the image.&quot;</span>
 </code></pre></div>
 

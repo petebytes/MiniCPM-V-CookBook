@@ -281,13 +281,13 @@ footer.page-footer a:hover { color: var(--primary); }
 <tbody>
 <tr>
 <td>Instruct</td>
-<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">openbmb/MiniCPM-V-4_6</a></td>
-<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6">OpenBMB/MiniCPM-V-4_6</a></td>
+<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4.6">openbmb/MiniCPM-V-4.6</a></td>
+<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6">OpenBMB/MiniCPM-V-4.6</a></td>
 </tr>
 <tr>
 <td>Thinking（思考）</td>
-<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4_6-Thinking">openbmb/MiniCPM-V-4_6-Thinking</a></td>
-<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_6-Thinking">OpenBMB/MiniCPM-V-4_6-Thinking</a></td>
+<td><a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking">openbmb/MiniCPM-V-4.6-Thinking</a></td>
+<td><a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-Thinking">OpenBMB/MiniCPM-V-4.6-Thinking</a></td>
 </tr>
 </tbody>
 </table>
@@ -336,7 +336,7 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 </code></pre></div>
 
 <p><strong>参数说明：</strong>
-- <code>&lt;模型路径&gt;</code>：MiniCPM-V-4_6 的本地路径，或 HuggingFace ID <code>openbmb/MiniCPM-V-4_6</code> / <code>openbmb/MiniCPM-V-4_6-Thinking</code>
+- <code>&lt;模型路径&gt;</code>：MiniCPM-V-4.6 的本地路径，或 HuggingFace ID <code>openbmb/MiniCPM-V-4.6</code> / <code>openbmb/MiniCPM-V-4.6-Thinking</code>
 - <code>--api-key</code>：API 访问密钥
 - <code>--max-model-len</code>：最大上下文长度。v4.6 backbone 最长支持 256K，部署时按需设置即可
 - <code>--gpu_memory_utilization</code>：GPU 显存使用率</p>
@@ -412,7 +412,7 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 </code></pre></div>
 
 <h3 id="2-4-思考模式">2.4 思考模式</h3>
-<p>如果部署的是 <strong><code>openbmb/MiniCPM-V-4_6-Thinking</code></strong> 模型，chat template 会默认在 assistant 起始位置插入 <code>&lt;think&gt;</code> 块；模型先输出推理过程，再以 <code>&lt;/think&gt;</code> 分隔后给出回答。可通过 <code>chat_template_kwargs</code> 跳过：</p>
+<p>如果部署的是 <strong><code>openbmb/MiniCPM-V-4.6-Thinking</code></strong> 模型，chat template 会默认在 assistant 起始位置插入 <code>&lt;think&gt;</code> 块；模型先输出推理过程，再以 <code>&lt;/think&gt;</code> 分隔后给出回答。可通过 <code>chat_template_kwargs</code> 跳过：</p>
 <div class="code"><pre><span></span><code><span class="n">extra_body</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;stop_token_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">248044</span><span class="p">,</span> <span class="mi">248046</span><span class="p">],</span>
     <span class="c1"># 在 Thinking 模型上跳过开头的 &lt;think&gt; 块</span>
@@ -507,7 +507,7 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;模型路径&gt;<sp
 
 <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;&lt;模型路径&gt;&quot;</span>
 <span class="c1"># 或直接使用 HuggingFace ID：</span>
-<span class="c1"># MODEL_NAME = &quot;openbmb/MiniCPM-V-4_6&quot;</span>
+<span class="c1"># MODEL_NAME = &quot;openbmb/MiniCPM-V-4.6&quot;</span>
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;./assets/airplane.jpeg&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">)</span>
@@ -554,7 +554,7 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;模型路径&gt;<sp
 
 <h2 id="注意事项">注意事项</h2>
 <ol>
-<li><strong>模型路径</strong>：将示例中的 <code>&lt;模型路径&gt;</code> 替换为本地路径，或 <code>openbmb/MiniCPM-V-4_6</code> / <code>openbmb/MiniCPM-V-4_6-Thinking</code>。</li>
+<li><strong>模型路径</strong>：将示例中的 <code>&lt;模型路径&gt;</code> 替换为本地路径，或 <code>openbmb/MiniCPM-V-4.6</code> / <code>openbmb/MiniCPM-V-4.6-Thinking</code>。</li>
 <li><strong>停止符</strong>：v4.6 采用 Qwen3.5 词表，正确的 <code>stop_token_ids</code> 为 <code>[248044, 248046]</code>（v4.5 用的是 <code>[1, 151645]</code>）。</li>
 <li><strong>API 密钥</strong>：客户端密钥需与 <code>vllm serve</code> 启动时一致。</li>
 <li><strong>显存配置</strong>：根据硬件调整 <code>--gpu_memory_utilization</code> / <code>--max-model-len</code> / <code>--max-num-batched-tokens</code>。v4.6 backbone 最长支持 256K，但通常无需开满。</li>

@@ -273,7 +273,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <strong>支持版本：</strong> MiniCPM-V 4.6 / MiniCPM-V 4.5 / MiniCPM-V 4.0 / MiniCPM-V 2.6 / MiniCPM-V 2.5
 :::</p>
 <h2 id="1-下载模型">1. 下载模型</h2>
-<p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_6">HuggingFace</a> 下载 MiniCPM-V-4_6 模型（Thinking 版本为 <code>openbmb/MiniCPM-V-4_6-Thinking</code>），解压到本地目录。</p>
+<p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6">HuggingFace</a> 下载 MiniCPM-V-4.6 模型（Thinking 版本为 <code>openbmb/MiniCPM-V-4.6-Thinking</code>），解压到本地目录。</p>
 <h2 id="2-量化脚本">2. 量化脚本</h2>
 <p>下方脚本会加载原始模型，使用 bitsandbytes 量化为 4-bit，运行一次推理校验，并保存量化后的模型。</p>
 <blockquote>
@@ -292,8 +292,8 @@ footer.page-footer a:hover { color: var(--primary); }
 <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">(),</span> <span class="s2">&quot;CUDA is not available, but this code requires a GPU.&quot;</span>
 
 <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/model/MiniCPM-V-4_6&quot;</span>  <span class="c1"># 原始模型路径</span>
-<span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;./model/MiniCPM-V-4_6-int4&quot;</span>  <span class="c1"># 量化模型保存路径</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/model/MiniCPM-V-4.6&quot;</span>  <span class="c1"># 原始模型路径</span>
+<span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;./model/MiniCPM-V-4.6-int4&quot;</span>  <span class="c1"># 量化模型保存路径</span>
 <span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;./assets/airplane.jpeg&quot;</span>
 
 <span class="c1"># 4-bit 量化配置</span>
