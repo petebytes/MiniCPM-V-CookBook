@@ -6,20 +6,22 @@
 
 训练任务：
 
-- 输入一张图片和 counting 问题
-- 输出图片中目标类别的数量
-- assistant 目标输出为先输出每个目标物体点的位置，用 `x y` 坐标来表示，如 `<point>573 489</point>`，然后输出最终数量，例如 `0`、`3`、`10`。
+- 输入一张图片和一个计数问题
+- 输出图片中目标物体的数量
+- `assistant` 目标输出需要先给出每个目标物体点的位置，用 `x y` 坐标表示，如 `<point>573 489</point>`，再输出最终数量，例如 `0`、`3`、`10`。
 - 评测指标如下：
 
-| 指标 | 含义 |
-| --- | --- |
+
+| 指标    | 含义               |
+| ----- | ---------------- |
 | Acc@0 | 精确匹配率（预测值 = 真实值） |
+
 
 ## 2 使用 ms-swift 微调
 
 ### 2.1 环境说明
 
-- __最小可运行安装步骤__
+- **最小可运行安装步骤**
 
 ```bash
 conda create -n "MiniCPM-v_4.6-VL" python=3.10 -y
@@ -38,14 +40,14 @@ cd ms-swift
 pip install -e .
 ```
 
-- __依赖版本参考__
+- **依赖版本参考**
 
 ```text
 python                        3.10.0
 accelerate                    1.13.0
 deepspeed                     0.18.3
 flash_attn                    2.8.3
-ms_swift                      official latest-code
+ms_swift                      官方最新代码
 torch                         2.8.0
 torchvision                   0.23.0
 transformers                  5.7.0
@@ -53,26 +55,22 @@ transformers                  5.7.0
 
 ### 2.2 数据准备
 
-- __数据下载__：数据来源为 [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count)，先将 huggingface 文件下载下来
+- **数据下载**：数据来源为 [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count)，先从 Hugging Face 下载相关文件
 
 ```text
 hf download allenai/pixmo-count --repo-type dataset --local-dir path_to_your_hf_file
 ```
 
-- __图片下载__：根据 parquet 文件中image_url一列下载图片
-- __数据集构建__：需要将数据集转化为swift格式
-
+- **图片下载**：根据 parquet 文件中的 `image_url` 列下载图片
+- **数据集构建**：需要将数据集转换为 ms-swift 格式
   - 如果要支持带 points 训练，需要将 parquet 文件中 points 一列中的点坐标拼到 assistant 消息中。
   - 由于 MiniCPM-V 4.6 会将图片坐标归一化到 `0~1000`，因此也需要对 points 坐标进行以下处理：
-
     ```python
     def expected_norm(x_px: float, y_px: float, width: int, height: int) -> Tuple[int, int]:
         return int((x_px / width) * 1000.0), int((y_px / height) * 1000.0)
     ```
-
   - 如果要追求进一步的训练稳定，可以使用提示词隔离的技巧，在 assistant 前缀中加入 `<think>\n\n</think>\n\n`，并且在训练时使用 `--loss_scale ignore_empty_think` 参数保证空 think 在计算 loss 时被 mask 掉。
   - **数据格式参考：**
-
     ```json
     {
         "messages": [
@@ -96,7 +94,7 @@ hf download allenai/pixmo-count --repo-type dataset --local-dir path_to_your_hf_
 
 ### 2.3 启动训练
 
-- __最小可运行方式__：配置好模型路径、训练集路径、验证集路径和输出目录后，执行以下脚本。
+- **最小可运行方式**：配置好模型路径、训练集路径、验证集路径和输出目录后，执行以下脚本。
 
 ```bash
 run_swift.sh
@@ -157,27 +155,31 @@ ${SWIFT_BIN} sft \
   --report_to wandb
 ```
 
-- __关键参数说明__
+- **关键参数说明**
   - 训练支持 `16x`、`4x` 两种下采样率，通过 `export DOWNSAMPLE_MODE="${DOWNSAMPLE_MODE:-4x}"` 一行进行控制。
   - 当前版本的 `transformers` 对 Qwen3.5 系列的 packing 支持并不好，为了防止过拟合，请使用 `--packing false`。
   - 如果先前的数据集构建过程中进行了提示词隔离，即在 assistant 回复加入 `<think>\n\n</think>\n\n` 前缀，这样的改动需要结合 `--loss_scale ignore_empty_think` 来确保前缀在计算 loss 时被 mask 掉。
 
 ### 2.4 训练过程
 
-https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/swift---VmlldzoxNjgxMDk0Ng
+[https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng)
 
 <img src="./assets/finetune_minicpmv46/minicpmv46_swift_ft_dynamics.png" alt="ms-swift 训练过程" />
+
+
 
 ### 2.5 评测结果
 
 - 下表展示了两种视觉 Token 压缩率设置下的评测结果。训练与评测参数保持一致，并同时给出了所有 checkpoint 中的最高分数和前三名平均分数。
 
-| 模型 | 视觉 Token 压缩率 | Acc@0 Top1 | Acc@0 Avg.Top3 |
-| --- | --- | --- | --- |
-| MiniCPM-V 4.6 | 4 | 46.5 | N/A |
-| MiniCPM-V 4.6 | 16 | 51.8 | N/A |
-| Fine-tuned model | 4 | 79.7 | 79.3 |
-| Fine-tuned model | 16 | 84.3 | 83.9 |
+
+| 模型               | 视觉 Token 压缩率 | Acc@0 Top1 | Acc@0 Avg.Top3 |
+| ---------------- | ------------ | ---------- | -------------- |
+| MiniCPM-V 4.6    | 16           | 46.5       | N/A            |
+| MiniCPM-V 4.6    | 4            | 51.8       | N/A            |
+| Fine-tuned model | 16           | 79.7       | 79.3           |
+| Fine-tuned model | 4            | 84.3       | 83.9           |
+
 
 - 输出样例：
 
@@ -189,7 +191,7 @@ The respective coordinates of people: 82 638, 175 638, 264 648, 347 652, 439 629
 
 ### 3.1 环境说明
 
-- __最小可运行安装步骤__
+- **最小可运行安装步骤**
 
 ```bash
 conda create -n "MiniCPM-v_4.6-VL" python=3.11 -y
@@ -209,14 +211,14 @@ pip install -e .
 pip install -r requirements/metrics.txt -r requirements/deepspeed.txt
 ```
 
-- __依赖版本参考__
+- **依赖版本参考**
 
 ```text
 python                        3.11.0
 accelerate                    1.13.0
 deepspeed                     0.18.3
 flash_attn                    2.8.3
-llamafactory                  0.9.5 (modified)
+llamafactory                  官方最新代码
 torch                         2.8.0
 torchvision                   0.23.0
 transformers                  5.7.0
@@ -225,18 +227,18 @@ transformers                  5.7.0
 ### 3.2 数据准备
 
 - 准备方式与 2.2 相同
-- 注意：使用 llama-factory 训练，需要给出数据集对应的 dataset_info.json
+- 注意：使用 LlamaFactory 训练时，还需要提供数据集对应的 `dataset_info.json`
 
 ### 3.3 启动训练
 
-- __最小可运行方式__：准备好 `train.yaml` 后，执行下面脚本即可开始训练。
-
+- **最小可运行方式**：准备好 `train.yaml` 后，执行下面脚本即可开始训练。
 - 1. 配置 `train.yaml`
 
 ```yaml
 ### model
 model_name_or_path: /path/to/minicpm-v-4_6
 trust_remote_code: true
+flash_attn: fa2
 
 ### method
 stage: sft
@@ -253,6 +255,7 @@ template: minicpm_v_4_6
 cutoff_len: 4096
 preprocessing_num_workers: 16
 dataloader_num_workers: 16
+overwrite_cache: true
 
 ### output
 output_dir: /path/to/output_dir
@@ -274,7 +277,10 @@ num_train_epochs: 4.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.05
 bf16: true
+max_grad_norm: 1000
 ddp_timeout: 180000000
+weight_decay: 0.1
+adam_beta2: 0.95
 ```
 
 - 2. 执行 `run.sh`
@@ -310,10 +316,30 @@ echo "Output dir: $OUTPUT_DIR"
 llamafactory-cli train "$CONFIG_FILE"
 ```
 
-- __补充说明__：如果你要使用 `batchsize > 1` 进行训练或评测，请务必确保在 `tokenizer_config.json` 加上 `"padding_side": "left"`，这是因为使用 LlamaFactory 进行训练时可能出现保存的 checkpoint 的 `tokenizer_config.json` 中 `"padding_side"` 为 `"right"` 的情况，导致 padding 出现问题，模型无法正常输出。
-
 ### 3.4 训练过程
 
-https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyMDcyMA
+[https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ)
 
 <img src="./assets/finetune_minicpmv46/minicpmv46_lf_ft_dynamics.png" alt="Llama-Factory 训练过程" />
+
+
+
+### 3.5 评测结果
+
+- 下表展示了两种视觉 Token 压缩率设置下的评测结果。训练与评测参数保持一致，并同时给出了所有 checkpoint 中的最高分数和前三名平均分数。
+
+
+| 模型               | 视觉 Token 压缩率 | Acc@0 Top1 | Acc@0 Avg.Top3 |
+| ---------------- | ------------ | ---------- | -------------- |
+| MiniCPM-V 4.6    | 16           | 46.5       | N/A            |
+| MiniCPM-V 4.6    | 4            | 51.8       | N/A            |
+| Fine-tuned model | 16           | 78.4       | 78.1           |
+| Fine-tuned model | 4            | 83.1       | 82.5           |
+
+
+- 输出样例：
+
+```text
+The respective coordinates of airplanes: 131 802, 208 602, 275 442, 337 277, 358 699, 428 523, 497 333, 587 602, 667 375, 865 393. So the total count is 10.
+```
+

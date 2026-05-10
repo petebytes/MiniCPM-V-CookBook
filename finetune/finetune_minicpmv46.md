@@ -6,9 +6,9 @@ This section uses the [Counting](https://huggingface.co/datasets/allenai/pixmo-c
 
 Training task:
 
-- Input an image and a counting question
-- Output the number of target objects in the image
-- The target `assistant` output first lists the coordinates of each target object in `x y` format, for example, `<point>573 489</point>`, and then outputs the final count, such as `0`, `3`, or `10`.
+- Input: an image and a counting question
+- Output: the number of target objects in the image
+- The target `assistant` response first lists the coordinates of each target object in `x y` format, for example, `<point>573 489</point>`, and then gives the final count, such as `0`, `3`, or `10`.
 - The evaluation metric is shown below:
 
 | Metric | Meaning |
@@ -45,7 +45,7 @@ python                        3.10.0
 accelerate                    1.13.0
 deepspeed                     0.18.3
 flash_attn                    2.8.3
-ms_swift                      official latest-code
+ms_swift                      latest official code
 torch                         2.8.0
 torchvision                   0.23.0
 transformers                  5.7.0
@@ -60,7 +60,7 @@ hf download allenai/pixmo-count --repo-type dataset --local-dir path_to_your_hf_
 ```
 
 - __Download images__: download the images according to the `image_url` column in the parquet file
-- __Build the dataset__: convert the dataset into the swift format
+- __Build the dataset__: convert the dataset into the ms-swift format
 
   - To support training with points, you need to concatenate the coordinates from the `points` column in the parquet file into the assistant message.
   - Since MiniCPM-V 4.6 normalizes image coordinates to `0~1000`, the point coordinates also need to be transformed as follows:
@@ -164,7 +164,7 @@ ${SWIFT_BIN} sft \
 
 ### 2.4 Training Curves
 
-https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/swift---VmlldzoxNjgxMDk0Ng
+https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng
 
 <img src="./assets/finetune_minicpmv46/minicpmv46_swift_ft_dynamics.png" alt="ms-swift training curves" />
 
@@ -174,10 +174,10 @@ https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/swift---
 
 | Model | Visual Token Compression Ratio | Acc@0 Top1 | Acc@0 Avg.Top3 |
 | --- | --- | --- | --- |
-| MiniCPM-V 4.6 | 4 | 46.5 | N/A |
-| MiniCPM-V 4.6 | 16 | 51.8 | N/A |
-| Fine-tuned model | 4 | 79.7 | 79.3 |
-| Fine-tuned model | 16 | 84.3 | 83.9 |
+| MiniCPM-V 4.6 | 16 | 46.5 | N/A |
+| MiniCPM-V 4.6 | 4 | 51.8 | N/A |
+| Fine-tuned model | 16 | 79.7 | 79.3 |
+| Fine-tuned model | 4 | 84.3 | 83.9 |
 
 - Output example:
 
@@ -216,7 +216,7 @@ python                        3.11.0
 accelerate                    1.13.0
 deepspeed                     0.18.3
 flash_attn                    2.8.3
-llamafactory                  0.9.5 (modified)
+llamafactory                  latest official code
 torch                         2.8.0
 torchvision                   0.23.0
 transformers                  5.7.0
@@ -225,7 +225,7 @@ transformers                  5.7.0
 ### 3.2 Data Preparation
 
 - The preparation procedure is the same as in Section 2.2
-- Note: when training with llama-factory, you also need to provide the corresponding `dataset_info.json`
+- Note: when training with LlamaFactory, you also need to provide the corresponding `dataset_info.json`
 
 ### 3.3 Launch Training
 
@@ -237,6 +237,7 @@ transformers                  5.7.0
 ### model
 model_name_or_path: /path/to/minicpm-v-4_6
 trust_remote_code: true
+flash_attn: fa2
 
 ### method
 stage: sft
@@ -253,6 +254,7 @@ template: minicpm_v_4_6
 cutoff_len: 4096
 preprocessing_num_workers: 16
 dataloader_num_workers: 16
+overwrite_cache: true
 
 ### output
 output_dir: /path/to/output_dir
@@ -274,7 +276,10 @@ num_train_epochs: 4.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.05
 bf16: true
+max_grad_norm: 1000
 ddp_timeout: 180000000
+weight_decay: 0.1
+adam_beta2: 0.95
 ```
 
 - 2. Run `run.sh`
@@ -310,10 +315,25 @@ echo "Output dir: $OUTPUT_DIR"
 llamafactory-cli train "$CONFIG_FILE"
 ```
 
-- __Additional note__: if you want to use `batchsize > 1` during training or evaluation, make sure to add `"padding_side": "left"` to `tokenizer_config.json`. When training with LlamaFactory, the saved checkpoint may contain `"padding_side": "right"` in `tokenizer_config.json`, which can cause padding issues and prevent the model from generating correctly.
-
 ### 3.4 Training Curves
 
-https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyMDcyMA
+https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ
 
 <img src="./assets/finetune_minicpmv46/minicpmv46_lf_ft_dynamics.png" alt="Llama-Factory training curves" />
+
+### 3.5 Evaluation Results
+
+- The table below shows the evaluation results under two visual token compression ratios. Training and evaluation use the same settings, and both the best score among all checkpoints and the average score of the top three checkpoints are reported.
+
+| Model | Visual Token Compression Ratio | Acc@0 Top1 | Acc@0 Avg.Top3 |
+| --- | --- | --- | --- |
+| MiniCPM-V 4.6 | 16 | 46.5 | N/A |
+| MiniCPM-V 4.6 | 4 | 51.8 | N/A |
+| Fine-tuned model | 16 | 78.4 | 78.1 |
+| Fine-tuned model | 4 | 83.1 | 82.5 |
+
+- Output example:
+
+```text
+The respective coordinates of airplanes: 131 802, 208 602, 275 442, 337 277, 358 699, 428 523, 497 333, 587 602, 667 375, 865 393. So the total count is 10.
+```
