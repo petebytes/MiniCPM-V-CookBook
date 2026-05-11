@@ -2,7 +2,7 @@
 
 ## 1 模型与任务概览
 
-本章节以 [Counting](https://huggingface.co/datasets/allenai/pixmo-count) 任务作为微调示例。
+本章节以 counting 任务 [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count) 作为微调示例。
 
 训练任务：
 
@@ -24,8 +24,8 @@
 - **最小可运行安装步骤**
 
 ```bash
-conda create -n "MiniCPM-v_4.6-VL" python=3.10 -y
-conda activate "MiniCPM-v_4.6-VL"
+conda create -n "MiniCPM-V_4.6-Counting" python=3.10 -y
+conda activate "MiniCPM-V_4.6-Counting"
 
 pip install torch==2.8.0 torchvision==0.23.0
 
@@ -55,21 +55,15 @@ transformers                  5.7.0
 
 ### 2.2 数据准备
 
-- **数据下载**：数据来源为 [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count)，先从 Hugging Face 下载相关文件
-
-```text
-hf download allenai/pixmo-count --repo-type dataset --local-dir path_to_your_hf_file
-```
-
-- **图片下载**：根据 parquet 文件中的 `image_url` 列下载图片
-- **数据集构建**：需要将数据集转换为 ms-swift 格式
-  - 如果要支持带 points 训练，需要将 parquet 文件中 points 一列中的点坐标拼到 assistant 消息中。
-  - 由于 MiniCPM-V 4.6 会将图片坐标归一化到 `0~1000`，因此也需要对 points 坐标进行以下处理：
-    ```python
-    def expected_norm(x_px: float, y_px: float, width: int, height: int) -> Tuple[int, int]:
-        return int((x_px / width) * 1000.0), int((y_px / height) * 1000.0)
-    ```
-  - 如果要追求进一步的训练稳定，可以使用提示词隔离的技巧，在 assistant 前缀中加入 `<think>\n\n</think>\n\n`，并且在训练时使用 `--loss_scale ignore_empty_think` 参数保证空 think 在计算 loss 时被 mask 掉。
+- **数据下载**：数据来源为 [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count)，在完成数据集和图片文件下载后，将数据集转换为 ms-swift 格式
+  - **注意事项**：
+    - 如果要支持带 points 训练，需要将 parquet 文件中 points 一列中的点坐标拼到 assistant 消息中。
+    - 由于 MiniCPM-V 4.6 会将图片坐标归一化到 `0~1000`，因此也需要对 points 坐标进行以下处理：
+      ```python
+      def expected_norm(x_px: float, y_px: float, width: int, height: int) -> Tuple[int, int]:
+          return int((x_px / width) * 1000.0), int((y_px / height) * 1000.0)
+      ```
+    - 如果要追求进一步的训练稳定，可以使用提示词隔离的技巧，在 assistant 前缀中加入 `<think>\n\n</think>\n\n`，并且在训练时使用 `--loss_scale ignore_empty_think` 参数保证空 think 在计算 loss 时被 mask 掉。
   - **数据格式参考：**
     ```json
     {
@@ -173,31 +167,37 @@ ${SWIFT_BIN} sft \
 - 下表展示了两种视觉 Token 压缩率设置下的评测结果。训练与评测参数保持一致，并同时给出了所有 checkpoint 中的最高分数和前三名平均分数。
 
 
-| 模型               | 视觉 Token 压缩率 | Acc@0 Top1 | Acc@0 Avg.Top3 |
-| ---------------- | ------------ | ---------- | -------------- |
-| MiniCPM-V 4.6    | 16           | 46.5       | N/A            |
-| MiniCPM-V 4.6    | 4            | 51.8       | N/A            |
-| Fine-tuned model | 16           | 79.7       | 79.3           |
-| Fine-tuned model | 4            | 84.3       | 83.9           |
+  | 模型               | 视觉 Token 压缩率 | Acc@0 Top1 <sup>[1]</sup> | Acc@0 Avg.Top3 <sup>[2]</sup> |
+  | ---------------- | ------------ | ---------- | -------------- |
+  | MiniCPM-V 4.6    | 16           | 46.5       | N/A  <sup>[3]</sup>      |
+  | MiniCPM-V 4.6    | 4            | 51.8       | N/A  <sup>[3]</sup>      |
+  | Fine-tuned model | 16           | 79.7       | 79.3           |
+  | Fine-tuned model | 4            | 84.3       | 83.9           |
 
+  <small>[1]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 的最高分数。
+  <br>
+  [2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。
+  <br>
+  [3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)，无法计算 Acc@0 Avg.Top3</small>
 
 - 输出样例：
-
 ```text
 Q: Carefully observe the image. Are there any people in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
 
-A: The respective coordinates of people: 82 638, 175 638, 264 648, 347 652, 439 629, 537 626, 620 632, 708 628, 796 616, 915 632. So the total count is 10.
+A: The respective coordinates of people: <point>79 638</point>, <point>179 630</point>, <point>261 654</point>, <point>345 648</point>, <point>432 628</point>, <point>532 625</point>, <point>620 628</point>, <point>712 626</point>, <point>800 616</point>, <point>915 626</point>. So the total count is 10.
 ```
+<img src="./assets/finetune_minicpmv46/sample_1.png" alt="ms-swift sample" />
 
-## 3 使用 Llama-Factory 微调
+
+## 3 使用 LlaMA-Factory 微调
 
 ### 3.1 环境说明
 
 - **最小可运行安装步骤**
 
 ```bash
-conda create -n "MiniCPM-v_4.6-VL" python=3.11 -y
-conda activate "MiniCPM-v_4.6-VL"
+conda create -n "MiniCPM-V_4.6-Counting" python=3.11 -y
+conda activate "MiniCPM-V_4.6-Counting"
 
 pip install torch==2.8.0 torchvision==0.23.0
 
@@ -331,19 +331,25 @@ llamafactory-cli train "$CONFIG_FILE"
 - 下表展示了两种视觉 Token 压缩率设置下的评测结果。训练与评测参数保持一致，并同时给出了所有 checkpoint 中的最高分数和前三名平均分数。
 
 
-| 模型               | 视觉 Token 压缩率 | Acc@0 Top1 | Acc@0 Avg.Top3 |
-| ---------------- | ------------ | ---------- | -------------- |
-| MiniCPM-V 4.6    | 16           | 46.5       | N/A            |
-| MiniCPM-V 4.6    | 4            | 51.8       | N/A            |
-| Fine-tuned model | 16           | 78.4       | 78.1           |
-| Fine-tuned model | 4            | 83.1       | 82.5           |
+  | 模型               | 视觉 Token 压缩率 | Acc@0 Top1 <sup>[1]</sup> | Acc@0 Avg.Top3 <sup>[2]</sup> |
+  | ---------------- | ------------ | ---------- | -------------- |
+  | MiniCPM-V 4.6    | 16           | 46.5       | N/A  <sup>[3]</sup>          |
+  | MiniCPM-V 4.6    | 4            | 51.8       | N/A  <sup>[3]</sup>          |
+  | Fine-tuned model | 16           | 78.4       | 78.1           |
+  | Fine-tuned model | 4            | 83.1       | 82.5           |
 
+  <small>[1]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 的最高分数。
+  <br>
+  [2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。
+  <br>
+  [3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)，无法计算 Acc@0 Avg.Top3</small>
 
 - 输出样例：
 
 ```text
 Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
 
-A: The respective coordinates of airplanes: 131 802, 208 602, 275 442, 337 277, 358 699, 428 523, 497 333, 587 602, 667 375, 865 393. So the total count is 10.
+A: The respective coordinates of airplanes: <point>310 370</point>, <point>360 275</point>, <point>385 486</point>, <point>402 180</point>, <point>439 368</point>, <point>474 611</point>, <point>505 250</point>, <point>532 448</point>, <point>536 818</point>, <point>597 328</point>. So the total count is 10.
 ```
 
+<img src="./assets/finetune_minicpmv46/sample_2.png" alt="LlamaFactory sample" />
