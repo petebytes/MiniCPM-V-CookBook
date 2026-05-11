@@ -68,19 +68,19 @@ For everything else (Docker images, CPU-only fallback, etc.) see the
 By default the server downloads weights from the HuggingFace Hub:
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6 --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6 --port 30000 --trust-remote-code --dtype bfloat16
 ```
 
 Or specify a local path:
 
 ```bash
-python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4.6 --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4.6 --port 30000 --trust-remote-code --dtype bfloat16
 ```
 
 To serve the Thinking variant, swap the model id:
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --port 30000 --trust-remote-code --dtype bfloat16
 ```
 
 ## 3. Calling the Service
@@ -106,7 +106,8 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --por
             ]
           }
         ],
-        "max_tokens": 300
+        "max_tokens": 300,
+        "top_k": -1
       }'
     ```
 
@@ -134,7 +135,7 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --por
             }
         ],
         max_tokens=300,
-        extra_body={"stop_token_ids": [248044, 248046]},
+        extra_body={"top_k": -1, "stop_token_ids": [248044, 248046]},
     )
 
     print(response.choices[0].message.content)
