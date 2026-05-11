@@ -55,15 +55,7 @@ transformers                  5.7.0
 
 ### 2.2 数据准备
 
-- **数据下载**：数据来源为 [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count)，在完成数据集和图片文件下载后，将数据集转换为 ms-swift 格式
-  - **注意事项**：
-    - 如果要支持带 points 训练，需要将 parquet 文件中 points 一列中的点坐标拼到 assistant 消息中。
-    - 由于 MiniCPM-V 4.6 会将图片坐标归一化到 `0~1000`，因此也需要对 points 坐标进行以下处理：
-      ```python
-      def expected_norm(x_px: float, y_px: float, width: int, height: int) -> Tuple[int, int]:
-          return int((x_px / width) * 1000.0), int((y_px / height) * 1000.0)
-      ```
-    - 如果要追求进一步的训练稳定，可以使用提示词隔离的技巧，在 assistant 前缀中加入 `<think>\n\n</think>\n\n`，并且在训练时使用 `--loss_scale ignore_empty_think` 参数保证空 think 在计算 loss 时被 mask 掉。
+从 [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count) 下载数据集，并将其转换为 ms-swift 格式。
   - **数据格式参考：**
     ```json
     {
@@ -85,10 +77,17 @@ transformers                  5.7.0
         "channel": "pixmo-count"
     }
     ```
+  - Counting 任务中加入对 points 预测的监督能够提高微调的效果，因此我们推荐将数据中的 points 坐标拼到 assistant 回复中。
+  - 由于 MiniCPM-V 4.6 会将图片坐标归一化到 `0~1000`，因此也需要对 points 坐标进行以下处理：
+    ```python
+    def expected_norm(x_px: float, y_px: float, width: int, height: int) -> Tuple[int, int]:
+        return int((x_px / width) * 1000.0), int((y_px / height) * 1000.0)
+    ```
+  - 微调训练推荐在 assistant 前缀中加入 `<think>\n\n</think>\n\n`，并且在训练时使用 `--loss_scale ignore_empty_think` 参数保证空 think 在计算 loss 时被 mask 掉。（如果是 thinking 的任务，则加入 `<think>\n`）
 
 ### 2.3 启动训练
 
-- **最小可运行方式**：配置好模型路径、训练集路径、验证集路径和输出目录后，执行以下脚本。
+配置好模型路径、训练集路径、验证集路径和输出目录后，执行以下脚本即可以开始训练。
 
 ```bash
 run_swift.sh
@@ -149,44 +148,43 @@ ${SWIFT_BIN} sft \
   --report_to wandb
 ```
 
-- **关键参数说明**
-  - 训练支持 `16x`、`4x` 两种下采样率，通过 `export DOWNSAMPLE_MODE="${DOWNSAMPLE_MODE:-4x}"` 一行进行控制。
-  - 当前版本的 `transformers` 对 Qwen3.5 系列的 packing 支持并不好，为了防止过拟合，请使用 `--packing false`。
-  - 如果先前的数据集构建过程中进行了提示词隔离，即在 assistant 回复加入 `<think>\n\n</think>\n\n` 前缀，这样的改动需要结合 `--loss_scale ignore_empty_think` 来确保前缀在计算 loss 时被 mask 掉。
+关键参数说明
+- 训练支持 `16x`、`4x` 两种视觉 Token 压缩率，通过 `export DOWNSAMPLE_MODE="${DOWNSAMPLE_MODE:-4x}"` 参数进行控制。
+- 当前版本的 `transformers` 对 Qwen3.5 系列的 packing 训练的支持仍存在问题，目前请使用 `--packing false`，官方修复后本文档也会进行更新。
+- 如果先前的数据集构建过程中进行了提示词隔离，即在 assistant 回复加入 `<think>\n\n</think>\n\n` 前缀，这样的改动需要结合 `--loss_scale ignore_empty_think` 来确保前缀在计算 loss 时被 mask 掉。
 
 ### 2.4 训练过程
 
 [https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng)
 
-<img src="./assets/finetune_minicpmv46/minicpmv46_swift_ft_dynamics.png" alt="ms-swift 训练过程" />
-
 
 
 ### 2.5 评测结果
 
-- 下表展示了两种视觉 Token 压缩率设置下的评测结果。训练与评测参数保持一致，并同时给出了所有 checkpoint 中的最高分数和前三名平均分数。
+下表展示了两种视觉 Token 压缩率设置下的评测结果。训练与评测参数保持一致，并同时给出了所有 checkpoint 中的最高分数和前三名平均分数。
 
-
-  | 模型               | 视觉 Token 压缩率 | Acc@0 Top1 <sup>[1]</sup> | Acc@0 Avg.Top3 <sup>[2]</sup> |
-  | ---------------- | ------------ | ---------- | -------------- |
-  | MiniCPM-V 4.6    | 16           | 46.5       | N/A  <sup>[3]</sup>      |
-  | MiniCPM-V 4.6    | 4            | 51.8       | N/A  <sup>[3]</sup>      |
-  | Fine-tuned model | 16           | 79.7       | 79.3           |
-  | Fine-tuned model | 4            | 84.3       | 83.9           |
+  | 模型               | 视觉 Token 压缩率 | Acc@0 Top1 [1] | Acc@0 Avg.Top3 [2] |
+  | ---------------- | ------------ | -------------- | ------------------ |
+  | MiniCPM-V 4.6    | 16           | 46.5           | N/A [3]            |
+  | MiniCPM-V 4.6    | 4            | 51.8           | N/A [3]            |
+  | Fine-tuned model | 16           | 79.7           | 79.3               |
+  | Fine-tuned model | 4            | 84.3           | 83.9               |
 
   <small>[1]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 的最高分数。
-  <br>
-  [2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。
-  <br>
-  [3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)，无法计算 Acc@0 Avg.Top3</small>
+    
+  [2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。   
+  [3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)
 
-- 输出样例：
-```text
-Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
+  - 输出样例：
 
-A: The respective coordinates of airplanes: <point>310 370</point>, <point>365 277</point>, <point>388 486</point>, <point>405 185</point>, <point>437 368</point>, <point>474 611</point>, <point>503 250</point>, <point>527 451</point>, <point>535 818</point>, <point>597 331</point>. So the total count is 10.
-```
-<img src="./assets/finetune_minicpmv46/sample_1.png" alt="ms-swift sample" />
+  ```text
+  Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
+
+  A: The respective coordinates of airplanes: <point>310 370</point>, <point>365 277</point>, <point>388 486</point>, <point>405 185</point>, <point>437 368</point>, <point>474 611</point>, <point>503 250</point>, <point>527 451</point>, <point>535 818</point>, <point>597 331</point>. So the total count is 10.
+  ```
+
+  <img src="./assets/finetune_minicpmv46/sample_1.png" alt="ms-swift 示例图片" />
+
 
 
 ## 3 使用 LlaMA-Factory 微调
@@ -233,8 +231,7 @@ transformers                  5.7.0
 
 ### 3.3 启动训练
 
-- **最小可运行方式**：准备好 `train.yaml` 后，执行下面脚本即可开始训练。
-- 1. 配置 `train.yaml`
+- 配置 `train.yaml`
 
 ```yaml
 ### model
@@ -285,7 +282,7 @@ weight_decay: 0.1
 adam_beta2: 0.95
 ```
 
-- 2. 执行 `run.sh`
+- 执行 `run.sh`
 
 ```bash
 #!/bin/bash
@@ -322,34 +319,30 @@ llamafactory-cli train "$CONFIG_FILE"
 
 [https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ)
 
-<img src="./assets/finetune_minicpmv46/minicpmv46_lf_ft_dynamics.png" alt="Llama-Factory 训练过程" />
-
 
 
 ### 3.5 评测结果
 
-- 下表展示了两种视觉 Token 压缩率设置下的评测结果。训练与评测参数保持一致，并同时给出了所有 checkpoint 中的最高分数和前三名平均分数。
+下表展示了两种视觉 Token 压缩率设置下的评测结果。训练与评测参数保持一致，并同时给出了所有 checkpoint 中的最高分数和前三名平均分数。
 
-
-  | 模型               | 视觉 Token 压缩率 | Acc@0 Top1 <sup>[1]</sup> | Acc@0 Avg.Top3 <sup>[2]</sup> |
-  | ---------------- | ------------ | ---------- | -------------- |
-  | MiniCPM-V 4.6    | 16           | 46.5       | N/A  <sup>[3]</sup>          |
-  | MiniCPM-V 4.6    | 4            | 51.8       | N/A  <sup>[3]</sup>          |
-  | Fine-tuned model | 16           | 78.4       | 78.1           |
-  | Fine-tuned model | 4            | 83.1       | 82.5           |
+  | 模型               | 视觉 Token 压缩率 | Acc@0 Top1 [1] | Acc@0 Avg.Top3 [2] |
+  | ---------------- | ------------ | -------------- | ------------------ |
+  | MiniCPM-V 4.6    | 16           | 46.5           | N/A [3]            |
+  | MiniCPM-V 4.6    | 4            | 51.8           | N/A [3]            |
+  | Fine-tuned model | 16           | 78.4           | 78.1               |
+  | Fine-tuned model | 4            | 83.1           | 82.5               |
 
   <small>[1]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 的最高分数。
-  <br>
-  [2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。
-  <br>
-  [3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)，无法计算 Acc@0 Avg.Top3</small>
+    
+  [2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。   
+  [3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)，无法计算 Acc@0 Avg.Top3
+  
+  - 输出样例：
 
-- 输出样例：
+  ```text
+  Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
 
-```text
-Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
+  A: The respective coordinates of airplanes: <point>310 370</point>, <point>360 275</point>, <point>385 486</point>, <point>402 180</point>, <point>439 368</point>, <point>474 611</point>, <point>505 250</point>, <point>532 448</point>, <point>536 818</point>, <point>597 328</point>. So the total count is 10.
+  ```
 
-A: The respective coordinates of airplanes: <point>310 370</point>, <point>360 275</point>, <point>385 486</point>, <point>402 180</point>, <point>439 368</point>, <point>474 611</point>, <point>505 250</point>, <point>532 448</point>, <point>536 818</point>, <point>597 328</point>. So the total count is 10.
-```
-
-<img src="./assets/finetune_minicpmv46/sample_2.png" alt="LlamaFactory sample" />
+  <img src="./assets/finetune_minicpmv46/sample_2.png" alt="Llama-Factory 示例图片" />
