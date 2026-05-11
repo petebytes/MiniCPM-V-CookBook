@@ -1,6 +1,6 @@
 # MiniCPM-V 4.6 Fine-Tuning Tutorial (LlaMA-Factory)
 
-## 1 Model and Task Overview
+## Model and Task Overview
 
 This section uses the counting task [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count) as a fine-tuning example.
 
@@ -9,11 +9,9 @@ Training task:
 - Input an image and a counting question
 - The target `assistant` response first lists the coordinates of each target object in `x y` format, for example, `<point>573 489</point>`, and then outputs the final count, such as `0`, `3`, or `10`.
 
-## 2 Fine-Tuning with Llama-Factory
+## Environment Setup
 
-### 2.1 Environment Setup
-
-- **Minimum runnable installation steps**
+**Minimum runnable installation steps**
 
 ```bash
 conda create -n "MiniCPM-V-4.6-Counting" python=3.11 -y
@@ -33,7 +31,7 @@ pip install -e .
 pip install -r requirements/metrics.txt -r requirements/deepspeed.txt
 ```
 
-- **Reference dependency versions**
+**Reference dependency versions**
 
 ```text
 python                        3.11.0
@@ -46,11 +44,11 @@ torchvision                   0.23.0
 transformers                  5.7.0
 ```
 
-### 2.2 Data Preparation
+## Data Preparation
 
 Download the dataset from [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count) and convert it into the json format.
 
-- **Data format reference:**
+**Data format reference:**
   ```json
   {
       "messages": [
@@ -79,7 +77,7 @@ Download the dataset from [allenai/pixmo-count](https://huggingface.co/datasets/
   ```
 - For fine-tuning, we recommend adding `<think>\n\n</think>\n\n` to the assistant prefix. For thinking tasks, use `<think>\n` instead.
 
-### 2.3 Launch Training
+## Launch Training
 
 After configuring the model path, training set path, validation set path, and output directory, run the following script to start training.
 
@@ -172,15 +170,15 @@ Key parameter notes
 - Training supports two visual token compression ratios, `16x` and `4x`, which are controlled by `export DOWNSAMPLE_MODE="${DOWNSAMPLE_MODE:-4x}"`.
 - The current version of `transformers` still has issues with packed training for the Qwen3.5 series. For now, please do not use the packing mode. This document will be updated once an official fix is available.
 
-### 2.4 Training Curves
+## Training Curves
 
 [https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ)
 
 <img src="./assets/finetune_minicpmv46/minicpmv46_lf_ft_dynamics.png" alt="Llama-Factory training curves" />
 
-### 2.5 Evaluation Results
+## Evaluation Results
 
-- Evaluation metrics explanation:
+Evaluation metrics explanation:
 
 | Metric | Description |
 | --- | --- |
@@ -188,7 +186,7 @@ Key parameter notes
 | Acc@0 Top1 | The highest Acc@0 score among all checkpoints saved during training |
 | Acc@0 Avg.Top3 | The average Acc@0 score of the top three checkpoints saved during training |
 
-- The table below shows the results under two visual token compression ratios:
+The table below shows the results under two visual token compression ratios:
 
 | Model | Visual Token Compression Ratio | Acc@0 Top1 | Acc@0 Avg.Top3 |
 | --- | --- | --- | --- |
@@ -199,7 +197,7 @@ Key parameter notes
 
   <small>[1]: MiniCPM-V 4.6 is the original model without fine-tuning, so only one Acc@0 result (Acc@0 Top1) is available and Acc@0 Avg.Top3 cannot be computed.</small>
 
-- Output example:
+Output example:
 
   ```text
   Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.

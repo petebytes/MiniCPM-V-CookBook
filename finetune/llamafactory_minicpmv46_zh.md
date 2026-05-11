@@ -1,6 +1,6 @@
 # MiniCPM-V 4.6 微调教程 (LlaMA-Factory)
 
-## 1 模型与任务概览
+## 模型与任务概览
 
 本章节以 counting 任务 [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count) 作为微调示例。
 
@@ -10,11 +10,9 @@
 - `assistant` 目标输出需要先给出每个目标物体点的位置，用 `x y` 坐标表示，如 `<point>573 489</point>`，再输出最终数量，例如 `0`、`3`、`10`。
 
 
-## 2 使用 LlaMA-Factory 微调
+## 环境说明
 
-### 2.1 环境说明
-
-- **最小可运行安装步骤**
+**最小可运行安装步骤**
 
 ```bash
 conda create -n "MiniCPM-V-4.6-Counting" python=3.11 -y
@@ -34,7 +32,7 @@ pip install -e .
 pip install -r requirements/metrics.txt -r requirements/deepspeed.txt
 ```
 
-- **依赖版本参考**
+**依赖版本参考**
 
 ```text
 python                        3.11.0
@@ -47,38 +45,40 @@ torchvision                   0.23.0
 transformers                  5.7.0
 ```
 
-### 2.2 数据准备
+## 数据准备
 
 从 [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count) 下载数据集，并将其转换为 json 格式。
-  - **数据格式参考：**
-    ```json
-    {
-        "messages": [
-            {
-                "content": "<image>\nCarefully observe the image. Are there any people in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.",
-                "role": "user"
-            },
-            {
-                "content": "<think>\n\n</think>\n\nThe respective coordinates of people: <point>236 469</point>, <point>307 232</point>, <point>362 434</point>, <point>485 521</point>, <point>487 340</point>, <point>615 386</point>, <point>735 441</point>, <point>870 615</point>. So the total count is 8.",
-                "role": "assistant"
-            }
-        ],
-        "images": [
-            "/path/to/images/*.jpg"
-        ],
-        "source_file": "pixmo-count",
-        "orig_index": 1,
-        "channel": "pixmo-count"
-    }
-  - Counting 任务中加入对 points 预测的监督能够提高微调的效果，因此我们推荐将数据中的 points 坐标拼到 assistant 回复中。
-  - 由于 MiniCPM-V 4.6 会将图片坐标归一化到 `0~1000`，因此也需要对 points 坐标进行以下处理：
-    ```python
-    def expected_norm(x_px: float, y_px: float, width: int, height: int) -> Tuple[int, int]:
-        return int((x_px / width) * 1000.0), int((y_px / height) * 1000.0)
-    ```
-  - 微调训练推荐在 assistant 前缀中加入 `<think>\n\n</think>\n\n`。（如果是 thinking 的任务，则加入 `<think>\n`）    
 
-### 2.3 启动训练
+**数据格式参考：**
+  ```json
+  {
+      "messages": [
+          {
+              "content": "<image>\nCarefully observe the image. Are there any people in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.",
+              "role": "user"
+          },
+          {
+              "content": "<think>\n\n</think>\n\nThe respective coordinates of people: <point>236 469</point>, <point>307 232</point>, <point>362 434</point>, <point>485 521</point>, <point>487 340</point>, <point>615 386</point>, <point>735 441</point>, <point>870 615</point>. So the total count is 8.",
+              "role": "assistant"
+          }
+      ],
+      "images": [
+          "/path/to/images/*.jpg"
+      ],
+      "source_file": "pixmo-count",
+      "orig_index": 1,
+      "channel": "pixmo-count"
+  }
+  ```
+- Counting 任务中加入对 points 预测的监督能够提高微调的效果，因此我们推荐将数据中的 points 坐标拼到 assistant 回复中。
+- 由于 MiniCPM-V 4.6 会将图片坐标归一化到 `0~1000`，因此也需要对 points 坐标进行以下处理：
+  ```python
+  def expected_norm(x_px: float, y_px: float, width: int, height: int) -> Tuple[int, int]:
+      return int((x_px / width) * 1000.0), int((y_px / height) * 1000.0)
+  ```
+- 微调训练推荐在 assistant 前缀中加入 `<think>\n\n</think>\n\n`。（如果是 thinking 的任务，则加入 `<think>\n`）    
+
+## 启动训练
 
 配置好模型路径、训练集路径、验证集路径和输出目录后，执行以下脚本即可以开始训练。
 - 配置 `train.yaml`
@@ -169,7 +169,7 @@ llamafactory-cli train "$CONFIG_FILE"
 - 训练支持 `16x`、`4x` 两种视觉 Token 压缩率，通过 `export DOWNSAMPLE_MODE="${DOWNSAMPLE_MODE:-4x}"` 参数进行控制。
 - 当前版本的 `transformers` 对 Qwen3.5 系列的 packing 训练的支持仍存在问题，目前请先不要使用 packing 模式，官方修复后本文档也会进行更新。
 
-### 2.4 训练过程
+## 训练过程
 
 [https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ)
 
@@ -177,9 +177,9 @@ llamafactory-cli train "$CONFIG_FILE"
 
 
 
-### 2.5 评测结果
+## 评测结果
 
-- 评测指标说明：
+评测指标说明：
 
 | 指标 | 说明 |
 | --- | --- |
@@ -187,7 +187,7 @@ llamafactory-cli train "$CONFIG_FILE"
 | Acc@0 Top1 | 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 的最高分数 |
 | Acc@0 Avg.Top3 | 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数 |
 
-- 下表展示了两种视觉 Token 压缩率设置下的评测结果：
+下表展示了两种视觉 Token 压缩率设置下的评测结果：
 
 | 模型               | 视觉 Token 压缩率 | Acc@0 Top1 | Acc@0 Avg.Top3 |
 | ---------------- | ------------ | ---------- | -------------- |
@@ -198,7 +198,7 @@ llamafactory-cli train "$CONFIG_FILE"
 
 <small>[1]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)，无法计算 Acc@0 Avg.Top3</small>
 
-- 输出样例：
+输出样例：
 
   ```text
   Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
