@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Dataset guidance — Recipes for vision, speech, and live-streaming multimodal AI.">
-<title>Dataset guidance — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="Gradio — Recipes for vision, speech, and live-streaming multimodal AI.">
+<title>Gradio — MiniCPM-V & o Cookbook</title>
 <link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
 <style>
@@ -202,7 +202,7 @@ footer.page-footer a:hover { color: var(--primary); }
 }
 </style>
 </head>
-<body data-version="shared" data-lang="en" data-slug="shared/finetune/dataset">
+<body data-version="o4.5" data-lang="en" data-slug="o4.5/demos/gradio">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
@@ -224,7 +224,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../../zh/shared/finetune/dataset.html" rel="alternate" hreflang="zh">中文</a>
+    <a class="sidebar-lang-switch" href="../../../zh/o4.5/demos/gradio.html" rel="alternate" hreflang="zh">中文</a>
   </div>
   <ul class="nav-list">
   <li><a class="" href="../../index.html">Home</a></li>
@@ -232,128 +232,85 @@ footer.page-footer a:hover { color: var(--primary); }
 <div class="sidebar-section-title">Version</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/overview.html" selected>MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/overview.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/overview.html">MiniCPM-o 4.5</option>
+    <option value="../../v4.6/demos/gradio.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/demos/gradio.html">MiniCPM-V 4.5</option>
+    <option value="gradio.html" selected>MiniCPM-o 4.5</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="" href="../../v4.6/overview.html">Overview</a></li>
-<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/inference/single-image.html">Single-image QA</a></li>
-<li><a class="" href="../../v4.6/inference/multi-images.html">Multi-image QA</a></li>
-<li><a class="" href="../../v4.6/inference/video-understanding.html">Video QA</a></li>
-<li><a class="" href="../../v4.6/inference/ocr.html">OCR</a></li>
-<li><a class="" href="../../v4.6/inference/pdf-parse.html">PDF parsing</a></li>
-<li><a class="" href="../../v4.6/inference/grounding.html">Visual grounding</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/deployment/vllm.html">vLLM</a></li>
-<li><a class="" href="../../v4.6/deployment/sglang.html">SGLang</a></li>
-<li><a class="" href="../../v4.6/deployment/llamacpp.html">llama.cpp</a></li>
-<li><a class="" href="../../v4.6/deployment/ollama.html">Ollama</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Quantization</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/quantization/gguf.html">GGUF</a></li>
-<li><a class="" href="../../v4.6/quantization/bnb.html">BNB</a></li>
-<li><a class="" href="../../v4.6/quantization/awq.html">AWQ</a></li></ul></li>
+<li><a class="" href="../overview.html">Overview</a></li>
+<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../inference/speech2text.html">Speech-to-Text</a></li>
+<li><a class="" href="../inference/text2speech.html">Text-to-Speech</a></li>
+<li><a class="" href="../inference/voice-clone.html">Voice cloning</a></li>
+<li><a class="" href="../inference/omni-recognition.html">Omni recognition</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
+<li><a class="" href="../deployment/sglang.html">SGLang</a></li>
+<li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
+<li><a class="" href="../deployment/ollama.html">Ollama</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Quantization</div><ul class="nav-group-children"><li><a class="" href="../quantization/gguf.html">GGUF</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="fastapi.html">FastAPI Omni Streaming</a></li>
+<li><a class="active" href="gradio.html">Gradio</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="active" href="dataset.html">Dataset guidance</a></li>
-<li><a class="" href="full.html">Full-parameter</a></li>
-<li><a class="" href="lora.html">LoRA</a></li>
-<li><a class="" href="llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="swift.html">SWIFT</a></li>
-<li><a class="" href="align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="../demos/fastapi.html">FastAPI Omni Streaming</a></li>
-<li><a class="" href="../demos/gradio.html">Gradio</a></li>
-<li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
+<li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
+<li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="dataset-preparation-guide">Dataset Preparation Guide</h1>
-<p>This tutorial will guide you on how to prepare datasets for supervised fine-tuning of MiniCPM-o. Please strictly follow the format and requirements below to organize your data.</p>
-<h2 id="1-data-format-description">1. Data Format Description</h2>
-<p>Each data sample should be a dictionary containing the image path and multi-turn conversation content. For example:</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image.jpg&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Describe this image.&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This is a cat.&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
+  <article><h1 id="web-demo-for-minicpm-o-4-5">Web Demo for MiniCPM-o 4.5</h1>
+<p>Provides web interface demonstration service for MiniCPM-o 4.5, supporting multimodal conversations with images and videos. The demo consists of two parts: <a href="./server/">server</a> and <a href="./client/">client</a>.</p>
+<p>📖 <a href="gradio.html">中文版本</a></p>
+<h2 id="key-features">Key Features</h2>
+<ul>
+<li><strong>Multi-modal Input</strong>: Support images and videos</li>
+<li><strong>Streaming Output</strong>: Real-time response streaming</li>
+<li><strong>Thinking Mode</strong>: Display model's reasoning process with <code>&lt;think&gt;</code> tags</li>
+<li><strong>Memory Optimization</strong>: Only loads vision and LLM modules, disables audio/TTS to save VRAM</li>
+</ul>
+<h2 id="deployment-steps">Deployment Steps</h2>
+<h3 id="server">Server</h3>
+<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>server
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>gradio-server<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
+conda<span class="w"> </span>activate<span class="w"> </span>gradio-server
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+python<span class="w"> </span>gradio_server.py
 </code></pre></div>
 
-<ul>
-<li><code>image</code>: Image path, supports both single and multiple images (see below).</li>
-<li><code>conversations</code>: Multi-turn conversation, must start with user, and role only supports "user" and "assistant".</li>
-</ul>
-<h3 id="multi-image-input-format">Multi-image Input Format</h3>
-<p>To support multiple images, the <code>image</code> field should be a dictionary, with keys like <code>&lt;image_00&gt;</code>, <code>&lt;image_01&gt;</code>, and values as image paths:</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_00&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image1.jpg&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_01&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image2.jpg&quot;</span>
-<span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Compare &lt;image_00&gt; and &lt;image_01&gt;.&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The first image is a cat, the second is a dog.&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
+<p><strong>Custom Parameters:</strong></p>
+<div class="code"><pre><span></span><code><span class="c1"># Specify server port, log directory, model path and model type (MiniCPM-o 4.5)</span>
+<span class="c1"># If VRAM is limited, you can use INT4-quantized model</span>
+python<span class="w"> </span>gradio_server.py<span class="w"> </span>--port<span class="o">=</span><span class="m">9999</span><span class="w"> </span>--log_dir<span class="o">=</span>logs_o45<span class="w"> </span>--model_path<span class="o">=</span>openbmb/MiniCPM-o-2_6<span class="w"> </span>--model_type<span class="o">=</span>minicpmo4_5
 </code></pre></div>
 
-<h2 id="2-dataset-loading-and-preprocessing">2. Dataset Loading and Preprocessing</h2>
-<p>Dataset loading and preprocessing mainly rely on the <code>SupervisedDataset</code> class. The core process is as follows:</p>
-<ul>
-<li>Read raw data (in json or list format).</li>
-<li>Load and transform images.</li>
-<li>Tokenize and encode conversation content to generate input_ids, labels, position_ids, etc.</li>
-<li>Support advanced image processing such as slicing and patching (slice_config).</li>
-</ul>
-<h3 id="main-parameter-description">Main Parameter Description</h3>
-<ul>
-<li><code>raw_data</code>: List of raw data samples.</li>
-<li><code>transform</code>: Image preprocessing method (e.g., normalization, resizing, etc.).</li>
-<li><code>tokenizer</code>: Tokenizer, should match the model.</li>
-<li><code>slice_config</code>: Image slicing configuration (optional).</li>
-<li><code>llm_type</code>: Large model type (e.g., "minicpm", "llama3", "qwen").</li>
-<li><code>patch_size</code>: Image patch size, default is 14.</li>
-<li><code>query_nums</code>: Number of image tokens, default is 64.</li>
-<li><code>batch_vision</code>: Whether to process images in batch, default is False.</li>
-<li><code>max_length</code>: Maximum text length, default is 2048.</li>
-</ul>
-<h2 id="3-dataset-examples">3. Dataset Examples</h2>
-<p>Single-image multi-turn conversation example:</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;images/cat.jpg&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;image&gt; What animal is this?&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This is a cat.&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;What is it doing?&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;It is sleeping.&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
+<h3 id="client">Client</h3>
+<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>client
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>gradio-client<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
+conda<span class="w"> </span>activate<span class="w"> </span>gradio-client
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+python<span class="w"> </span>gradio_client_minicpmo4_5.py
 </code></pre></div>
 
-<p>Multi-image conversation example:</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_00&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;images/cat.jpg&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_01&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;images/dog.jpg&quot;</span>
-<span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Compare &lt;image_00&gt; and &lt;image_01&gt;.&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The first image is a cat, the second is a dog.&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
+<p><strong>Custom Parameters:</strong></p>
+<div class="code"><pre><span></span><code><span class="c1"># Specify frontend port and backend service address (MiniCPM-o 4.5)</span>
+python<span class="w"> </span>gradio_client_minicpmo4_5.py<span class="w"> </span>--port<span class="o">=</span><span class="m">8889</span><span class="w"> </span>--server<span class="o">=</span>http://localhost:9999/api
 </code></pre></div>
 
-<h2 id="4-common-issues-and-notes">4. Common Issues and Notes</h2>
+<h2 id="access">Access</h2>
+<p>By default, after the services are started, you can access the web demo by visiting http://localhost:8889 in your browser.</p>
+<h2 id="ui-features">UI Features</h2>
+<h3 id="decode-type">Decode Type</h3>
 <ul>
-<li>The conversation must start with user, and role only supports "user" and "assistant".</li>
-<li>Image paths must be valid and support local paths.</li>
-<li>For multiple images, use <code>&lt;image_xx&gt;</code> placeholders in conversations to correspond to the image dictionary.</li>
-<li>For large images, it is recommended to configure <code>slice_config</code> for slicing.</li>
-<li>If data loading fails, the logger will automatically resample a data sample.</li>
+<li><strong>Sampling</strong>: Default mode with real-time streaming support</li>
+<li><strong>Beam Search</strong>: Higher quality output but no streaming support</li>
 </ul>
-<hr></article>
+<h3 id="thinking-mode">Thinking Mode</h3>
+<p>Enable to see the model's reasoning process. The thinking content is displayed in a separate section with visual distinction.</p>
+<h3 id="streaming-mode">Streaming Mode</h3>
+<p>Enable real-time character-by-character output. Only available in Sampling mode.</p>
+<p><img alt="demo" src="./assets/demo.png"></p></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

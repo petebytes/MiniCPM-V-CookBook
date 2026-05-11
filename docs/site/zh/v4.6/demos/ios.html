@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Gradio — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
-<title>Gradio — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="iOS — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
+<title>iOS — MiniCPM-V & o Cookbook</title>
 <link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
 <style>
@@ -202,7 +202,7 @@ footer.page-footer a:hover { color: var(--primary); }
 }
 </style>
 </head>
-<body data-version="shared" data-lang="zh" data-slug="shared/demos/gradio">
+<body data-version="v4.6" data-lang="zh" data-slug="v4.6/demos/ios">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
@@ -224,7 +224,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../../en/shared/demos/gradio.html" rel="alternate" hreflang="en">English</a>
+    <a class="sidebar-lang-switch" href="../../../en/v4.6/demos/ios.html" rel="alternate" hreflang="en">English</a>
   </div>
   <ul class="nav-list">
   <li><a class="" href="../../index.html">首页</a></li>
@@ -232,76 +232,94 @@ footer.page-footer a:hover { color: var(--primary); }
 <div class="sidebar-section-title">版本</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/overview.html" selected>MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/overview.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/overview.html">MiniCPM-o 4.5</option>
+    <option value="ios.html" selected>MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/demos/ios.html">MiniCPM-V 4.5</option>
+    <option value="../../o4.5/demos/ios.html">MiniCPM-o 4.5</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="" href="../../v4.6/overview.html">概览</a></li>
-<li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/inference/single-image.html">单图问答</a></li>
-<li><a class="" href="../../v4.6/inference/multi-images.html">多图问答</a></li>
-<li><a class="" href="../../v4.6/inference/video-understanding.html">视频理解</a></li>
-<li><a class="" href="../../v4.6/inference/ocr.html">OCR</a></li>
-<li><a class="" href="../../v4.6/inference/pdf-parse.html">PDF 解析</a></li>
-<li><a class="" href="../../v4.6/inference/grounding.html">视觉定位</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/deployment/vllm.html">vLLM</a></li>
-<li><a class="" href="../../v4.6/deployment/sglang.html">SGLang</a></li>
-<li><a class="" href="../../v4.6/deployment/llamacpp.html">llama.cpp</a></li>
-<li><a class="" href="../../v4.6/deployment/ollama.html">Ollama</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/quantization/gguf.html">GGUF</a></li>
-<li><a class="" href="../../v4.6/quantization/bnb.html">BNB</a></li>
-<li><a class="" href="../../v4.6/quantization/awq.html">AWQ</a></li></ul></li>
+<li><a class="" href="../overview.html">概览</a></li>
+<li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../inference/single-image.html">单图问答</a></li>
+<li><a class="" href="../inference/multi-images.html">多图问答</a></li>
+<li><a class="" href="../inference/video-understanding.html">视频理解</a></li>
+<li class="nav-group collapsed"><div class="nav-group-header">其他视觉任务</div><ul class="nav-group-children"><li><a class="" href="../inference/ocr.html">OCR</a></li>
+<li><a class="" href="../inference/pdf-parse.html">PDF 解析</a></li>
+<li><a class="" href="../inference/grounding.html">视觉定位</a></li></ul></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
+<li><a class="" href="../deployment/sglang.html">SGLang</a></li>
+<li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
+<li><a class="" href="../deployment/ollama.html">Ollama</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="../quantization/gguf.html">GGUF</a></li>
+<li><a class="" href="../quantization/bnb.html">BNB</a></li>
+<li><a class="" href="../quantization/awq.html">AWQ</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="gradio.html">Gradio</a></li>
+<li><a class="active" href="ios.html">iOS</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../finetune/dataset.html">数据集准备</a></li>
-<li><a class="" href="../finetune/full.html">全参数微调</a></li>
-<li><a class="" href="../finetune/lora.html">LoRA</a></li>
-<li><a class="" href="../finetune/llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="../finetune/swift.html">SWIFT</a></li>
-<li><a class="" href="../finetune/align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="fastapi.html">FastAPI 全模态流式</a></li>
-<li><a class="active" href="gradio.html">Gradio</a></li>
-<li><a class="" href="ios.html">iOS</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
+<li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
+<li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="web-demo-服务器配置指南">Web Demo 服务器配置指南</h1>
-<p>为 MiniCPM-V 4.5（兼容 4.0）提供 Web 界面演示服务，支持图像和视频的多模态对话。Demo 分为<a href="./server/">服务端</a>和<a href="./client/">客户端</a>两个部分。</p>
-<p>📖 <a href="gradio.html">English Version</a></p>
-<h2 id="部署步骤">部署步骤</h2>
-<h3 id="服务端">服务端</h3>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>server
-conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>gradio-server<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
-conda<span class="w"> </span>activate<span class="w"> </span>gradio-server
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-python<span class="w"> </span>gradio_server.py
+  <article><h1 id="minicpm-v-ios-设备部署">MiniCPM-V - iOS 设备部署</h1>
+<h2 id="1-部署-ios-app">1. 部署 iOS App</h2>
+<p><strong>NOTE: 为了获取在 iOS 设备上部署、测试 App 的权限，您可能需要拥有一个 Apple 开发者账号</strong></p>
+<p>克隆 iOS demo（基于<code>llama.cpp</code>）代码仓库: </p>
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/MiniCPM-o-demo-iOS.git
+<span class="nb">cd</span><span class="w"> </span>MiniCPM-o-demo-iOS
 </code></pre></div>
 
-<p><strong>自定义参数:</strong></p>
-<div class="code"><pre><span></span><code><span class="c1"># 指定服务端口、日志目录、模型路径和类型（MiniCPM-V 4.5）</span>
-<span class="c1"># 若显存有限，可将 /path/to/model 指向 INT4 量化模型，并自行安装相关依赖。</span>
-python<span class="w"> </span>gradio_server.py<span class="w"> </span>--port<span class="o">=</span><span class="m">9999</span><span class="w"> </span>--log_dir<span class="o">=</span>logs_v4_5<span class="w"> </span>--model_path<span class="o">=</span>/path/to/model<span class="w"> </span>--model_type<span class="o">=</span>minicpmv4_5
+<p>安装 Xcode:</p>
+<ul>
+<li>从 App Store 下载 Xcode</li>
+<li>安装命令行工具
+    ```bash
+    xcode-select --install</li>
+<li>同意软件许可协议
+    <code>bash
+    sudo xcodebuild -license</code></li>
+</ul>
+<p>使用 Xcode 打开 <code>MiniCPM-V-demo.xcodeproj</code>，可能需要等待 Xcode 自动下载所需的库。</p>
+<p>在 Xcode 页面顶部选择想要运行 iOS demo 的设备，点击三角形的 Run 按钮即可运行。</p>
+<p><strong>NOTE: 若上述流程出现 <code>thirdparty/llama.xcframework</code>路径相关报错，请按照如下教程自行编译 <code>llama.xcframework</code> 库</strong></p>
+<h2 id="2-自行编译构建-openbmb-提供的-llama-cpp">2. 自行编译构建 OpenBMB 提供的 llama.cpp</h2>
+<p>克隆 llama.cpp 代码仓库: </p>
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>Support-iOS-Demo<span class="w"> </span>https://github.com/tc-mb/llama.cpp.git
+<span class="nb">cd</span><span class="w"> </span>llama.cpp
 </code></pre></div>
 
-<h3 id="客户端">客户端</h3>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>client
-conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>gradio-client<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
-conda<span class="w"> </span>activate<span class="w"> </span>gradio-client
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-python<span class="w"> </span>gradio_client_minicpmv4_5.py
+<p>使用脚本为 iOS 设备构建所需的 llama.cpp 库: </p>
+<div class="code"><pre><span></span><code>./build-xcframework.sh
 </code></pre></div>
 
-<p><strong>自定义参数:</strong></p>
-<div class="code"><pre><span></span><code><span class="c1"># 指定前端端口和后端服务地址（MiniCPM-V 4.5）</span>
-python<span class="w"> </span>gradio_client_minicpmv4_5.py<span class="w"> </span>--port<span class="o">=</span><span class="m">8889</span><span class="w"> </span>--server<span class="o">=</span>http://localhost:9999/api
+<p>将构建完成的库复制到 iOS demo 对应目录:</p>
+<div class="code"><pre><span></span><code>cp<span class="w"> </span>-r<span class="w"> </span>./build-apple/llama.xcframework<span class="w"> </span>../MiniCPM-o-demo-iOS/MiniCPM-V-demo/thirdparty
 </code></pre></div>
 
-<h2 id="访问地址">访问地址</h2>
-<p>默认配置下，服务启动完成后，在浏览器中访问 http://localhost:8889 可以看到 web demo 页面（客户端默认端口为 8889，服务端默认端口为 9999）</p>
-<p><img alt="demo" src="./assets/demo.png"></p></article>
+<h2 id="3-获取模型-gguf-权重">3. 获取模型 GGUF 权重</h2>
+<h3 id="方法一-下载官方-gguf-文件">方法一: 下载官方 GGUF 文件</h3>
+<ul>
+<li>HuggingFace: https://huggingface.co/openbmb/MiniCPM-V-4-gguf</li>
+<li>魔搭社区: https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf</li>
+</ul>
+<p>从仓库中下载语言模型文件（如: <code>ggml-model-Q4_0.gguf</code>）与视觉模型文件（<code>mmproj-model-f16-iOS.gguf</code>）</p>
+<h3 id="方法二-从-pytorch-模型转换">方法二: 从 Pytorch 模型转换</h3>
+<p>下载 MiniCPM-V-4 PyTorch 模型到 "MiniCPM-V-4" 文件夹:
+*   HuggingFace: https://huggingface.co/openbmb/MiniCPM-V-4
+*   魔搭社区: https://modelscope.cn/models/OpenBMB/MiniCPM-V-4</p>
+<p>将 PyTorch 模型转换为 GGUF 格式:</p>
+<div class="code"><pre><span></span><code>python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-surgery.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4
+
+python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4<span class="w"> </span>--minicpmv-projector<span class="w"> </span>../MiniCPM-V-4/minicpmv.projector<span class="w"> </span>--output-dir<span class="w"> </span>../MiniCPM-V-4/<span class="w"> </span>--minicpmv_version<span class="w"> </span><span class="m">5</span>
+
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>../MiniCPM-V-4/model
+
+<span class="c1"># int4 量化版本</span>
+./llama-quantize<span class="w"> </span>../MiniCPM-V-4/model/Model-3.6B-f16.gguf<span class="w"> </span>../MiniCPM-V-4/model/ggml-model-Q4_0.gguf<span class="w"> </span>Q4_0
+</code></pre></div></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

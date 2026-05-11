@@ -242,11 +242,11 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="single-image.html">单图问答</a></li>
 <li><a class="" href="multi-images.html">多图问答</a></li>
 <li><a class="active" href="video-understanding.html">视频理解</a></li>
-<li><a class="" href="ocr.html">OCR</a></li>
-<li><a class="" href="pdf-parse.html">PDF 解析</a></li>
-<li><a class="" href="grounding.html">视觉定位</a></li>
+<li><a class="" href="single-image-think.html">单图（思考模式）</a></li>
 <li><a class="" href="multi-images-think.html">多图（思考模式）</a></li>
-<li><a class="" href="single-image-think.html">单图（思考模式）</a></li></ul></li>
+<li class="nav-group collapsed"><div class="nav-group-header">其他视觉任务</div><ul class="nav-group-children"><li><a class="" href="ocr.html">OCR</a></li>
+<li><a class="" href="pdf-parse.html">PDF 解析</a></li>
+<li><a class="" href="grounding.html">视觉定位</a></li></ul></li></ul></li>
 <li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
 <li><a class="" href="../deployment/sglang.html">SGLang</a></li>
 <li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
@@ -255,27 +255,23 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><a class="" href="../quantization/bnb.html">BNB</a></li>
 <li><a class="" href="../quantization/awq.html">AWQ</a></li>
 <li><a class="" href="../quantization/gptq.html">GPTQ</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
+<li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/dataset.html">数据集准备</a></li>
-<li><a class="" href="../../shared/finetune/full.html">全参数微调</a></li>
-<li><a class="" href="../../shared/finetune/lora.html">LoRA</a></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
 <li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
 <li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../../shared/demos/fastapi.html">FastAPI 全模态流式</a></li>
-<li><a class="" href="../../shared/demos/gradio.html">Gradio</a></li>
-<li><a class="" href="../../shared/demos/ios.html">iOS</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
   <article><h1 id="视频理解">视频理解</h1>
 <h3 id="加载模型">加载模型</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
@@ -290,13 +286,13 @@ footer.page-footer a:hover { color: var(--primary); }
 </code></pre></div>
 
 <h3 id="视频编码函数">视频编码函数</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">decord</span> <span class="kn">import</span> <span class="n">VideoReader</span><span class="p">,</span> <span class="n">cpu</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">decord</span><span class="w"> </span><span class="kn">import</span> <span class="n">VideoReader</span><span class="p">,</span> <span class="n">cpu</span>
 
 <span class="n">MAX_NUM_FRAMES</span> <span class="o">=</span> <span class="mi">64</span>  <span class="c1"># 显存吃紧时调小</span>
 
 
-<span class="k">def</span> <span class="nf">encode_video</span><span class="p">(</span><span class="n">video_path</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">uniform_sample</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">encode_video</span><span class="p">(</span><span class="n">video_path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uniform_sample</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="n">gap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
         <span class="n">idxs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">gap</span> <span class="o">+</span> <span class="n">gap</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">]</span>

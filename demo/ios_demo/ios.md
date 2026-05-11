@@ -1,4 +1,4 @@
-# MiniCPM-V 4.0 - Deployment on iOS Device
+# MiniCPM-V - Deployment on iOS Device
 
 ## 1. Deploying iOS App
 

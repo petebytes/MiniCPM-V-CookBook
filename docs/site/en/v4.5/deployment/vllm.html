@@ -242,11 +242,11 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../inference/single-image.html">Single-image QA</a></li>
 <li><a class="" href="../inference/multi-images.html">Multi-image QA</a></li>
 <li><a class="" href="../inference/video-understanding.html">Video QA</a></li>
-<li><a class="" href="../inference/ocr.html">OCR</a></li>
-<li><a class="" href="../inference/pdf-parse.html">PDF parsing</a></li>
-<li><a class="" href="../inference/grounding.html">Visual grounding</a></li>
+<li><a class="" href="../inference/single-image-think.html">Single-image (think)</a></li>
 <li><a class="" href="../inference/multi-images-think.html">Multi-image (think)</a></li>
-<li><a class="" href="../inference/single-image-think.html">Single-image (think)</a></li></ul></li>
+<li class="nav-group collapsed"><div class="nav-group-header">Other visual tasks</div><ul class="nav-group-children"><li><a class="" href="../inference/ocr.html">OCR</a></li>
+<li><a class="" href="../inference/pdf-parse.html">PDF parsing</a></li>
+<li><a class="" href="../inference/grounding.html">Visual grounding</a></li></ul></li></ul></li>
 <li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="active" href="vllm.html">vLLM</a></li>
 <li><a class="" href="sglang.html">SGLang</a></li>
 <li><a class="" href="llamacpp.html">llama.cpp</a></li>
@@ -255,18 +255,14 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><a class="" href="../quantization/bnb.html">BNB</a></li>
 <li><a class="" href="../quantization/awq.html">AWQ</a></li>
 <li><a class="" href="../quantization/gptq.html">GPTQ</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
+<li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/dataset.html">Dataset guidance</a></li>
-<li><a class="" href="../../shared/finetune/full.html">Full-parameter</a></li>
-<li><a class="" href="../../shared/finetune/lora.html">LoRA</a></li>
+<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
 <li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
 <li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="../../shared/demos/fastapi.html">FastAPI Omni Streaming</a></li>
-<li><a class="" href="../../shared/demos/gradio.html">Gradio</a></li>
-<li><a class="" href="../../shared/demos/ios.html">iOS</a></li></ul></li>
 </ul>
 </aside>
 
@@ -292,8 +288,8 @@ footer.page-footer a:hover { color: var(--primary); }
 - <code>--max-model-len</code>: Set the maximum model length
 - <code>--gpu_memory_utilization</code>: GPU memory utilization rate</p>
 <h3 id="2-2-image-inference">2.2 Image Inference</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">import</span> <span class="nn">base64</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 
 <span class="c1"># API configuration</span>
 <span class="n">openai_api_key</span> <span class="o">=</span> <span class="s2">&quot;token-abc123&quot;</span>  <span class="c1"># API key must match the one set when launching the service</span>
@@ -332,8 +328,8 @@ footer.page-footer a:hover { color: var(--primary); }
 </code></pre></div>
 
 <h3 id="2-3-video-inference">2.3 Video Inference</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">import</span> <span class="nn">base64</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 
 <span class="c1"># API configuration</span>
 <span class="n">openai_api_key</span> <span class="o">=</span> <span class="s2">&quot;token-abc123&quot;</span>
@@ -383,8 +379,8 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><code>"chat_template_kwargs": {"enable_thinking": True}</code></li>
 </ul>
 <p>In the reply, thinking and the reply will be separated by the <code>&lt;/think&gt;</code> tag.</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">import</span> <span class="nn">base64</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 
 <span class="c1"># API configuration</span>
 <span class="n">openai_api_key</span> <span class="o">=</span> <span class="s2">&quot;token-abc123&quot;</span>
@@ -444,8 +440,8 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <p>2、Or add the <code>mm_processor_kwargs</code> parameter in the OpenAI request
 -  <code>"mm_processor_kwargs": {"choose_fps": 1}</code></p>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">import</span> <span class="nn">base64</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 
 <span class="c1"># API configuration</span>
 <span class="n">openai_api_key</span> <span class="o">=</span> <span class="s2">&quot;token-abc123&quot;</span>
@@ -502,10 +498,10 @@ footer.page-footer a:hover { color: var(--primary); }
 </code></pre></div>
 
 <h4 id="multi-turn-conversation-example-code">Multi-turn Conversation Example Code</h4>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">import</span> <span class="nn">base64</span>
-<span class="kn">import</span> <span class="nn">mimetypes</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mimetypes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="c1"># API configuration</span>
 <span class="n">openai_api_key</span> <span class="o">=</span> <span class="s2">&quot;token-abc123&quot;</span>
@@ -523,17 +519,17 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="p">}</span>
 <span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">file_to_base64</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">file_to_base64</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert file to base64 encoding&quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">get_mime_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_mime_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get file MIME type&quot;&quot;&quot;</span>
     <span class="n">mime</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">mime</span> <span class="ow">or</span> <span class="s1">&#39;application/octet-stream&#39;</span>
 
-<span class="k">def</span> <span class="nf">build_file_content</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_file_content</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build multimedia file content&quot;&quot;&quot;</span>
     <span class="n">mime_type</span> <span class="o">=</span> <span class="n">get_mime_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
     <span class="n">base64_data</span> <span class="o">=</span> <span class="n">file_to_base64</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
@@ -589,9 +585,9 @@ footer.page-footer a:hover { color: var(--primary); }
 </code></pre></div>
 
 <h2 id="3-offline-inference">3. Offline Inference</h2>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vllm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
 
 <span class="c1"># Model configuration</span>
 <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;&lt;model_path&gt;&quot;</span>

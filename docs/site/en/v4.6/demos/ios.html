@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="LoRA — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
-<title>LoRA — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="iOS — Recipes for vision, speech, and live-streaming multimodal AI.">
+<title>iOS — MiniCPM-V & o Cookbook</title>
 <link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
 <style>
@@ -202,7 +202,7 @@ footer.page-footer a:hover { color: var(--primary); }
 }
 </style>
 </head>
-<body data-version="shared" data-lang="zh" data-slug="shared/finetune/lora">
+<body data-version="v4.6" data-lang="en" data-slug="v4.6/demos/ios">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
@@ -211,100 +211,121 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="brand-text">MiniCPM-V & o Cookbook</span>
   </a>
   <div class="topbar-search">
-    <input type="search" placeholder="搜索文档…" id="pagefind-search">
+    <input type="search" placeholder="Search docs…" id="pagefind-search">
   </div>
   <nav class="topbar-actions">
     <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook" target="_blank" rel="noopener">GitHub</a>
     <a href="https://huggingface.co/openbmb" target="_blank" rel="noopener">HuggingFace</a>
-    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">魔搭社区</a>
+    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">ModelScope</a>
     <a href="https://discord.gg/rftuRMbqzf" target="_blank" rel="noopener">Discord</a>
-    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">技术报告</a>
+    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">Paper</a>
   </nav>
 </header>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../../en/shared/finetune/lora.html" rel="alternate" hreflang="en">English</a>
+    <a class="sidebar-lang-switch" href="../../../zh/v4.6/demos/ios.html" rel="alternate" hreflang="zh">中文</a>
   </div>
   <ul class="nav-list">
-  <li><a class="" href="../../index.html">首页</a></li>
+  <li><a class="" href="../../index.html">Home</a></li>
 </ul>
-<div class="sidebar-section-title">版本</div>
+<div class="sidebar-section-title">Version</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/overview.html" selected>MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/overview.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/overview.html">MiniCPM-o 4.5</option>
+    <option value="ios.html" selected>MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/demos/ios.html">MiniCPM-V 4.5</option>
+    <option value="../../o4.5/demos/ios.html">MiniCPM-o 4.5</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="" href="../../v4.6/overview.html">概览</a></li>
-<li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/inference/single-image.html">单图问答</a></li>
-<li><a class="" href="../../v4.6/inference/multi-images.html">多图问答</a></li>
-<li><a class="" href="../../v4.6/inference/video-understanding.html">视频理解</a></li>
-<li><a class="" href="../../v4.6/inference/ocr.html">OCR</a></li>
-<li><a class="" href="../../v4.6/inference/pdf-parse.html">PDF 解析</a></li>
-<li><a class="" href="../../v4.6/inference/grounding.html">视觉定位</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/deployment/vllm.html">vLLM</a></li>
-<li><a class="" href="../../v4.6/deployment/sglang.html">SGLang</a></li>
-<li><a class="" href="../../v4.6/deployment/llamacpp.html">llama.cpp</a></li>
-<li><a class="" href="../../v4.6/deployment/ollama.html">Ollama</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/quantization/gguf.html">GGUF</a></li>
-<li><a class="" href="../../v4.6/quantization/bnb.html">BNB</a></li>
-<li><a class="" href="../../v4.6/quantization/awq.html">AWQ</a></li></ul></li>
+<li><a class="" href="../overview.html">Overview</a></li>
+<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../inference/single-image.html">Single-image QA</a></li>
+<li><a class="" href="../inference/multi-images.html">Multi-image QA</a></li>
+<li><a class="" href="../inference/video-understanding.html">Video QA</a></li>
+<li class="nav-group collapsed"><div class="nav-group-header">Other visual tasks</div><ul class="nav-group-children"><li><a class="" href="../inference/ocr.html">OCR</a></li>
+<li><a class="" href="../inference/pdf-parse.html">PDF parsing</a></li>
+<li><a class="" href="../inference/grounding.html">Visual grounding</a></li></ul></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
+<li><a class="" href="../deployment/sglang.html">SGLang</a></li>
+<li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
+<li><a class="" href="../deployment/ollama.html">Ollama</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Quantization</div><ul class="nav-group-children"><li><a class="" href="../quantization/gguf.html">GGUF</a></li>
+<li><a class="" href="../quantization/bnb.html">BNB</a></li>
+<li><a class="" href="../quantization/awq.html">AWQ</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="gradio.html">Gradio</a></li>
+<li><a class="active" href="ios.html">iOS</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="dataset.html">数据集准备</a></li>
-<li><a class="" href="full.html">全参数微调</a></li>
-<li><a class="active" href="lora.html">LoRA</a></li>
-<li><a class="" href="llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="swift.html">SWIFT</a></li>
-<li><a class="" href="align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../demos/fastapi.html">FastAPI 全模态流式</a></li>
-<li><a class="" href="../demos/gradio.html">Gradio</a></li>
-<li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
+<li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
+<li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
-  <article><h3 id="lora-微调">LoRA 微调</h3>
-<p>LoRA 是轻量级的微调方法，只更新少量参数。我们基于 <code>peft</code> 提供了 LoRA 实现。</p>
-<p>训练脚本可在此查看：<a href="./finetune_lora.sh">finetune_lora.sh</a></p>
-<div class="code"><pre><span></span><code><span class="nv">MODEL</span><span class="o">=</span><span class="s2">&quot;MiniCPM-o-2_6&quot;</span><span class="w"> </span><span class="c1"># 或 &quot;openbmb/MiniCPM-V-4&quot;、&quot;openbmb/MiniCPM-V-2_6&quot;、&quot;openbmb/MiniCPM-Llama3-V-2_5&quot;、&quot;openbmb/MiniCPM-V-2&quot;</span>
-<span class="nv">DATA</span><span class="o">=</span><span class="s2">&quot;path/to/trainging_data&quot;</span><span class="w"> </span><span class="c1"># json 文件</span>
-<span class="nv">EVAL_DATA</span><span class="o">=</span><span class="s2">&quot;path/to/test_data&quot;</span><span class="w"> </span><span class="c1"># json 文件</span>
-<span class="nv">LLM_TYPE</span><span class="o">=</span><span class="s2">&quot;qwen&quot;</span><span class="w"> </span><span class="c1"># 使用 openbmb/MiniCPM-V-2 时设为 minicpm；使用 openbmb/MiniCPM-Llama3-V-2_5 时设为 &quot;llama3&quot;；</span>
-<span class="c1"># 使用 openbmb/MiniCPM-o-2_6 或 openbmb/MiniCPM-V-2_6 时设为 qwen；</span>
-<span class="c1"># 使用 openbmb/MiniCPM-V-4 时设为 llama</span>
+  <article><h1 id="minicpm-v-deployment-on-ios-device">MiniCPM-V - Deployment on iOS Device</h1>
+<h2 id="1-deploying-ios-app">1. Deploying iOS App</h2>
+<p><strong>NOTE: To deploy and test the app on an iOS device, you may need an Apple Developer account.</strong></p>
+<p>Clone our iOS demo (using <code>llama.cpp</code>) repository:</p>
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/MiniCPM-o-demo-iOS.git
+<span class="nb">cd</span><span class="w"> </span>MiniCPM-o-demo-iOS
 </code></pre></div>
 
-<p>启动训练：</p>
-<div class="code"><pre><span></span><code>sh finetune_lora.sh
+<p>Install Xcode:</p>
+<ul>
+<li>Download Xcode from the App Store</li>
+<li>Install the Command Line Tools:</li>
+</ul>
+<p><code>bash
+  xcode-select --install</code>
+* Agree to the software license agreement:</p>
+<p><code>bash
+  sudo xcodebuild -license</code></p>
+<p>Open <code>MiniCPM-V-demo.xcodeproj</code> with Xcode. It may take a moment for Xcode to automatically download the required dependencies.</p>
+<p>In Xcode, select the target device at the top of the window, then click the "Run" (triangle) button to launch the demo.</p>
+<p><strong>NOTE: If you encounter errors related to the <code>thirdparty/llama.xcframework</code> path, please follow the steps below to build the <code>llama.xcframework</code> manually.</strong></p>
+<h2 id="2-manually-building-the-llama-cpp-library-from-openbmb">2. Manually Building the llama.cpp Library From OpenBMB</h2>
+<p>Clone the llama.cpp repository:</p>
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>Support-iOS-Demo<span class="w"> </span>https://github.com/tc-mb/llama.cpp.git
+<span class="nb">cd</span><span class="w"> </span>llama.cpp
 </code></pre></div>
 
-<p>训练完成后，可通过 adapter 路径加载模型。建议为预训练模型使用绝对路径，因为 LoRA 仅保存 adapter，adapter config json 中的绝对路径用于定位预训练模型。</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">peft</span> <span class="kn">import</span> <span class="n">PeftModel</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span>
-<span class="n">model_type</span><span class="o">=</span>  <span class="s2">&quot;openbmb/MiniCPM-o-2_6&quot;</span> <span class="c1"># 或 &quot;openbmb/MiniCPM-V-4&quot;、&quot;openbmb/MiniCPM-V-2_6&quot;、&quot;openbmb/MiniCPM-Llama3-V-2_5&quot;、&quot;openbmb/MiniCPM-V-2&quot;</span>
-<span class="n">path_to_adapter</span><span class="o">=</span><span class="s2">&quot;path_to_your_fine_tuned_checkpoint&quot;</span>
+<p>Build the llama.cpp library for iOS using the script:</p>
+<div class="code"><pre><span></span><code>./build-xcframework.sh
+</code></pre></div>
 
-<span class="n">model</span> <span class="o">=</span>  <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-        <span class="n">model_type</span><span class="p">,</span>
-        <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
+<p>Copy the built library into the corresponding directory of the iOS demo project:</p>
+<div class="code"><pre><span></span><code>cp<span class="w"> </span>-r<span class="w"> </span>./build-apple/llama.xcframework<span class="w"> </span>../MiniCPM-o-demo-iOS/MiniCPM-V-demo/thirdparty
+</code></pre></div>
 
-<span class="n">lora_model</span> <span class="o">=</span> <span class="n">PeftModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span>
-    <span class="n">path_to_adapter</span><span class="p">,</span>
-    <span class="n">device_map</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<h2 id="3-gguf-files">3. GGUF Files</h2>
+<h3 id="1-download-official-gguf-files">1: Download Official GGUF Files</h3>
+<ul>
+<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4-gguf">https://huggingface.co/openbmb/MiniCPM-V-4-gguf</a></li>
+<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf</a></li>
+</ul>
+<p>Download the language model file (e.g., <code>ggml-model-Q4_0.gguf</code>) and the vision model file (<code>mmproj-model-f16-iOS.gguf</code>) from the repository.</p>
+<h3 id="2-convert-from-pytorch-model">2: Convert from PyTorch Model</h3>
+<p>Download the MiniCPM-V-4 PyTorch model into a folder named <code>MiniCPM-V-4</code>:</p>
+<ul>
+<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4">https://huggingface.co/openbmb/MiniCPM-V-4</a></li>
+<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4</a></li>
+</ul>
+<p>Convert the PyTorch model to GGUF format:</p>
+<div class="code"><pre><span></span><code>python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-surgery.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4
+
+python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4<span class="w"> </span>--minicpmv-projector<span class="w"> </span>../MiniCPM-V-4/minicpmv.projector<span class="w"> </span>--output-dir<span class="w"> </span>../MiniCPM-V-4/<span class="w"> </span>--minicpmv_version<span class="w"> </span><span class="m">5</span>
+
+python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>../MiniCPM-V-4/model
+
+<span class="c1"># int4 quantized</span>
+./llama-quantize<span class="w"> </span>../MiniCPM-V-4/model/Model-3.6B-f16.gguf<span class="w"> </span>../MiniCPM-V-4/model/ggml-model-Q4_0.gguf<span class="w"> </span>Q4_0
 </code></pre></div></article>
 
   <footer class="page-footer">
-    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>
-    <span>由 <code>build_docs.py</code> 自动生成</span>
+    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>
+    <span>Built with <code>build_docs.py</code></span>
   </footer>
 </main>
 

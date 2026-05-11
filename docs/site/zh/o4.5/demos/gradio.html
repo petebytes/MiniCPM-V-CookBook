@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="iOS — Recipes for vision, speech, and live-streaming multimodal AI.">
-<title>iOS — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="Gradio — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
+<title>Gradio — MiniCPM-V & o Cookbook</title>
 <link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
 <style>
@@ -202,7 +202,7 @@ footer.page-footer a:hover { color: var(--primary); }
 }
 </style>
 </head>
-<body data-version="shared" data-lang="en" data-slug="shared/demos/ios">
+<body data-version="o4.5" data-lang="zh" data-slug="o4.5/demos/gradio">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
@@ -211,125 +211,110 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="brand-text">MiniCPM-V & o Cookbook</span>
   </a>
   <div class="topbar-search">
-    <input type="search" placeholder="Search docs…" id="pagefind-search">
+    <input type="search" placeholder="搜索文档…" id="pagefind-search">
   </div>
   <nav class="topbar-actions">
     <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook" target="_blank" rel="noopener">GitHub</a>
     <a href="https://huggingface.co/openbmb" target="_blank" rel="noopener">HuggingFace</a>
-    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">ModelScope</a>
+    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">魔搭社区</a>
     <a href="https://discord.gg/rftuRMbqzf" target="_blank" rel="noopener">Discord</a>
-    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">Paper</a>
+    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">技术报告</a>
   </nav>
 </header>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../../zh/shared/demos/ios.html" rel="alternate" hreflang="zh">中文</a>
+    <a class="sidebar-lang-switch" href="../../../en/o4.5/demos/gradio.html" rel="alternate" hreflang="en">English</a>
   </div>
   <ul class="nav-list">
-  <li><a class="" href="../../index.html">Home</a></li>
+  <li><a class="" href="../../index.html">首页</a></li>
 </ul>
-<div class="sidebar-section-title">Version</div>
+<div class="sidebar-section-title">版本</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/overview.html" selected>MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/overview.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/overview.html">MiniCPM-o 4.5</option>
+    <option value="../../v4.6/demos/gradio.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/demos/gradio.html">MiniCPM-V 4.5</option>
+    <option value="gradio.html" selected>MiniCPM-o 4.5</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="" href="../../v4.6/overview.html">Overview</a></li>
-<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/inference/single-image.html">Single-image QA</a></li>
-<li><a class="" href="../../v4.6/inference/multi-images.html">Multi-image QA</a></li>
-<li><a class="" href="../../v4.6/inference/video-understanding.html">Video QA</a></li>
-<li><a class="" href="../../v4.6/inference/ocr.html">OCR</a></li>
-<li><a class="" href="../../v4.6/inference/pdf-parse.html">PDF parsing</a></li>
-<li><a class="" href="../../v4.6/inference/grounding.html">Visual grounding</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/deployment/vllm.html">vLLM</a></li>
-<li><a class="" href="../../v4.6/deployment/sglang.html">SGLang</a></li>
-<li><a class="" href="../../v4.6/deployment/llamacpp.html">llama.cpp</a></li>
-<li><a class="" href="../../v4.6/deployment/ollama.html">Ollama</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Quantization</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/quantization/gguf.html">GGUF</a></li>
-<li><a class="" href="../../v4.6/quantization/bnb.html">BNB</a></li>
-<li><a class="" href="../../v4.6/quantization/awq.html">AWQ</a></li></ul></li>
+<li><a class="" href="../overview.html">概览</a></li>
+<li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../inference/speech2text.html">语音转文本</a></li>
+<li><a class="" href="../inference/text2speech.html">文本转语音</a></li>
+<li><a class="" href="../inference/voice-clone.html">语音克隆</a></li>
+<li><a class="" href="../inference/omni-recognition.html">全模态识别</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
+<li><a class="" href="../deployment/sglang.html">SGLang</a></li>
+<li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
+<li><a class="" href="../deployment/ollama.html">Ollama</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="../quantization/gguf.html">GGUF</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="fastapi.html">FastAPI 全模态流式</a></li>
+<li><a class="active" href="gradio.html">Gradio</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../finetune/dataset.html">Dataset guidance</a></li>
-<li><a class="" href="../finetune/full.html">Full-parameter</a></li>
-<li><a class="" href="../finetune/lora.html">LoRA</a></li>
-<li><a class="" href="../finetune/llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="../finetune/swift.html">SWIFT</a></li>
-<li><a class="" href="../finetune/align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="fastapi.html">FastAPI Omni Streaming</a></li>
-<li><a class="" href="gradio.html">Gradio</a></li>
-<li><a class="active" href="ios.html">iOS</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
+<li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
+<li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-v-4-0-deployment-on-ios-device">MiniCPM-V 4.0 - Deployment on iOS Device</h1>
-<h2 id="1-deploying-ios-app">1. Deploying iOS App</h2>
-<p><strong>NOTE: To deploy and test the app on an iOS device, you may need an Apple Developer account.</strong></p>
-<p>Clone our iOS demo (using <code>llama.cpp</code>) repository:</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/MiniCPM-o-demo-iOS.git
-<span class="nb">cd</span><span class="w"> </span>MiniCPM-o-demo-iOS
-</code></pre></div>
-
-<p>Install Xcode:</p>
+  <article><h1 id="minicpm-o-4-5-web-demo">MiniCPM-o 4.5 Web Demo</h1>
+<p>为 MiniCPM-o 4.5 提供 Web 界面演示服务，支持图片和视频的多模态对话。演示由两部分组成：<a href="./server/">服务端</a> 和 <a href="./client/">客户端</a>。</p>
+<p>📖 <a href="gradio.html">English Version</a></p>
+<h2 id="主要特性">主要特性</h2>
 <ul>
-<li>Download Xcode from the App Store</li>
-<li>Install the Command Line Tools:</li>
+<li><strong>多模态输入</strong>：支持图片和视频</li>
+<li><strong>流式输出</strong>：实时流式响应</li>
+<li><strong>思考模式</strong>：显示模型的推理过程（<code>&lt;think&gt;</code> 标签）</li>
+<li><strong>显存优化</strong>：仅加载视觉和语言模块，禁用音频/TTS以节省显存</li>
 </ul>
-<p><code>bash
-  xcode-select --install</code>
-* Agree to the software license agreement:</p>
-<p><code>bash
-  sudo xcodebuild -license</code></p>
-<p>Open <code>MiniCPM-V-demo.xcodeproj</code> with Xcode. It may take a moment for Xcode to automatically download the required dependencies.</p>
-<p>In Xcode, select the target device at the top of the window, then click the "Run" (triangle) button to launch the demo.</p>
-<p><strong>NOTE: If you encounter errors related to the <code>thirdparty/llama.xcframework</code> path, please follow the steps below to build the <code>llama.xcframework</code> manually.</strong></p>
-<h2 id="2-manually-building-the-llama-cpp-library-from-openbmb">2. Manually Building the llama.cpp Library From OpenBMB</h2>
-<p>Clone the llama.cpp repository:</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>Support-iOS-Demo<span class="w"> </span>https://github.com/tc-mb/llama.cpp.git
-<span class="nb">cd</span><span class="w"> </span>llama.cpp
+<h2 id="部署步骤">部署步骤</h2>
+<h3 id="服务端">服务端</h3>
+<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>server
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>gradio-server<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
+conda<span class="w"> </span>activate<span class="w"> </span>gradio-server
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+python<span class="w"> </span>gradio_server.py
 </code></pre></div>
 
-<p>Build the llama.cpp library for iOS using the script:</p>
-<div class="code"><pre><span></span><code>./build-xcframework.sh
+<p><strong>自定义参数：</strong></p>
+<div class="code"><pre><span></span><code><span class="c1"># 指定服务端口、日志目录、模型路径和模型类型 (MiniCPM-o 4.5)</span>
+<span class="c1"># 如果显存有限，可以使用 INT4 量化模型</span>
+python<span class="w"> </span>gradio_server.py<span class="w"> </span>--port<span class="o">=</span><span class="m">9999</span><span class="w"> </span>--log_dir<span class="o">=</span>logs_o45<span class="w"> </span>--model_path<span class="o">=</span>openbmb/MiniCPM-o-2_6<span class="w"> </span>--model_type<span class="o">=</span>minicpmo4_5
 </code></pre></div>
 
-<p>Copy the built library into the corresponding directory of the iOS demo project:</p>
-<div class="code"><pre><span></span><code>cp<span class="w"> </span>-r<span class="w"> </span>./build-apple/llama.xcframework<span class="w"> </span>../MiniCPM-o-demo-iOS/MiniCPM-V-demo/thirdparty
+<h3 id="客户端">客户端</h3>
+<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>client
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>gradio-client<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
+conda<span class="w"> </span>activate<span class="w"> </span>gradio-client
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+python<span class="w"> </span>gradio_client_minicpmo4_5.py
 </code></pre></div>
 
-<h2 id="3-gguf-files">3. GGUF Files</h2>
-<h3 id="1-download-official-gguf-files">1: Download Official GGUF Files</h3>
+<p><strong>自定义参数：</strong></p>
+<div class="code"><pre><span></span><code><span class="c1"># 指定前端端口和后端服务地址 (MiniCPM-o 4.5)</span>
+python<span class="w"> </span>gradio_client_minicpmo4_5.py<span class="w"> </span>--port<span class="o">=</span><span class="m">8889</span><span class="w"> </span>--server<span class="o">=</span>http://localhost:9999/api
+</code></pre></div>
+
+<h2 id="访问">访问</h2>
+<p>默认情况下，服务启动后，可以通过浏览器访问 http://localhost:8889 来使用 Web Demo。</p>
+<h2 id="ui-功能">UI 功能</h2>
+<h3 id="解码类型">解码类型</h3>
 <ul>
-<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4-gguf">https://huggingface.co/openbmb/MiniCPM-V-4-gguf</a></li>
-<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf</a></li>
+<li><strong>Sampling</strong>：默认模式，支持实时流式输出</li>
+<li><strong>Beam Search</strong>：输出质量更高但不支持流式输出</li>
 </ul>
-<p>Download the language model file (e.g., <code>ggml-model-Q4_0.gguf</code>) and the vision model file (<code>mmproj-model-f16-iOS.gguf</code>) from the repository.</p>
-<h3 id="2-convert-from-pytorch-model">2: Convert from PyTorch Model</h3>
-<p>Download the MiniCPM-V-4 PyTorch model into a folder named <code>MiniCPM-V-4</code>:</p>
-<ul>
-<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4">https://huggingface.co/openbmb/MiniCPM-V-4</a></li>
-<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4</a></li>
-</ul>
-<p>Convert the PyTorch model to GGUF format:</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-surgery.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4
-
-python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4<span class="w"> </span>--minicpmv-projector<span class="w"> </span>../MiniCPM-V-4/minicpmv.projector<span class="w"> </span>--output-dir<span class="w"> </span>../MiniCPM-V-4/<span class="w"> </span>--minicpmv_version<span class="w"> </span><span class="m">5</span>
-
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>../MiniCPM-V-4/model
-
-<span class="c1"># int4 quantized</span>
-./llama-quantize<span class="w"> </span>../MiniCPM-V-4/model/Model-3.6B-f16.gguf<span class="w"> </span>../MiniCPM-V-4/model/ggml-model-Q4_0.gguf<span class="w"> </span>Q4_0
-</code></pre></div></article>
+<h3 id="思考模式">思考模式</h3>
+<p>启用后可以看到模型的推理过程。思考内容会以视觉区分的方式显示在单独的区域。</p>
+<h3 id="流式模式">流式模式</h3>
+<p>启用后可以实时逐字符输出。仅在 Sampling 模式下可用。</p>
+<p><img alt="demo" src="./assets/demo.png"></p></article>
 
   <footer class="page-footer">
-    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>
-    <span>Built with <code>build_docs.py</code></span>
+    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>
+    <span>由 <code>build_docs.py</code> 自动生成</span>
   </footer>
 </main>
 

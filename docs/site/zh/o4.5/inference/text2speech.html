@@ -248,27 +248,23 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
 <li><a class="" href="../deployment/ollama.html">Ollama</a></li></ul></li>
 <li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="../quantization/gguf.html">GGUF</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../demos/fastapi.html">FastAPI 全模态流式</a></li>
+<li><a class="" href="../demos/gradio.html">Gradio</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/dataset.html">数据集准备</a></li>
-<li><a class="" href="../../shared/finetune/full.html">全参数微调</a></li>
-<li><a class="" href="../../shared/finetune/lora.html">LoRA</a></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
 <li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
 <li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../../shared/demos/fastapi.html">FastAPI 全模态流式</a></li>
-<li><a class="" href="../../shared/demos/gradio.html">Gradio</a></li>
-<li><a class="" href="../../shared/demos/ios.html">iOS</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
   <article><h1 id="文本转语音">文本转语音</h1>
 <h3 id="加载模型">加载模型</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">librosa</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">librosa</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-o-2_6&#39;</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

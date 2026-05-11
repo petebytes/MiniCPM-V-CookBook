@@ -242,11 +242,11 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="single-image.html">Single-image QA</a></li>
 <li><a class="" href="multi-images.html">Multi-image QA</a></li>
 <li><a class="" href="video-understanding.html">Video QA</a></li>
-<li><a class="active" href="ocr.html">OCR</a></li>
-<li><a class="" href="pdf-parse.html">PDF parsing</a></li>
-<li><a class="" href="grounding.html">Visual grounding</a></li>
+<li><a class="" href="single-image-think.html">Single-image (think)</a></li>
 <li><a class="" href="multi-images-think.html">Multi-image (think)</a></li>
-<li><a class="" href="single-image-think.html">Single-image (think)</a></li></ul></li>
+<li class="nav-group collapsed"><div class="nav-group-header">Other visual tasks</div><ul class="nav-group-children"><li><a class="active" href="ocr.html">OCR</a></li>
+<li><a class="" href="pdf-parse.html">PDF parsing</a></li>
+<li><a class="" href="grounding.html">Visual grounding</a></li></ul></li></ul></li>
 <li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
 <li><a class="" href="../deployment/sglang.html">SGLang</a></li>
 <li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
@@ -255,27 +255,23 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><a class="" href="../quantization/bnb.html">BNB</a></li>
 <li><a class="" href="../quantization/awq.html">AWQ</a></li>
 <li><a class="" href="../quantization/gptq.html">GPTQ</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
+<li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/dataset.html">Dataset guidance</a></li>
-<li><a class="" href="../../shared/finetune/full.html">Full-parameter</a></li>
-<li><a class="" href="../../shared/finetune/lora.html">LoRA</a></li>
+<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
 <li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
 <li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="../../shared/demos/fastapi.html">FastAPI Omni Streaming</a></li>
-<li><a class="" href="../../shared/demos/gradio.html">Gradio</a></li>
-<li><a class="" href="../../shared/demos/ios.html">iOS</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
   <article><h1 id="ocr">OCR</h1>
 <h3 id="initialize-model">Initialize model</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
