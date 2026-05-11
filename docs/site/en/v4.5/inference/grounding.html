@@ -270,173 +270,173 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="grounding">Grounding</h1>
 <h2 id="sample-code">Sample Code</h2>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<pre class="code"><code class="language-python">import re
+from PIL import Image, ImageDraw
+import torch
+from transformers import AutoModel, AutoTokenizer
 
-<span class="k">def</span> <span class="nf">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">):</span>
-    <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span>
+def setup_model_and_tokenizer(model_path):
+    dtype = torch.bfloat16
+    model = AutoModel.from_pretrained(model_path, torch_dtype=dtype, trust_remote_code=True)
+    model = model.to(dtype=torch.bfloat16)
+    model = model.eval().cuda()
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    return model, tokenizer
 
-<span class="k">def</span> <span class="nf">extract_bbox_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
-    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;box&gt;([\d\s]+)&lt;/box&gt;&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
-        <span class="n">bbox_str</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">bbox</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
-        <span class="k">return</span> <span class="n">bbox</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t find bbox in response&quot;</span><span class="p">)</span>
+def extract_bbox_from_response(response):
+    match = re.search(r&quot;&lt;box&gt;([\d\s]+)&lt;/box&gt;&quot;, response)
+    if match:
+        bbox_str = match.group(1)
+        bbox = list(map(int, bbox_str.strip().split()))
+        return bbox
+    else:
+        raise ValueError(&quot;Can't find bbox in response&quot;)
 
-<span class="k">def</span> <span class="nf">draw_bbox_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox</span><span class="p">):</span>
-    <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
-    <span class="n">x1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span>
-    <span class="n">y1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
-    <span class="n">x2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span>
-    <span class="n">y2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
-    <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-    <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">outline</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">image</span>
+def draw_bbox_on_image(image, bbox):
+    w, h = image.size
+    x1 = int(bbox[0] / 1000 * w)
+    y1 = int(bbox[1] / 1000 * h)
+    x2 = int(bbox[2] / 1000 * w)
+    y2 = int(bbox[3] / 1000 * h)
+    draw = ImageDraw.Draw(image)
+    draw.rectangle([x1, y1, x2, y2], outline=&quot;red&quot;, width=4)
+    return image
 
-<span class="k">def</span> <span class="nf">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
-    <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">question</span><span class="p">,</span> <span class="n">image</span><span class="p">]},</span>
-    <span class="p">]</span>
-    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-            <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-            <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
-            <span class="n">sampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
-            <span class="n">max_inp_length</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span>
-            <span class="n">use_image_id</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model output:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
-    <span class="n">bbox</span> <span class="o">=</span> <span class="n">extract_bbox_from_response</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-    <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">draw_bbox_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">res</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">image_with_box</span>
+def model_infer_and_draw(img_path, question, model, tokenizer):
+    image = Image.open(img_path)
+    msgs = [
+        {'role': 'user', 'content': [question, image]},
+    ]
+    with torch.inference_mode():
+        res = model.chat(
+            image=None,
+            msgs=msgs,
+            tokenizer=tokenizer,
+            sampling=True,
+            max_new_tokens=1024,
+            max_inp_length=8192,
+            use_image_id=True,
+        )
+    print(&quot;Model output:&quot;, res)
+    bbox = extract_bbox_from_response(res)
+    image_with_box = draw_bbox_on_image(image, bbox)
+    return res, bbox, image_with_box
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">img_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/airplane.jpeg&#39;</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s1">&#39;Please provide the bounding box coordinate of the region this sentence describes: &lt;ref&gt;airplane&lt;/ref&gt;&#39;</span>
+model_path = 'openbmb/MiniCPM-V-4_5'
+img_path = './assets/airplane.jpeg'
+question = 'Please provide the bounding box coordinate of the region this sentence describes: &lt;ref&gt;airplane&lt;/ref&gt;'
 
-<span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
-<span class="n">res</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+model, tokenizer = setup_model_and_tokenizer(model_path)
+res, bbox, image_with_box = model_infer_and_draw(img_path, question, model, tokenizer)
 
-<span class="n">out_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/airplane_grounding.jpeg&#39;</span>
-<span class="n">image_with_box</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
-</code></pre></div>
+out_path = './assets/airplane_grounding.jpeg'
+image_with_box.save(out_path)
+</code></pre>
 
 <h2 id="show-case">show case</h2>
 <h3 id="airplane">airplane</h3>
-<div class="code"><pre><span></span><code><span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span>
-<span class="n">img_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/airplane.jpeg&#39;</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s1">&#39;Please provide the bounding box coordinate of the region this sentence describes: &lt;ref&gt;airplane&lt;/ref&gt;&#39;</span>
+<pre class="code"><code class="language-python">model_path = 'openbmb/MiniCPM-V-4_5'
+device = 'cuda'
+img_path = './assets/airplane.jpeg'
+question = 'Please provide the bounding box coordinate of the region this sentence describes: &lt;ref&gt;airplane&lt;/ref&gt;'
 
-<span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-<span class="n">res</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+model, tokenizer = setup_model_and_tokenizer(model_path, device)
+res, bbox, image_with_box = model_infer_and_draw(img_path, question, model, tokenizer)
 
-<span class="n">out_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/airplane-grounding.jpeg&#39;</span>
-<span class="n">image_with_box</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
-</code></pre></div>
+out_path = './assets/airplane-grounding.jpeg'
+image_with_box.save(out_path)
+</code></pre>
 
 <p>Original image:
 <img alt="alt text" src="./assets/airplane.jpeg"></p>
 <p>After grounding:
 <img alt="alt text" src="./assets/airplane-grounding.jpeg"></p>
 <h3 id="doraemon">doraemon</h3>
-<div class="code"><pre><span></span><code><span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span>
-<span class="n">img_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/doraemon.jpeg&#39;</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s1">&#39;Please provide the bounding box coordinate of the region this sentence describes: &lt;ref&gt;doraemon&lt;/ref&gt;&#39;</span>
+<pre class="code"><code class="language-python">model_path = 'openbmb/MiniCPM-V-4_5'
+device = 'cuda'
+img_path = './assets/doraemon.jpeg'
+question = 'Please provide the bounding box coordinate of the region this sentence describes: &lt;ref&gt;doraemon&lt;/ref&gt;'
 
-<span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-<span class="n">res</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+model, tokenizer = setup_model_and_tokenizer(model_path, device)
+res, bbox, image_with_box = model_infer_and_draw(img_path, question, model, tokenizer)
 
-<span class="n">out_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/doraemon-grounding.jpeg&#39;</span>
-<span class="n">image_with_box</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
-</code></pre></div>
+out_path = './assets/doraemon-grounding.jpeg'
+image_with_box.save(out_path)
+</code></pre>
 
 <p>Original image:
 <img alt="alt text" src="./assets/doraemon.jpg"></p>
 <p>After grounding:
 <img alt="alt text" src="./assets/doraemon-grounding.jpg"></p>
 <h3 id="multiple-objects">Multiple Objects</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="k">def</span> <span class="nf">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">):</span>
-    <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span>
+<pre class="code"><code class="language-python">import re
+from PIL import Image, ImageDraw
+import torch
+from transformers import AutoModel, AutoTokenizer
+import json
+def setup_model_and_tokenizer(model_path):
+    dtype = torch.bfloat16
+    model = AutoModel.from_pretrained(model_path, torch_dtype=dtype, trust_remote_code=True)
+    model = model.to(dtype=torch.bfloat16)
+    model = model.eval().cuda()
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    return model, tokenizer
 
-<span class="k">def</span> <span class="nf">extract_bbox_from_json_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
-    <span class="n">response_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-    <span class="n">bbox_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">name_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response_json</span><span class="p">:</span>
-        <span class="n">bbox_str</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;box&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="c1"># remoeve &quot;&lt;box&gt;&quot; and &quot;&lt;/box&gt;&quot; if exists</span>
-        <span class="n">bbox_str</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;/?box&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">bbox_str</span><span class="p">)</span>
-        <span class="n">name_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_en&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_zh&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
-        <span class="n">bbox</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
-        <span class="n">bbox_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">bbox_list</span><span class="p">,</span> <span class="n">name_list</span>
+def extract_bbox_from_json_response(response):
+    response_json = json.loads(response)
+    bbox_list = []
+    name_list = []
+    for item in response_json:
+        bbox_str = item.get(&quot;box&quot;, &quot;&quot;)
+        # remoeve &quot;&lt;box&gt;&quot; and &quot;&lt;/box&gt;&quot; if exists
+        bbox_str = re.sub(r&quot;&lt;/?box&gt;&quot;, &quot;&quot;, bbox_str)
+        name_list.append((item.get(&quot;name_en&quot;, &quot;&quot;), item.get(&quot;name_zh&quot;, &quot;&quot;)))
+        bbox = list(map(int, bbox_str.strip().split()))
+        bbox_list.append(bbox)
+    return bbox_list, name_list
 
-<span class="k">def</span> <span class="nf">draw_multiple_bboxes_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox_list</span><span class="p">,</span> <span class="n">name_list</span><span class="p">):</span>
-    <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
-    <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">names</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bbox_list</span><span class="p">,</span> <span class="n">name_list</span><span class="p">):</span>
-        <span class="n">x1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span>
-        <span class="n">y1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
-        <span class="n">x2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span>
-        <span class="n">y2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
-        <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">outline</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="mi">10</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">image</span>
+def draw_multiple_bboxes_on_image(image, bbox_list, name_list):
+    w, h = image.size
+    draw = ImageDraw.Draw(image)
+    for bbox, names in zip(bbox_list, name_list):
+        x1 = int(bbox[0] / 1000 * w)
+        y1 = int(bbox[1] / 1000 * h)
+        x2 = int(bbox[2] / 1000 * w)
+        y2 = int(bbox[3] / 1000 * h)
+        draw.rectangle([x1, y1, x2, y2], outline=&quot;red&quot;, width=4)
+        draw.text((x1, y1 - 10), f&quot;{names[0]} / {names[1]}&quot;, fill=&quot;red&quot;)
+    return image
 
-<span class="k">def</span> <span class="nf">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
-    <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">question</span><span class="p">,</span> <span class="n">image</span><span class="p">]},</span>
-    <span class="p">]</span>
-    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-            <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-            <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
-            <span class="n">sampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
-            <span class="n">max_inp_length</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span>
-            <span class="n">use_image_id</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model output:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
-    <span class="n">bbox</span><span class="p">,</span> <span class="n">name_list</span> <span class="o">=</span> <span class="n">extract_bbox_from_json_response</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-    <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">draw_multiple_bboxes_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">name_list</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">res</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">image_with_box</span>
+def model_infer_and_draw(img_path, question, model, tokenizer):
+    image = Image.open(img_path)
+    msgs = [
+        {'role': 'user', 'content': [question, image]},
+    ]
+    with torch.inference_mode():
+        res = model.chat(
+            image=None,
+            msgs=msgs,
+            tokenizer=tokenizer,
+            sampling=True,
+            max_new_tokens=1024,
+            max_inp_length=8192,
+            use_image_id=True,
+        )
+    print(&quot;Model output:&quot;, res)
+    bbox, name_list = extract_bbox_from_json_response(res)
+    image_with_box = draw_multiple_bboxes_on_image(image, bbox, name_list)
+    return res, bbox, image_with_box
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">img_path</span> <span class="o">=</span> <span class="s1">&#39;/cache/liuqilin/draft/example/qwen2v4_5/assets/doraemon.jpg&#39;</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s1">&#39;Identify all characters in the image and return their bounding boxes and English name and Chinese name in JSON format, a list of {&quot;name_en&quot;: &quot;Doraemon&quot;, &quot;name_zh&quot;: &quot;哆啦A梦&quot;,&quot;box&quot;, &quot;x1 y1 x2 y2&quot;}&#39;</span>
+model_path = 'openbmb/MiniCPM-V-4_5'
+img_path = '/cache/liuqilin/draft/example/qwen2v4_5/assets/doraemon.jpg'
+question = 'Identify all characters in the image and return their bounding boxes and English name and Chinese name in JSON format, a list of {&quot;name_en&quot;: &quot;Doraemon&quot;, &quot;name_zh&quot;: &quot;哆啦A梦&quot;,&quot;box&quot;, &quot;x1 y1 x2 y2&quot;}'
 
-<span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
-<span class="n">res</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+model, tokenizer = setup_model_and_tokenizer(model_path)
+res, bbox, image_with_box = model_infer_and_draw(img_path, question, model, tokenizer)
 
-<span class="n">out_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/doraemon_multi_grounding.jpg&#39;</span>
-<span class="n">image_with_box</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
-</code></pre></div>
+out_path = './assets/doraemon_multi_grounding.jpg'
+image_with_box.save(out_path)
+</code></pre>
 
 <p>Original image:
 <img alt="alt text" src="./assets/doraemon.jpg"></p>

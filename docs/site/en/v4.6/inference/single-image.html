@@ -270,88 +270,88 @@ footer.page-footer a:hover { color: var(--primary); }
 <p>MiniCPM-V 4.6 is registered upstream in <code>transformers&gt;=5.7.0</code> as the standalone architecture <code>MiniCPMV4_6ForConditionalGeneration</code>, so the standard HuggingFace <code>Processor</code> + <code>model.generate</code> flow works out of the box.</p>
 </blockquote>
 <h2 id="initialize-model">Initialize model</h2>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
+<pre class="code"><code class="language-python">import torch
+from PIL import Image
+from transformers import AutoProcessor, AutoModelForImageTextToText
 
-<span class="c1"># Pick the variant you want:</span>
-<span class="c1">#   &quot;openbmb/MiniCPM-V-4.6&quot;        — Instruct</span>
-<span class="c1">#   &quot;openbmb/MiniCPM-V-4.6-Thinking&quot;  — Thinking</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6&quot;</span>
+# Pick the variant you want:
+#   &quot;openbmb/MiniCPM-V-4.6&quot;        — Instruct
+#   &quot;openbmb/MiniCPM-V-4.6-Thinking&quot;  — Thinking
+model_path = &quot;openbmb/MiniCPM-V-4.6&quot;
 
-<span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span>
-    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
-    <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;flash_attention_2&quot;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-</code></pre></div>
+processor = AutoProcessor.from_pretrained(model_path)
+model = AutoModelForImageTextToText.from_pretrained(
+    model_path,
+    torch_dtype=torch.bfloat16,
+    attn_implementation=&quot;sdpa&quot;,  # or &quot;flash_attention_2&quot;
+).eval().cuda()
+</code></pre>
 
 <h2 id="chat-with-a-single-image">Chat with a single image</h2>
-<div class="code"><pre><span></span><code><span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;./assets/single.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
+<pre class="code"><code class="language-python">image = Image.open(&quot;./assets/single.png&quot;).convert(&quot;RGB&quot;)
 
-<span class="c1"># First round</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;What is the landform in the picture?&quot;</span>
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
-    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">question</span><span class="p">},</span>
-    <span class="p">],</span>
-<span class="p">}]</span>
+# First round
+question = &quot;What is the landform in the picture?&quot;
+messages = [{
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: [
+        {&quot;type&quot;: &quot;image&quot;, &quot;image&quot;: image},
+        {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: question},
+    ],
+}]
 
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span>
-    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">tokenize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+inputs = processor.apply_chat_template(
+    messages,
+    add_generation_prompt=True,
+    tokenize=True,
+    return_dict=True,
+    return_tensors=&quot;pt&quot;,
+).to(model.device)
 
-<span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
-<span class="n">answer</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
-    <span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span>
-    <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+out_ids = model.generate(**inputs, max_new_tokens=512)
+answer = processor.decode(
+    out_ids[0][inputs[&quot;input_ids&quot;].shape[-1]:],
+    skip_special_tokens=True,
+)
+print(answer)
+</code></pre>
 
 <h2 id="second-round">Second round</h2>
-<div class="code"><pre><span></span><code><span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">answer</span><span class="p">}]})</span>
-<span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;What should I pay attention to when traveling here?&quot;</span><span class="p">}],</span>
-<span class="p">})</span>
+<pre class="code"><code class="language-python">messages.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: [{&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: answer}]})
+messages.append({
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: [{&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;What should I pay attention to when traveling here?&quot;}],
+})
 
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span>
-    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">tokenize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+inputs = processor.apply_chat_template(
+    messages,
+    add_generation_prompt=True,
+    tokenize=True,
+    return_dict=True,
+    return_tensors=&quot;pt&quot;,
+).to(model.device)
 
-<span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
-<span class="n">answer</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
-    <span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span>
-    <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+out_ids = model.generate(**inputs, max_new_tokens=512)
+answer = processor.decode(
+    out_ids[0][inputs[&quot;input_ids&quot;].shape[-1]:],
+    skip_special_tokens=True,
+)
+print(answer)
+</code></pre>
 
 <h2 id="sample-image">Sample image</h2>
 <p><img alt="alt text" src="./assets/single.png"></p>
 <h2 id="notes-on-the-thinking-variant">Notes on the Thinking variant</h2>
 <p>If <code>model_path</code> points to <code>openbmb/MiniCPM-V-4.6-Thinking</code>, the chat template prepends a <code>&lt;think&gt;\n</code> block to the assistant turn — the model returns <code>&lt;reasoning&gt;\n&lt;/think&gt;\n&lt;final answer&gt;</code>. To skip the leading <code>&lt;think&gt;</code> block, pass <code>enable_thinking=False</code>:</p>
-<div class="code"><pre><span></span><code><span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span>
-    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">tokenize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-    <span class="n">chat_template_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;enable_thinking&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-</code></pre></div>
+<pre class="code"><code class="language-python">inputs = processor.apply_chat_template(
+    messages,
+    add_generation_prompt=True,
+    tokenize=True,
+    return_dict=True,
+    return_tensors=&quot;pt&quot;,
+    chat_template_kwargs={&quot;enable_thinking&quot;: False},
+).to(model.device)
+</code></pre>
 
 <p>The Instruct checkpoint never emits <code>&lt;think&gt;</code> blocks; pick the appropriate checkpoint for your task instead of toggling at request time.</p></article>
 

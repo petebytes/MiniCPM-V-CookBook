@@ -270,48 +270,48 @@ footer.page-footer a:hover { color: var(--primary); }
 <strong>Support:</strong> MiniCPM-o 2.6
 :::</p>
 <h2 id="environment-setup">Environment Setup</h2>
-<div class="code"><pre><span></span><code><span class="c1"># clone the repository</span>
-git<span class="w"> </span>clone<span class="w"> </span>git@github.com:PKU-Alignment/align-anything.git
-<span class="nb">cd</span><span class="w"> </span>align-anything
+<pre class="code"><code class="language-bash"># clone the repository
+git clone git@github.com:PKU-Alignment/align-anything.git
+cd align-anything
 
-<span class="c1"># create virtual env</span>
-conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>align-anything<span class="w"> </span><span class="nv">python</span><span class="o">==</span><span class="m">3</span>.11
-conda<span class="w"> </span>activate<span class="w"> </span>align-anything
-</code></pre></div>
+# create virtual env
+conda create -n align-anything python==3.11
+conda activate align-anything
+</code></pre>
 
 <p><strong>On Nvidia GPU</strong></p>
 <ul>
 <li><strong><code>[Optional]</code></strong> We recommend installing <a href="https://anaconda.org/nvidia/cuda">CUDA</a> in the conda environment and set the environment variable.</li>
 </ul>
-<div class="code"><pre><span></span><code><span class="c1"># We tested on the H800 computing cluster, and this version of CUDA works well.</span>
-<span class="c1"># You can adjust this version according to the actual situation of the computing cluster.</span>
+<pre class="code"><code class="language-bash"># We tested on the H800 computing cluster, and this version of CUDA works well.
+# You can adjust this version according to the actual situation of the computing cluster.
 
-conda<span class="w"> </span>install<span class="w"> </span>nvidia/label/cuda-12.2.0::cuda
-<span class="nb">export</span><span class="w"> </span><span class="nv">CUDA_HOME</span><span class="o">=</span><span class="nv">$CONDA_PREFIX</span>
-</code></pre></div>
+conda install nvidia/label/cuda-12.2.0::cuda
+export CUDA_HOME=$CONDA_PREFIX
+</code></pre>
 
 <blockquote>
 <p>If your CUDA installed in a different location, such as <code>/usr/local/cuda/bin/nvcc</code>, you can set the environment variables as follows:</p>
 </blockquote>
-<div class="code"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">CUDA_HOME</span><span class="o">=</span><span class="s2">&quot;/usr/local/cuda&quot;</span>
-</code></pre></div>
+<pre class="code"><code class="language-bash">export CUDA_HOME=&quot;/usr/local/cuda&quot;
+</code></pre>
 
 <p>Finally, install <code>align-anything</code> by:</p>
-<div class="code"><pre><span></span><code>pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+<pre class="code"><code class="language-bash">pip3 install -e .
 
-pip3<span class="w"> </span>install<span class="w"> </span><span class="nv">vllm</span><span class="o">==</span><span class="m">0</span>.7.2<span class="w"> </span><span class="c1"># to run ppo on vllm engine</span>
-</code></pre></div>
+pip3 install vllm==0.7.2 # to run ppo on vllm engine
+</code></pre>
 
 <h2 id="training">Training</h2>
 <p>You can find SFT &amp; DPO training script in the <code>./scripts/minicpmo</code> directory. These scripts would automatically download the model and dataset, and run the training or evaluation.</p>
 <p>For example, <code>scripts/minicpmo/minicpmo_dpo_vision.sh</code> is the script for <code>Text + Image -&gt; Text</code> modality, you can run it by:</p>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>scripts
-bash<span class="w"> </span>minicpmo/minicpmo_dpo_vision.sh
-</code></pre></div>
+<pre class="code"><code class="language-bash">cd scripts
+bash minicpmo/minicpmo_dpo_vision.sh
+</code></pre>
 
 <p><strong>Note:</strong> The scripts will automatically download the model and dataset from huggingface. If you are prohibited from the internet, please try to use the <code>HF Mirror</code>:</p>
-<div class="code"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">HF_ENDPOINT</span><span class="o">=</span>https://hf-mirror.com
-</code></pre></div></article>
+<pre class="code"><code class="language-bash">export HF_ENDPOINT=https://hf-mirror.com
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

@@ -270,79 +270,79 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="视频理解">视频理解</h1>
 <h3 id="加载模型">加载模型</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<pre class="code"><code class="language-python">from PIL import Image
+from transformers import AutoModel, AutoTokenizer
+import torch
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span>
-    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span>  <span class="c1"># sdpa 或 flash_attention_2</span>
-    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
+model_path = 'openbmb/MiniCPM-V-4_5'
+model = AutoModel.from_pretrained(
+    model_path,
+    trust_remote_code=True,
+    attn_implementation='sdpa',  # sdpa 或 flash_attention_2
+    torch_dtype=torch.bfloat16,
+)
+model = model.eval().cuda()
+tokenizer = AutoTokenizer.from_pretrained(
+    model_path, trust_remote_code=True)
+</code></pre>
 
 <h3 id="视频编码函数">视频编码函数</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">decord</span> <span class="kn">import</span> <span class="n">VideoReader</span><span class="p">,</span> <span class="n">cpu</span>
+<pre class="code"><code class="language-python">from decord import VideoReader, cpu
 
-<span class="n">MAX_NUM_FRAMES</span> <span class="o">=</span> <span class="mi">64</span>  <span class="c1"># 显存吃紧时调小</span>
+MAX_NUM_FRAMES = 64  # 显存吃紧时调小
 
 
-<span class="k">def</span> <span class="nf">encode_video</span><span class="p">(</span><span class="n">video_path</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">uniform_sample</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-        <span class="n">gap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
-        <span class="n">idxs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">gap</span> <span class="o">+</span> <span class="n">gap</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxs</span><span class="p">]</span>
+def encode_video(video_path):
+    def uniform_sample(l, n):
+        gap = len(l) / n
+        idxs = [int(i * gap + gap / 2) for i in range(n)]
+        return [l[i] for i in idxs]
 
-    <span class="n">vr</span> <span class="o">=</span> <span class="n">VideoReader</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="n">ctx</span><span class="o">=</span><span class="n">cpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-    <span class="n">sample_fps</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">vr</span><span class="o">.</span><span class="n">get_avg_fps</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># 帧率</span>
-    <span class="n">frame_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vr</span><span class="p">),</span> <span class="n">sample_fps</span><span class="p">)]</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">frame_idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_NUM_FRAMES</span><span class="p">:</span>
-        <span class="n">frame_idx</span> <span class="o">=</span> <span class="n">uniform_sample</span><span class="p">(</span><span class="n">frame_idx</span><span class="p">,</span> <span class="n">MAX_NUM_FRAMES</span><span class="p">)</span>
-    <span class="n">frames</span> <span class="o">=</span> <span class="n">vr</span><span class="o">.</span><span class="n">get_batch</span><span class="p">(</span><span class="n">frame_idx</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
-    <span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint8&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;帧数:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">frames</span>
-</code></pre></div>
+    vr = VideoReader(video_path, ctx=cpu(0))
+    sample_fps = round(vr.get_avg_fps() / 1)  # 帧率
+    frame_idx = [i for i in range(0, len(vr), sample_fps)]
+    if len(frame_idx) &gt; MAX_NUM_FRAMES:
+        frame_idx = uniform_sample(frame_idx, MAX_NUM_FRAMES)
+    frames = vr.get_batch(frame_idx).asnumpy()
+    frames = [Image.fromarray(v.astype('uint8')) for v in frames]
+    print('帧数:', len(frames))
+    return frames
+</code></pre>
 
 <h3 id="视频对话">视频对话</h3>
-<div class="code"><pre><span></span><code><span class="n">video_path</span> <span class="o">=</span> <span class="s2">&quot;assets/badminton.mp4&quot;</span>
-<span class="n">frames</span> <span class="o">=</span> <span class="n">encode_video</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;描述这段视频&quot;</span>
-<span class="n">msg</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="n">frames</span> <span class="o">+</span> <span class="p">[</span><span class="n">question</span><span class="p">]},</span>
-<span class="p">]</span>
+<pre class="code"><code class="language-python">video_path = &quot;assets/badminton.mp4&quot;
+frames = encode_video(video_path)
+question = &quot;描述这段视频&quot;
+msg = [
+    {'role': 'user', 'content': frames + [question]},
+]
 
-<span class="c1"># 视频解码参数</span>
-<span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">params</span><span class="p">[</span><span class="s2">&quot;use_image_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="c1"># 显存不足且分辨率 &gt; 448*448 时设为 1</span>
-<span class="n">params</span><span class="p">[</span><span class="s2">&quot;max_slice_nums&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+# 视频解码参数
+params = {}
+params[&quot;use_image_id&quot;] = False
+# 显存不足且分辨率 &gt; 448*448 时设为 1
+params[&quot;max_slice_nums&quot;] = 2
 
-<span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">params</span>
-<span class="p">)</span>
+res = model.chat(
+    image=None,
+    msgs=msg,
+    tokenizer=tokenizer,
+    **params
+)
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Response:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-</code></pre></div>
+print(&quot;Response:&quot;)
+print(res)
+</code></pre>
 
 <h3 id="示例输出">示例输出</h3>
-<div class="code"><pre><span></span><code>num frames: 21
+<pre class="code"><code>num frames: 21
 Response:
 The video captures a dynamic badminton match between two skilled players, one in yellow and the other in red. The game takes place on an indoor court with green flooring and white lines marking its boundaries. Throughout the footage, we see both athletes displaying impressive footwork as they move swiftly across the playing area to return shots.
 
 At various points, the player wearing yellow is seen executing powerful smashes from different locations around the court, including near the net where he successfully hits his opponent out of bounds twice. In response, the competitor dressed in red demonstrates agility by diving repeatedly onto the floor after failing to retrieve these low shots made close to the ground or driven straight towards him at high speed.
 
 As their rally progresses, each participant showcases quick reflexes and strategic positioning during exchanges that span diagonally across multiple corners while maintaining control over ball placement along sidelines marked by distinct pink borders surrounding them. Their movements are fluid yet intense – reflecting competitive spirit typical for professional sports events like this one which appears staged indoors under artificial lighting conditions visible through overhead fixtures illuminating entire venue space filled with spectators seated behind protective glass panels separating audience members safely away from actual play zone itself (which could be either clay or hard surface based on visual cues).
-</code></pre></div></article>
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

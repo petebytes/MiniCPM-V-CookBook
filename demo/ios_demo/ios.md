@@ -1,82 +1,88 @@
-# MiniCPM-V - Deployment on iOS Device
+# MiniCPM-V — iOS deployment (MiniCPM-V-Apps)
 
-## 1. Deploying iOS App
+> **Upstream project:** [OpenBMB/MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)\
+> README: [English](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md) · [简体中文](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md)
 
-**NOTE: To deploy and test the app on an iOS device, you may need an Apple Developer account.**
+That repository bundles **iOS**, **Android**, and **HarmonyOS NEXT** demos sharing one root **`llama.cpp` git submodule** (branch `Support-iOS-Demo`). This page summarizes the **iOS** flow; Android / HarmonyOS build steps stay in the upstream README.
 
-Clone our iOS demo (using `llama.cpp`) repository:
+**Prebuilt installers** (TestFlight / APK / HAP): [**DOWNLOAD.md**](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD.md) / [**DOWNLOAD_zh.md**](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD_zh.md). The sections below are for building from source.
+
+---
+
+## 1. Clone repo and submodule
 
 ```bash
-git clone https://github.com/tc-mb/MiniCPM-o-demo-iOS.git
-cd MiniCPM-o-demo-iOS
+git clone https://github.com/OpenBMB/MiniCPM-V-Apps.git
+cd MiniCPM-V-Apps
+git submodule update --init --recursive
 ```
+
+## 2. Open the Xcode project
+
+**NOTE:** Deploying on a physical iPhone or iPad may require an Apple Developer membership.
 
 Install Xcode:
 
-* Download Xcode from the App Store
-* Install the Command Line Tools:
+* Xcode from the App Store
+* Command Line Tools:
 
   ```bash
   xcode-select --install
   ```
-* Agree to the software license agreement:
+
+* Accept the license:
 
   ```bash
   sudo xcodebuild -license
   ```
 
-Open `MiniCPM-V-demo.xcodeproj` with Xcode. It may take a moment for Xcode to automatically download the required dependencies.
+Open **`MiniCPM-V-demo/MiniCPM-V-demo.xcodeproj`** in Xcode, pick a destination device, then tap **Run**.
 
-In Xcode, select the target device at the top of the window, then click the "Run" (triangle) button to launch the demo.
+**NOTE:** If something fails related to **`thirdparty/llama.xcframework`**, build it manually using section 3.
 
-**NOTE: If you encounter errors related to the `thirdparty/llama.xcframework` path, please follow the steps below to build the `llama.xcframework` manually.**
+---
 
-## 2. Manually Building the llama.cpp Library From OpenBMB
+## 3. Manually build `llama.xcframework`
 
-Clone the llama.cpp repository:
+From the **repository root** (after submodules are in place):
 
 ```bash
-git clone -b Support-iOS-Demo https://github.com/tc-mb/llama.cpp.git
 cd llama.cpp
-```
-
-Build the llama.cpp library for iOS using the script:
-
-```bash
 ./build-xcframework.sh
+cp -r ./build-apple/llama.xcframework ../MiniCPM-V-demo/thirdparty
 ```
 
-Copy the built library into the corresponding directory of the iOS demo project:
+---
 
-```bash
-cp -r ./build-apple/llama.xcframework ../MiniCPM-o-demo-iOS/MiniCPM-V-demo/thirdparty
-```
+## 4. GGUF model files for the demos
 
-## 3. GGUF Files
+Upstream currently targets **MiniCPM-V 2.6**, **4.0**, and **4.6**. Download matching **language-model** GGUF (e.g. Q4\_K\_M) plus **`mmproj-model-f16.gguf`** for the projector / vision stack. Typical total size and RAM guidance are summarized in the upstream README (hardware section).
 
-### 1: Download Official GGUF Files
+### MiniCPM-V 2.6 — official GGUF
 
-* HuggingFace: [https://huggingface.co/openbmb/MiniCPM-V-4-gguf](https://huggingface.co/openbmb/MiniCPM-V-4-gguf)
-* ModelScope: [https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf)
+* Hugging Face: [openbmb/MiniCPM-V-2_6-gguf](https://huggingface.co/openbmb/MiniCPM-V-2_6-gguf)
+* ModelScope: [OpenBMB/MiniCPM-V-2_6-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-2_6-gguf)
 
-Download the language model file (e.g., `ggml-model-Q4_0.gguf`) and the vision model file (`mmproj-model-f16-iOS.gguf`) from the repository.
+### MiniCPM-V 4.0 — official GGUF
 
-### 2: Convert from PyTorch Model
+* Hugging Face: [openbmb/MiniCPM-V-4-gguf](https://huggingface.co/openbmb/MiniCPM-V-4-gguf)
+* ModelScope: [OpenBMB/MiniCPM-V-4-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf)
 
-Download the MiniCPM-V-4 PyTorch model into a folder named `MiniCPM-V-4`:
+### MiniCPM-V 4.6 — official GGUF
 
-* HuggingFace: [https://huggingface.co/openbmb/MiniCPM-V-4](https://huggingface.co/openbmb/MiniCPM-V-4)
-* ModelScope: [https://modelscope.cn/models/OpenBMB/MiniCPM-V-4](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4)
+* Hugging Face: [openbmb/MiniCPM-V-4.6-gguf](https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf)
+* ModelScope: [OpenBMB/MiniCPM-V-4.6-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf)
 
-Convert the PyTorch model to GGUF format:
+*(Example filenames for 4.6 may appear as `MiniCPM-V-4_6-Q4_K_M.gguf`; always follow filenames listed in each HF / ModelScope repo.)*
 
-```bash
-python ./tools/mtmd/legacy-models/minicpmv-surgery.py -m ../MiniCPM-V-4
+---
 
-python ./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py -m ../MiniCPM-V-4 --minicpmv-projector ../MiniCPM-V-4/minicpmv.projector --output-dir ../MiniCPM-V-4/ --minicpmv_version 5
+## 5. Convert PyTorch → GGUF (optional)
 
-python ./convert_hf_to_gguf.py ../MiniCPM-V-4/model
+For server-side conversion recipes in this Cookbook, see:
 
-# int4 quantized
-./llama-quantize ../MiniCPM-V-4/model/Model-3.6B-f16.gguf ../MiniCPM-V-4/model/ggml-model-Q4_0.gguf Q4_0
-```
+* [MiniCPM-V 4.6 GGUF](../../quantization/gguf/minicpm-v4_6_gguf_quantize.md)
+* [MiniCPM-V 4.0 GGUF](../../quantization/gguf/minicpm-v4_gguf_quantize.md)
+* Further versions: sibling files under [`quantization/gguf/`](../../quantization/gguf/)
+
+Run conversion commands inside the **`llama.cpp`** subtree at the MiniCPM-V-Apps repo root.

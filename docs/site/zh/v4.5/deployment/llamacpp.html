@@ -271,21 +271,21 @@ footer.page-footer a:hover { color: var(--primary); }
   <article><h1 id="minicpm-v-4-5-llama-cpp">MiniCPM-V 4.5 - llama.cpp</h1>
 <h2 id="1-编译安装-llama-cpp">1. 编译安装 llama.cpp</h2>
 <p>克隆 llama.cpp 代码仓库: </p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ggml-org/llama.cpp.git
-<span class="nb">cd</span><span class="w"> </span>llama.cpp
-</code></pre></div>
+<pre class="code"><code class="language-bash">git clone https://github.com/ggml-org/llama.cpp.git
+cd llama.cpp
+</code></pre>
 
 <p>使用 <code>CMake</code> 构建 llama.cpp: 
 https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md</p>
 <p><strong>CPU/Metal:</strong></p>
-<div class="code"><pre><span></span><code>cmake<span class="w"> </span>-B<span class="w"> </span>build
-cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
-</code></pre></div>
+<pre class="code"><code class="language-bash">cmake -B build
+cmake --build build --config Release
+</code></pre>
 
 <p><strong>CUDA:</strong></p>
-<div class="code"><pre><span></span><code>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DGGML_CUDA<span class="o">=</span>ON
-cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
-</code></pre></div>
+<pre class="code"><code class="language-bash">cmake -B build -DGGML_CUDA=ON
+cmake --build build --config Release
+</code></pre>
 
 <h2 id="2-获取模型-gguf-权重">2. 获取模型 GGUF 权重</h2>
 <h3 id="方法一-下载官方-gguf-文件">方法一: 下载官方 GGUF 文件</h3>
@@ -299,34 +299,34 @@ cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"
 *   HuggingFace: https://huggingface.co/openbmb/MiniCPM-V-4_5
 *   魔搭社区: https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_5</p>
 <p>将 PyTorch 模型转换为 GGUF 格式:</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-surgery.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5
+<pre class="code"><code class="language-bash">python ./tools/mtmd/legacy-models/minicpmv-surgery.py -m ../MiniCPM-V-4_5
 
-python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5<span class="w"> </span>--minicpmv-projector<span class="w"> </span>../MiniCPM-V-4_5/minicpmv.projector<span class="w"> </span>--output-dir<span class="w"> </span>../MiniCPM-V-4_5/<span class="w"> </span>--minicpmv_version<span class="w"> </span><span class="m">6</span>
+python ./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py -m ../MiniCPM-V-4_5 --minicpmv-projector ../MiniCPM-V-4_5/minicpmv.projector --output-dir ../MiniCPM-V-4_5/ --minicpmv_version 6
 
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>../MiniCPM-V-4_5/model
+python ./convert_hf_to_gguf.py ../MiniCPM-V-4_5/model
 
-<span class="c1"># int4 量化版本</span>
-./llama-quantize<span class="w"> </span>../MiniCPM-V-4_5/model/Model-3.6B-F16.gguf<span class="w"> </span>../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf<span class="w"> </span>Q4_K_M
-</code></pre></div>
+# int4 量化版本
+./llama-quantize ../MiniCPM-V-4_5/model/Model-3.6B-F16.gguf ../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf Q4_K_M
+</code></pre>
 
 <h2 id="3-模型推理">3. 模型推理</h2>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>build/bin/
+<pre class="code"><code class="language-bash">cd build/bin/
 
-<span class="c1"># 运行 f16 版本</span>
-./llama-mtmd-cli<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5/model/Model-3.6B-F16.gguf<span class="w"> </span>--mmproj<span class="w"> </span>../MiniCPM-V-4_5/mmproj-model-f16.gguf<span class="w"> </span>-c<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;What is in the image?&quot;</span>
+# 运行 f16 版本
+./llama-mtmd-cli -m ../MiniCPM-V-4_5/model/Model-3.6B-F16.gguf --mmproj ../MiniCPM-V-4_5/mmproj-model-f16.gguf -c 4096 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 --image xx.jpg -p &quot;What is in the image?&quot;
 
-<span class="c1"># 运行 int4 量化版本</span>
-./llama-mtmd-cli<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf<span class="w"> </span>--mmproj<span class="w"> </span>../MiniCPM-V-4_5/mmproj-model-f16.gguf<span class="w"> </span>-c<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;What is in the image?&quot;</span>
+# 运行 int4 量化版本
+./llama-mtmd-cli -m ../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf --mmproj ../MiniCPM-V-4_5/mmproj-model-f16.gguf -c 4096 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 --image xx.jpg -p &quot;What is in the image?&quot;
 
-<span class="c1"># 或以交互模式运行</span>
-./llama-mtmd-cli<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf<span class="w"> </span>--mmproj<span class="w"> </span>../MiniCPM-V-4_5/mmproj-model-f16.gguf<span class="w"> </span>-c<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>-i
+# 或以交互模式运行
+./llama-mtmd-cli -m ../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf --mmproj ../MiniCPM-V-4_5/mmproj-model-f16.gguf -c 4096 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 --image xx.jpg -i
 
-<span class="c1"># 或以思考模式运行(思考输出的token无限制)</span>
-./llama-mtmd-cli<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf<span class="w"> </span>--mmproj<span class="w"> </span>../MiniCPM-V-4_5/mmproj-model-f16.gguf<span class="w"> </span>-c<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>--jinja<span class="w"> </span>--reasoning-budget<span class="w"> </span>-1<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;what is it?&quot;</span>
+# 或以思考模式运行(思考输出的token无限制)
+./llama-mtmd-cli -m ../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf --mmproj ../MiniCPM-V-4_5/mmproj-model-f16.gguf -c 4096 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 --image xx.jpg --jinja --reasoning-budget -1 -p &quot;what is it?&quot;
 
-<span class="c1"># 或以禁止思考模式运行</span>
-./llama-mtmd-cli<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf<span class="w"> </span>--mmproj<span class="w"> </span>../MiniCPM-V-4_5/mmproj-model-f16.gguf<span class="w"> </span>-c<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span>--repeat-penalty<span class="w"> </span><span class="m">1</span>.05<span class="w"> </span>--image<span class="w"> </span>xx.jpg<span class="w"> </span>--jinja<span class="w"> </span>--reasoning-budget<span class="w"> </span><span class="m">0</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;what is it?&quot;</span>
-</code></pre></div>
+# 或以禁止思考模式运行
+./llama-mtmd-cli -m ../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf --mmproj ../MiniCPM-V-4_5/mmproj-model-f16.gguf -c 4096 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 --image xx.jpg --jinja --reasoning-budget 0 -p &quot;what is it?&quot;
+</code></pre>
 
 <p><strong>命令行参数解析:</strong></p>
 <table>

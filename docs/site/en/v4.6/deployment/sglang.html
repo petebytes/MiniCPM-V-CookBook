@@ -279,19 +279,19 @@ footer.page-footer a:hover { color: var(--primary); }
 </ul>
 <h2 id="1-installing-sglang">1. Installing SGLang</h2>
 <h3 id="install-sglang-from-the-pr-fork-branch">Install SGLang from the PR / fork branch</h3>
-<div class="code"><pre><span></span><code><span class="c1"># clone the OpenBMB-maintained SGLang branch with v4.6 support</span>
-git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>Support-MiniCPM-V-4.6<span class="w"> </span>https://github.com/tc-mb/sglang.git
-<span class="nb">cd</span><span class="w"> </span>sglang
+<pre class="code"><code class="language-bash"># clone the OpenBMB-maintained SGLang branch with v4.6 support
+git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/sglang.git
+cd sglang
 
-pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;python[all]&quot;</span>
-</code></pre></div>
+pip install --upgrade pip
+pip install -e &quot;python[all]&quot;
+</code></pre>
 
 <p><code>transformers&gt;=5.7.0</code> is installed automatically — this in turn requires a
 recent PyTorch (≥ 2.6 at the time of writing). Verify the resolved versions
 match what FlashInfer needs <em>before</em> installing FlashInfer below:</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import torch, transformers; print(&#39;torch&#39;, torch.__version__, &#39;| cuda&#39;, torch.version.cuda, &#39;| transformers&#39;, transformers.__version__)&quot;</span>
-</code></pre></div>
+<pre class="code"><code class="language-bash">python -c &quot;import torch, transformers; print('torch', torch.__version__, '| cuda', torch.version.cuda, '| transformers', transformers.__version__)&quot;
+</code></pre>
 
 <h3 id="installing-flashinfer-optional-but-recommended">Installing FlashInfer (optional but recommended)</h3>
 <div class="admonition admonition-important" markdown="0">
@@ -327,29 +327,29 @@ matching your environment, for example:</p>
 </tbody>
 </table>
 <p>Then install via either:</p>
-<div class="code"><pre><span></span><code><span class="c1"># Method 1 — pip from the right index (slow / blocked in CN)</span>
-pip<span class="w"> </span>install<span class="w"> </span>flashinfer-python<span class="w"> </span>-i<span class="w"> </span>&lt;index<span class="w"> </span>URL<span class="w"> </span>from<span class="w"> </span>table<span class="w"> </span>above&gt;
+<pre class="code"><code class="language-bash"># Method 1 — pip from the right index (slow / blocked in CN)
+pip install flashinfer-python -i &lt;index URL from table above&gt;
 
-<span class="c1"># Method 2 — download the matching wheel manually</span>
-<span class="c1">#   1) Open the index URL in a browser, find a wheel that matches your</span>
-<span class="c1">#      python version (cp310 / cp311 / ...) and platform (linux_x86_64 / win_amd64)</span>
-<span class="c1">#   2) pip install &lt;downloaded-wheel.whl&gt;</span>
-</code></pre></div>
+# Method 2 — download the matching wheel manually
+#   1) Open the index URL in a browser, find a wheel that matches your
+#      python version (cp310 / cp311 / ...) and platform (linux_x86_64 / win_amd64)
+#   2) pip install &lt;downloaded-wheel.whl&gt;
+</code></pre>
 
 <p>For everything else (Docker images, CPU-only fallback, etc.) see the
 <a href="https://docs.sglang.ai/start/install.html">official SGLang installation docs</a>.</p>
 <h2 id="2-launching-the-inference-server">2. Launching the Inference Server</h2>
 <p>By default the server downloads weights from the HuggingFace Hub:</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-V-4.6<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
-</code></pre></div>
+<pre class="code"><code class="language-bash">python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6 --port 30000 --trust-remote-code
+</code></pre>
 
 <p>Or specify a local path:</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>/your/local/MiniCPM-V-4.6<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
-</code></pre></div>
+<pre class="code"><code class="language-bash">python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4.6 --port 30000 --trust-remote-code
+</code></pre>
 
 <p>To serve the Thinking variant, swap the model id:</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-V-4.6-Thinking<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code
-</code></pre></div>
+<pre class="code"><code class="language-bash">python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --port 30000 --trust-remote-code
+</code></pre>
 
 <h2 id="3-calling-the-service">3. Calling the Service</h2>
 <ul>

@@ -272,19 +272,19 @@ footer.page-footer a:hover { color: var(--primary); }
 </ul>
 <h3 id="2-将-pytorch-模型转换为-gguf-格式">2. 将 PyTorch 模型转换为 GGUF 格式</h3>
 <p>请执行以下脚本，以完成模型结构调整和模型转换。</p>
-<div class="code"><pre><span></span><code>bash<span class="w"> </span>./tools/omni/convert/run_convert.sh
+<pre class="code"><code class="language-bash">bash ./tools/omni/convert/run_convert.sh
 
-<span class="c1"># 需要修改脚本中的路径：</span>
-<span class="nv">MODEL_DIR</span><span class="o">=</span><span class="s2">&quot;/path/to/MiniCPM-o-4_5&quot;</span><span class="w">  </span><span class="c1"># 源模型</span>
-<span class="nv">LLAMACPP_DIR</span><span class="o">=</span><span class="s2">&quot;/path/to/llamacpp&quot;</span><span class="w">    </span><span class="c1"># llamacpp 目录</span>
-<span class="nv">OUTPUT_DIR</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CONVERT_DIR</span><span class="si">}</span><span class="s2">/gguf&quot;</span><span class="w">    </span><span class="c1"># 输出目录</span>
-<span class="nv">PYTHON</span><span class="o">=</span><span class="s2">&quot;/path/to/python&quot;</span><span class="w">            </span><span class="c1"># Python 路径</span>
-</code></pre></div>
+# 需要修改脚本中的路径：
+MODEL_DIR=&quot;/path/to/MiniCPM-o-4_5&quot;  # 源模型
+LLAMACPP_DIR=&quot;/path/to/llamacpp&quot;    # llamacpp 目录
+OUTPUT_DIR=&quot;${CONVERT_DIR}/gguf&quot;    # 输出目录
+PYTHON=&quot;/path/to/python&quot;            # Python 路径
+</code></pre>
 
 <h3 id="3-执行-int4-量化">3. 执行 INT4 量化</h3>
 <p>转换完成后，使用 <code>llama-quantize</code> 工具对 F16 精度的 GGUF 模型进行 INT4 量化。</p>
-<div class="code"><pre><span></span><code>./llama-quantize<span class="w"> </span>./tools/omni/convert/gguf/Llm-8.2B-F16.gguf<span class="w"> </span>./tools/omni/convert/gguf/Llm-8.2B-Q4_K_M.gguf<span class="w"> </span>Q4_K_M
-</code></pre></div></article>
+<pre class="code"><code class="language-bash">./llama-quantize ./tools/omni/convert/gguf/Llm-8.2B-F16.gguf ./tools/omni/convert/gguf/Llm-8.2B-Q4_K_M.gguf Q4_K_M
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

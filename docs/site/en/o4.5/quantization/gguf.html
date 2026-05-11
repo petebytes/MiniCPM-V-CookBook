@@ -272,19 +272,19 @@ footer.page-footer a:hover { color: var(--primary); }
 </ul>
 <h3 id="2-convert-the-pytorch-model-to-gguf-format">2. Convert the PyTorch Model to GGUF Format</h3>
 <p>Run the following bash to perform model surgery and convert the model.</p>
-<div class="code"><pre><span></span><code>bash<span class="w"> </span>./tools/omni/convert/run_convert.sh
+<pre class="code"><code class="language-bash">bash ./tools/omni/convert/run_convert.sh
 
-<span class="c1"># You need to modify the paths in the script:</span>
-<span class="nv">MODEL_DIR</span><span class="o">=</span><span class="s2">&quot;/path/to/MiniCPM-o-4_5&quot;</span><span class="w">  </span><span class="c1"># Source model</span>
-<span class="nv">LLAMACPP_DIR</span><span class="o">=</span><span class="s2">&quot;/path/to/llamacpp&quot;</span><span class="w">    </span><span class="c1"># llamacpp directory</span>
-<span class="nv">OUTPUT_DIR</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">CONVERT_DIR</span><span class="si">}</span><span class="s2">/gguf&quot;</span><span class="w">    </span><span class="c1"># Output directory</span>
-<span class="nv">PYTHON</span><span class="o">=</span><span class="s2">&quot;/path/to/python&quot;</span><span class="w">            </span><span class="c1"># Python path</span>
-</code></pre></div>
+# You need to modify the paths in the script:
+MODEL_DIR=&quot;/path/to/MiniCPM-o-4_5&quot;  # Source model
+LLAMACPP_DIR=&quot;/path/to/llamacpp&quot;    # llamacpp directory
+OUTPUT_DIR=&quot;${CONVERT_DIR}/gguf&quot;    # Output directory
+PYTHON=&quot;/path/to/python&quot;            # Python path
+</code></pre>
 
 <h3 id="3-perform-int4-quantization">3. Perform INT4 Quantization</h3>
 <p>Once the conversion is complete, use the <code>llama-quantize</code> tool to quantize the F16 precision GGUF model to INT4.</p>
-<div class="code"><pre><span></span><code>./llama-quantize<span class="w"> </span>./tools/omni/convert/gguf/Llm-8.2B-F16.gguf<span class="w"> </span>./tools/omni/convert/gguf/Llm-8.2B-Q4_K_M.gguf<span class="w"> </span>Q4_K_M
-</code></pre></div></article>
+<pre class="code"><code class="language-bash">./llama-quantize ./tools/omni/convert/gguf/Llm-8.2B-F16.gguf ./tools/omni/convert/gguf/Llm-8.2B-Q4_K_M.gguf Q4_K_M
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

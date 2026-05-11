@@ -270,14 +270,14 @@ footer.page-footer a:hover { color: var(--primary); }
 <p>Supported models: <strong>MiniCPM-V-4</strong>, <strong>MiniCPM-o-2_6</strong>, <strong>MiniCPM-V-2_6</strong>, <strong>MiniCPM-Llama3-V-2_5</strong>, <strong>MiniCPM-V-2</strong>.</p>
 <h2 id="1-data-preparation">1. Data Preparation</h2>
 <p>Each data sample should be a dictionary containing the image path and multi-turn conversation content. For example:</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image.jpg&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Describe this image.&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This is a cat.&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre class="code"><code class="language-json">{
+  &quot;image&quot;: &quot;path/to/image.jpg&quot;,
+  &quot;conversations&quot;: [
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Describe this image.&quot;},
+    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;This is a cat.&quot;}
+  ]
+}
+</code></pre>
 
 <ul>
 <li><code>image</code>: Image path, supports both single and multiple images (see below).</li>
@@ -285,17 +285,17 @@ footer.page-footer a:hover { color: var(--primary); }
 </ul>
 <h3 id="multi-image-input-format">Multi-image Input Format</h3>
 <p>To support multiple images, the <code>image</code> field should be a dictionary, with keys like <code>&lt;image_00&gt;</code>, <code>&lt;image_01&gt;</code>, and values as image paths:</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_00&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image1.jpg&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_01&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image2.jpg&quot;</span>
-<span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Compare &lt;image_00&gt; and &lt;image_01&gt;.&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The first image is a cat, the second is a dog.&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre class="code"><code class="language-json">{
+  &quot;image&quot;: {
+    &quot;&lt;image_00&gt;&quot;: &quot;path/to/image1.jpg&quot;,
+    &quot;&lt;image_01&gt;&quot;: &quot;path/to/image2.jpg&quot;
+  },
+  &quot;conversations&quot;: [
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Compare &lt;image_00&gt; and &lt;image_01&gt;.&quot;},
+    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;The first image is a cat, the second is a dog.&quot;}
+  ]
+}
+</code></pre>
 
 <h3 id="dataset-loading-and-preprocessing">Dataset Loading and Preprocessing</h3>
 <p>Dataset loading and preprocessing mainly rely on the <code>SupervisedDataset</code> class. The core process is as follows:</p>
@@ -328,53 +328,53 @@ footer.page-footer a:hover { color: var(--primary); }
 <h2 id="2-full-parameter-fine-tuning">2. Full-parameter Fine-tuning</h2>
 <p>Full-parameter fine-tuning requires updating all parameters of LLM in the whole training process. Please specify the correct MODEL path, DATA path and LLM_TYPE in the shell scripts.</p>
 <p>You can find and review the training script here: <a href="./finetune_ds.sh">finetune_ds.sh</a></p>
-<div class="code"><pre><span></span><code><span class="nv">MODEL</span><span class="o">=</span><span class="s2">&quot;MiniCPM-o-2_6&quot;</span><span class="w"> </span><span class="c1"># or &quot;openbmb/MiniCPM-V-4&quot;, &quot;openbmb/MiniCPM-V-2_6&quot;, &quot;openbmb/MiniCPM-Llama3-V-2_5&quot;, &quot;openbmb/MiniCPM-V-2&quot;</span>
-<span class="nv">DATA</span><span class="o">=</span><span class="s2">&quot;path/to/trainging_data&quot;</span><span class="w"> </span><span class="c1"># json file</span>
-<span class="nv">EVAL_DATA</span><span class="o">=</span><span class="s2">&quot;path/to/test_data&quot;</span><span class="w"> </span><span class="c1"># json file</span>
-<span class="nv">LLM_TYPE</span><span class="o">=</span><span class="s2">&quot;qwen&quot;</span><span class="w"> </span><span class="c1"># if use openbmb/MiniCPM-V-2, please set LLM_TYPE=minicpm, if use openbmb/MiniCPM-Llama3-V-2_5, please set LLM_TYPE=&quot;llama3&quot;,</span>
-<span class="c1"># if use openbmb/MiniCPM-o-2_6 or openbmb/MiniCPM-V-2_6, please set LLM_TYPE=qwen</span>
-<span class="c1"># if use openbmb/MiniCPM-V-4, please set LLM_TYPE=llama</span>
-</code></pre></div>
+<pre class="code"><code class="language-shell">MODEL=&quot;MiniCPM-o-2_6&quot; # or &quot;openbmb/MiniCPM-V-4&quot;, &quot;openbmb/MiniCPM-V-2_6&quot;, &quot;openbmb/MiniCPM-Llama3-V-2_5&quot;, &quot;openbmb/MiniCPM-V-2&quot;
+DATA=&quot;path/to/trainging_data&quot; # json file
+EVAL_DATA=&quot;path/to/test_data&quot; # json file
+LLM_TYPE=&quot;qwen&quot; # if use openbmb/MiniCPM-V-2, please set LLM_TYPE=minicpm, if use openbmb/MiniCPM-Llama3-V-2_5, please set LLM_TYPE=&quot;llama3&quot;,
+# if use openbmb/MiniCPM-o-2_6 or openbmb/MiniCPM-V-2_6, please set LLM_TYPE=qwen
+# if use openbmb/MiniCPM-V-4, please set LLM_TYPE=llama
+</code></pre>
 
 <p>To launch your training, run the following script:</p>
-<div class="code"><pre><span></span><code>sh finetune_ds.sh
-</code></pre></div>
+<pre class="code"><code>sh finetune_ds.sh
+</code></pre>
 
 <h2 id="3-lora-fine-tuning">3. LoRA Fine-tuning</h2>
 <p>LoRA allows light-weight model tuning with only a small subset of parameters updated. We provide the LoRA implementation based on <code>peft</code>. To launch your training, run the following script:</p>
 <p>You can find and review the training script here: <a href="./finetune_lora.sh">finetune_lora.sh</a></p>
-<div class="code"><pre><span></span><code><span class="nv">MODEL</span><span class="o">=</span><span class="s2">&quot;MiniCPM-o-2_6&quot;</span><span class="w"> </span><span class="c1"># or &quot;openbmb/MiniCPM-V-4&quot;, &quot;openbmb/MiniCPM-V-2_6&quot;, &quot;openbmb/MiniCPM-Llama3-V-2_5&quot;, &quot;openbmb/MiniCPM-V-2&quot;</span>
-<span class="nv">DATA</span><span class="o">=</span><span class="s2">&quot;path/to/trainging_data&quot;</span><span class="w"> </span><span class="c1"># json file</span>
-<span class="nv">EVAL_DATA</span><span class="o">=</span><span class="s2">&quot;path/to/test_data&quot;</span><span class="w"> </span><span class="c1"># json file</span>
-<span class="nv">LLM_TYPE</span><span class="o">=</span><span class="s2">&quot;qwen&quot;</span><span class="w"> </span><span class="c1"># if use openbmb/MiniCPM-V-2, please set LLM_TYPE=minicpm, if use openbmb/MiniCPM-Llama3-V-2_5, please set LLM_TYPE=&quot;llama3&quot;,</span>
-<span class="c1"># if use openbmb/MiniCPM-o-2_6 or openbmb/MiniCPM-V-2_6, please set LLM_TYPE=qwen</span>
-<span class="c1"># if use openbmb/MiniCPM-V-4, please set LLM_TYPE=llama</span>
-</code></pre></div>
+<pre class="code"><code class="language-shell">MODEL=&quot;MiniCPM-o-2_6&quot; # or &quot;openbmb/MiniCPM-V-4&quot;, &quot;openbmb/MiniCPM-V-2_6&quot;, &quot;openbmb/MiniCPM-Llama3-V-2_5&quot;, &quot;openbmb/MiniCPM-V-2&quot;
+DATA=&quot;path/to/trainging_data&quot; # json file
+EVAL_DATA=&quot;path/to/test_data&quot; # json file
+LLM_TYPE=&quot;qwen&quot; # if use openbmb/MiniCPM-V-2, please set LLM_TYPE=minicpm, if use openbmb/MiniCPM-Llama3-V-2_5, please set LLM_TYPE=&quot;llama3&quot;,
+# if use openbmb/MiniCPM-o-2_6 or openbmb/MiniCPM-V-2_6, please set LLM_TYPE=qwen
+# if use openbmb/MiniCPM-V-4, please set LLM_TYPE=llama
+</code></pre>
 
 <p>To launch your training, run the following script:</p>
-<div class="code"><pre><span></span><code>sh finetune_lora.sh
-</code></pre></div>
+<pre class="code"><code>sh finetune_lora.sh
+</code></pre>
 
 <h2 id="4-loading-a-fine-tuned-model">4. Loading a Fine-tuned Model</h2>
 <p>After training (either full-parameter or LoRA), you can load the model with the path to the adapter. We advise you to use absolute path for your pretrained model, because LoRA only saves the adapter and the absolute path in the adapter configuration json file is used for finding out the pretrained model to load.</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">peft</span> <span class="kn">import</span> <span class="n">PeftModel</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span>
+<pre class="code"><code class="language-python">from peft import PeftModel
+from transformers import AutoModel
 
-<span class="n">model_type</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-o-2_6&quot;</span>  <span class="c1"># or &quot;openbmb/MiniCPM-V-4&quot;, &quot;openbmb/MiniCPM-V-2_6&quot;, &quot;openbmb/MiniCPM-Llama3-V-2_5&quot;, &quot;openbmb/MiniCPM-V-2&quot;</span>
-<span class="n">path_to_adapter</span> <span class="o">=</span> <span class="s2">&quot;path_to_your_fine_tuned_checkpoint&quot;</span>
+model_type = &quot;openbmb/MiniCPM-o-2_6&quot;  # or &quot;openbmb/MiniCPM-V-4&quot;, &quot;openbmb/MiniCPM-V-2_6&quot;, &quot;openbmb/MiniCPM-Llama3-V-2_5&quot;, &quot;openbmb/MiniCPM-V-2&quot;
+path_to_adapter = &quot;path_to_your_fine_tuned_checkpoint&quot;
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_type</span><span class="p">,</span>
-    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
+model = AutoModel.from_pretrained(
+    model_type,
+    trust_remote_code=True,
+)
 
-<span class="n">lora_model</span> <span class="o">=</span> <span class="n">PeftModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span>
-    <span class="n">path_to_adapter</span><span class="p">,</span>
-    <span class="n">device_map</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-</code></pre></div>
+lora_model = PeftModel.from_pretrained(
+    model,
+    path_to_adapter,
+    device_map=&quot;auto&quot;,
+    trust_remote_code=True,
+).eval().cuda()
+</code></pre>
 
 <h2 id="5-memory-usage-statistics">5. Memory Usage Statistics</h2>
 <p>The following table presents the memory usage when fine-tuning using NVIDIA A100 (80 GiB) GPUs with DeepSpeed Zero-3, gradient checkpointing, and CPU offloading (max length 2048, batch size 1).</p>

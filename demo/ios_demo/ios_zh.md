@@ -1,77 +1,88 @@
-# MiniCPM-V - iOS 设备部署
+# MiniCPM-V — iOS 部署（MiniCPM-V-Apps）
 
-## 1. 部署 iOS App
+> **官方仓库：** [OpenBMB/MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)\
+> README：[English](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md) · [**简体中文 README_zh**](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md)
 
-**NOTE: 为了获取在 iOS 设备上部署、测试 App 的权限，您可能需要拥有一个 Apple 开发者账号**
+同一仓库内含 **iOS**、**Android**、**HarmonyOS NEXT** 三端 demo，共享仓库根目录的 **`llama.cpp` git submodule**（分支 `Support-iOS-Demo`）。本文侧重 **iOS**；安卓与鸿蒙的编译说明请直接看 upstream README。
 
-克隆 iOS demo（基于`llama.cpp`）代码仓库: 
+**预编译安装包**（TestFlight / APK / HAP）：[**DOWNLOAD.md**](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD.md) / [**DOWNLOAD_zh.md**](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD_zh.md)。下面内容为从源码自行构建时使用。
+
+---
+
+## 1. 克隆仓库与子模块
 
 ```bash
-git clone https://github.com/tc-mb/MiniCPM-o-demo-iOS.git
-cd MiniCPM-o-demo-iOS
+git clone https://github.com/OpenBMB/MiniCPM-V-Apps.git
+cd MiniCPM-V-Apps
+git submodule update --init --recursive
 ```
 
-安装 Xcode:
+## 2. 打开 Xcode 工程
 
-- 从 App Store 下载 Xcode
-- 安装命令行工具
-    ```bash
-    xcode-select --install
-- 同意软件许可协议
-    ```bash
-    sudo xcodebuild -license
-    ```
+**说明：**在真机（iPhone / iPad）上部署、调试通常需要有效的 **Apple Developer** 帐号。
 
-使用 Xcode 打开 `MiniCPM-V-demo.xcodeproj`，可能需要等待 Xcode 自动下载所需的库。
+安装 Xcode：
 
-在 Xcode 页面顶部选择想要运行 iOS demo 的设备，点击三角形的 Run 按钮即可运行。
+* 从 App Store 安装 Xcode
+* 安装命令行工具：
 
-**NOTE: 若上述流程出现 `thirdparty/llama.xcframework `路径相关报错，请按照如下教程自行编译 `llama.xcframework` 库**
+  ```bash
+  xcode-select --install
+  ```
 
-## 2. 自行编译构建 OpenBMB 提供的 llama.cpp
+* 同意许可协议：
 
-克隆 llama.cpp 代码仓库: 
+  ```bash
+  sudo xcodebuild -license
+  ```
+
+使用 Xcode 打开 **`MiniCPM-V-demo/MiniCPM-V-demo.xcodeproj`**，在顶部选好运行目标设备，点击 **Run**（三角形）。
+
+**说明：**若出现 **`thirdparty/llama.xcframework`** 相关报错，按第 3 节手动构建框架。
+
+---
+
+## 3. 手动构建 llama.xcframework
+
+在**仓库根目录**（并已拉取 submodule）执行：
+
 ```bash
-git clone -b Support-iOS-Demo https://github.com/tc-mb/llama.cpp.git
 cd llama.cpp
-```
-
-使用脚本为 iOS 设备构建所需的 llama.cpp 库: 
-
-```bash
 ./build-xcframework.sh
+cp -r ./build-apple/llama.xcframework ../MiniCPM-V-demo/thirdparty
 ```
 
-将构建完成的库复制到 iOS demo 对应目录:
+---
 
-```bash
-cp -r ./build-apple/llama.xcframework ../MiniCPM-o-demo-iOS/MiniCPM-V-demo/thirdparty
-```
+## 4. App 所用 GGUF 模型
 
-## 3. 获取模型 GGUF 权重
+当前 Demo 对齐 **MiniCPM-V 2.6 / 4.0 / 4.6**。请分别从官方 GGUF 仓下载匹配的 **语言模型** GGUF（如 Q4\_K\_M）以及 **`mmproj-model-f16.gguf`**。**推荐机型内存与总下载体量**请参考 upstream [README_zh 硬件说明](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md#硬件要求)。
 
-### 方法一: 下载官方 GGUF 文件
+### MiniCPM-V 2.6 — 官方 GGUF
 
-*   HuggingFace: https://huggingface.co/openbmb/MiniCPM-V-4-gguf
-*   魔搭社区: https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf
+* Hugging Face：[openbmb/MiniCPM-V-2_6-gguf](https://huggingface.co/openbmb/MiniCPM-V-2_6-gguf)
+* 魔搭：[OpenBMB/MiniCPM-V-2_6-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-2_6-gguf)
 
-从仓库中下载语言模型文件（如: `ggml-model-Q4_0.gguf`）与视觉模型文件（`mmproj-model-f16-iOS.gguf`）
+### MiniCPM-V 4.0 — 官方 GGUF
 
-### 方法二: 从 Pytorch 模型转换
+* Hugging Face：[openbmb/MiniCPM-V-4-gguf](https://huggingface.co/openbmb/MiniCPM-V-4-gguf)
+* 魔搭：[OpenBMB/MiniCPM-V-4-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf)
 
-下载 MiniCPM-V-4 PyTorch 模型到 "MiniCPM-V-4" 文件夹:
-*   HuggingFace: https://huggingface.co/openbmb/MiniCPM-V-4
-*   魔搭社区: https://modelscope.cn/models/OpenBMB/MiniCPM-V-4
+### MiniCPM-V 4.6 — 官方 GGUF
 
-将 PyTorch 模型转换为 GGUF 格式:
+* Hugging Face：[openbmb/MiniCPM-V-4.6-gguf](https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf)
+* 魔搭：[OpenBMB/MiniCPM-V-4.6-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf)
 
-```bash
-python ./tools/mtmd/legacy-models/minicpmv-surgery.py -m ../MiniCPM-V-4
+*（示例：4.6 语言模型文件可能名为 `MiniCPM-V-4_6-Q4_K_M.gguf`；具体以各仓库实际文件名为准。）*
 
-python ./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py -m ../MiniCPM-V-4 --minicpmv-projector ../MiniCPM-V-4/minicpmv.projector --output-dir ../MiniCPM-V-4/ --minicpmv_version 5
+---
 
-python ./convert_hf_to_gguf.py ../MiniCPM-V-4/model
+## 5. 从 PyTorch 自行转换 GGUF（可选）
 
-# int4 量化版本
-./llama-quantize ../MiniCPM-V-4/model/Model-3.6B-f16.gguf ../MiniCPM-V-4/model/ggml-model-Q4_0.gguf Q4_0
-```
+Cookbook 中的转换流程见：
+
+* [MiniCPM-V 4.6 GGUF](../../quantization/gguf/minicpm-v4_6_gguf_quantize_zh.md)
+* [MiniCPM-V 4.0 GGUF](../../quantization/gguf/minicpm-v4_gguf_quantize_zh.md)
+* 其他版本：[`quantization/gguf/`](../../quantization/gguf/) 目录下对应文档
+
+请在 MiniCPM-V-Apps 仓库根目录下的 **`llama.cpp`** 子模块内执行各文档中的命令。

@@ -270,70 +270,70 @@ footer.page-footer a:hover { color: var(--primary); }
 <p>v4.6 keeps the video pipeline simple: the image processor is invoked frame-by-frame, with the per-video frame budget controlled by <code>max_slice_nums</code> on the processor. No special video backend is required.</p>
 </blockquote>
 <h2 id="initialize-model">Initialize model</h2>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
+<pre class="code"><code class="language-python">import torch
+from PIL import Image
+from transformers import AutoProcessor, AutoModelForImageTextToText
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6&quot;</span>  <span class="c1"># or &quot;openbmb/MiniCPM-V-4.6-Thinking&quot;</span>
+model_path = &quot;openbmb/MiniCPM-V-4.6&quot;  # or &quot;openbmb/MiniCPM-V-4.6-Thinking&quot;
 
-<span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span>
-    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
-    <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-</code></pre></div>
+processor = AutoProcessor.from_pretrained(model_path)
+model = AutoModelForImageTextToText.from_pretrained(
+    model_path,
+    torch_dtype=torch.bfloat16,
+    attn_implementation=&quot;sdpa&quot;,
+).eval().cuda()
+</code></pre>
 
 <h2 id="video-frames">Video → frames</h2>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">decord</span> <span class="kn">import</span> <span class="n">VideoReader</span><span class="p">,</span> <span class="n">cpu</span>
+<pre class="code"><code class="language-python">from decord import VideoReader, cpu
 
-<span class="n">MAX_NUM_FRAMES</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1"># reduce if you OOM on small GPUs</span>
+MAX_NUM_FRAMES = 32  # reduce if you OOM on small GPUs
 
-<span class="k">def</span> <span class="nf">encode_video</span><span class="p">(</span><span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">uniform_sample</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-        <span class="n">gap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">gap</span> <span class="o">+</span> <span class="n">gap</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+def encode_video(video_path: str):
+    def uniform_sample(indices, n):
+        gap = len(indices) / n
+        return [indices[int(i * gap + gap / 2)] for i in range(n)]
 
-    <span class="n">vr</span> <span class="o">=</span> <span class="n">VideoReader</span><span class="p">(</span><span class="n">video_path</span><span class="p">,</span> <span class="n">ctx</span><span class="o">=</span><span class="n">cpu</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-    <span class="n">sample_fps</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">vr</span><span class="o">.</span><span class="n">get_avg_fps</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># roughly 1 fps</span>
-    <span class="n">frame_idx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vr</span><span class="p">),</span> <span class="n">sample_fps</span><span class="p">))</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">frame_idx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_NUM_FRAMES</span><span class="p">:</span>
-        <span class="n">frame_idx</span> <span class="o">=</span> <span class="n">uniform_sample</span><span class="p">(</span><span class="n">frame_idx</span><span class="p">,</span> <span class="n">MAX_NUM_FRAMES</span><span class="p">)</span>
-    <span class="n">frames</span> <span class="o">=</span> <span class="n">vr</span><span class="o">.</span><span class="n">get_batch</span><span class="p">(</span><span class="n">frame_idx</span><span class="p">)</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">]</span>
-</code></pre></div>
+    vr = VideoReader(video_path, ctx=cpu(0))
+    sample_fps = round(vr.get_avg_fps() / 1)  # roughly 1 fps
+    frame_idx = list(range(0, len(vr), sample_fps))
+    if len(frame_idx) &gt; MAX_NUM_FRAMES:
+        frame_idx = uniform_sample(frame_idx, MAX_NUM_FRAMES)
+    frames = vr.get_batch(frame_idx).asnumpy()
+    return [Image.fromarray(f.astype(&quot;uint8&quot;)) for f in frames]
+</code></pre>
 
 <h2 id="chat-with-video">Chat with video</h2>
-<div class="code"><pre><span></span><code><span class="n">video_path</span> <span class="o">=</span> <span class="s2">&quot;assets/badminton.mp4&quot;</span>
-<span class="n">frames</span> <span class="o">=</span> <span class="n">encode_video</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;num frames:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span>
+<pre class="code"><code class="language-python">video_path = &quot;assets/badminton.mp4&quot;
+frames = encode_video(video_path)
+print(&quot;num frames:&quot;, len(frames))
 
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
-    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span> <span class="s2">&quot;video&quot;</span><span class="p">:</span> <span class="n">frames</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>  <span class="s2">&quot;text&quot;</span><span class="p">:</span>  <span class="s2">&quot;Describe the video&quot;</span><span class="p">},</span>
-    <span class="p">],</span>
-<span class="p">}]</span>
+messages = [{
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: [
+        {&quot;type&quot;: &quot;video&quot;, &quot;video&quot;: frames},
+        {&quot;type&quot;: &quot;text&quot;,  &quot;text&quot;:  &quot;Describe the video&quot;},
+    ],
+}]
 
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span>
-    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">tokenize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-    <span class="c1"># tune frame slice budget if needed (lower = less memory)</span>
-    <span class="n">chat_template_kwargs</span><span class="o">=</span><span class="p">{},</span>
-    <span class="n">max_slice_nums</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+inputs = processor.apply_chat_template(
+    messages,
+    add_generation_prompt=True,
+    tokenize=True,
+    return_dict=True,
+    return_tensors=&quot;pt&quot;,
+    # tune frame slice budget if needed (lower = less memory)
+    chat_template_kwargs={},
+    max_slice_nums=2,
+).to(model.device)
 
-<span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
-<span class="n">answer</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
-    <span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span>
-    <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+out_ids = model.generate(**inputs, max_new_tokens=1024)
+answer = processor.decode(
+    out_ids[0][inputs[&quot;input_ids&quot;].shape[-1]:],
+    skip_special_tokens=True,
+)
+print(answer)
+</code></pre>
 
 <blockquote>
 <p>If you hit GPU OOM:

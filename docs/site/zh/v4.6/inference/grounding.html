@@ -267,79 +267,79 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="视觉定位-grounding-minicpm-v-4-6">视觉定位 Grounding（MiniCPM-V 4.6）</h1>
 <h2 id="示例代码">示例代码</h2>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
+<pre class="code"><code class="language-python">import re
+import torch
+from PIL import Image, ImageDraw
+from transformers import AutoProcessor, AutoModelForImageTextToText
 
 
-<span class="k">def</span> <span class="nf">setup_model_and_processor</span><span class="p">(</span><span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-        <span class="n">model_path</span><span class="p">,</span>
-        <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
-        <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">processor</span>
+def setup_model_and_processor(model_path: str):
+    processor = AutoProcessor.from_pretrained(model_path)
+    model = AutoModelForImageTextToText.from_pretrained(
+        model_path,
+        torch_dtype=torch.bfloat16,
+        attn_implementation=&quot;sdpa&quot;,
+    ).eval().cuda()
+    return model, processor
 
 
-<span class="k">def</span> <span class="nf">extract_bbox_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;box&gt;([\d\s]+)&lt;/box&gt;&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t find bbox in response&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+def extract_bbox_from_response(response: str):
+    match = re.search(r&quot;&lt;box&gt;([\d\s]+)&lt;/box&gt;&quot;, response)
+    if not match:
+        raise ValueError(&quot;Can't find bbox in response&quot;)
+    return list(map(int, match.group(1).strip().split()))
 
 
-<span class="k">def</span> <span class="nf">draw_bbox_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">bbox</span><span class="p">):</span>
-    <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
-    <span class="n">x1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span>
-    <span class="n">y1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
-    <span class="n">x2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span>
-    <span class="n">y2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
-    <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-    <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">outline</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">image</span>
+def draw_bbox_on_image(image: Image.Image, bbox):
+    w, h = image.size
+    x1 = int(bbox[0] / 1000 * w)
+    y1 = int(bbox[1] / 1000 * h)
+    x2 = int(bbox[2] / 1000 * w)
+    y2 = int(bbox[3] / 1000 * h)
+    draw = ImageDraw.Draw(image)
+    draw.rectangle([x1, y1, x2, y2], outline=&quot;red&quot;, width=4)
+    return image
 
 
-<span class="k">def</span> <span class="nf">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">processor</span><span class="p">):</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
-    <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
-        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
-            <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>  <span class="s2">&quot;text&quot;</span><span class="p">:</span>  <span class="n">question</span><span class="p">},</span>
-        <span class="p">],</span>
-    <span class="p">}]</span>
+def model_infer_and_draw(img_path, question, model, processor):
+    image = Image.open(img_path).convert(&quot;RGB&quot;)
+    messages = [{
+        &quot;role&quot;: &quot;user&quot;,
+        &quot;content&quot;: [
+            {&quot;type&quot;: &quot;image&quot;, &quot;image&quot;: image},
+            {&quot;type&quot;: &quot;text&quot;,  &quot;text&quot;:  question},
+        ],
+    }]
 
-    <span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-        <span class="n">messages</span><span class="p">,</span>
-        <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">tokenize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+    inputs = processor.apply_chat_template(
+        messages,
+        add_generation_prompt=True,
+        tokenize=True,
+        return_dict=True,
+        return_tensors=&quot;pt&quot;,
+    ).to(model.device)
 
-    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
-        <span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+    with torch.inference_mode():
+        out_ids = model.generate(**inputs, max_new_tokens=1024)
 
-    <span class="n">response</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
-        <span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span>
-        <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;模型输出:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+    response = processor.decode(
+        out_ids[0][inputs[&quot;input_ids&quot;].shape[-1]:],
+        skip_special_tokens=True,
+    )
+    print(&quot;模型输出:&quot;, response)
 
-    <span class="n">bbox</span> <span class="o">=</span> <span class="n">extract_bbox_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">response</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">draw_bbox_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox</span><span class="p">)</span>
+    bbox = extract_bbox_from_response(response)
+    return response, bbox, draw_bbox_on_image(image, bbox)
 
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6&quot;</span>
-<span class="n">img_path</span> <span class="o">=</span> <span class="s2">&quot;./assets/airplane.jpeg&quot;</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;Please provide the bounding box coordinate of the region this sentence describes: &lt;ref&gt;airplane&lt;/ref&gt;&quot;</span>
+model_path = &quot;openbmb/MiniCPM-V-4.6&quot;
+img_path = &quot;./assets/airplane.jpeg&quot;
+question = &quot;Please provide the bounding box coordinate of the region this sentence describes: &lt;ref&gt;airplane&lt;/ref&gt;&quot;
 
-<span class="n">model</span><span class="p">,</span> <span class="n">processor</span> <span class="o">=</span> <span class="n">setup_model_and_processor</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
-<span class="n">response</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">image_with_box</span> <span class="o">=</span> <span class="n">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">processor</span><span class="p">)</span>
-<span class="n">image_with_box</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;./assets/airplane_grounding.jpeg&quot;</span><span class="p">)</span>
-</code></pre></div>
+model, processor = setup_model_and_processor(model_path)
+response, bbox, image_with_box = model_infer_and_draw(img_path, question, model, processor)
+image_with_box.save(&quot;./assets/airplane_grounding.jpeg&quot;)
+</code></pre>
 
 <h2 id="效果展示">效果展示</h2>
 <h3 id="飞机">飞机</h3>
@@ -349,69 +349,69 @@ footer.page-footer a:hover { color: var(--primary); }
 <p><img alt="alt text" src="./assets/airplane-grounding.jpeg"></p>
 <h3 id="多目标">多目标</h3>
 <p>多目标定位时，让模型直接返回 JSON 而不是 <code>&lt;box&gt;</code>，再相应解析：</p>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
+<pre class="code"><code class="language-python">import json
+import re
+import torch
+from PIL import Image, ImageDraw
+from transformers import AutoProcessor, AutoModelForImageTextToText
 
 
-<span class="k">def</span> <span class="nf">extract_bboxes_from_json_response</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="n">response_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-    <span class="n">bboxes</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response_json</span><span class="p">:</span>
-        <span class="n">bbox_str</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;/?box&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;box&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="n">bboxes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">bbox_str</span><span class="o">.</span><span class="n">split</span><span class="p">())))</span>
-        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_en&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_zh&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="n">bboxes</span><span class="p">,</span> <span class="n">names</span>
+def extract_bboxes_from_json_response(response: str):
+    response_json = json.loads(response)
+    bboxes, names = [], []
+    for item in response_json:
+        bbox_str = re.sub(r&quot;&lt;/?box&gt;&quot;, &quot;&quot;, item.get(&quot;box&quot;, &quot;&quot;)).strip()
+        bboxes.append(list(map(int, bbox_str.split())))
+        names.append((item.get(&quot;name_en&quot;, &quot;&quot;), item.get(&quot;name_zh&quot;, &quot;&quot;)))
+    return bboxes, names
 
 
-<span class="k">def</span> <span class="nf">draw_multiple_bboxes</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">bboxes</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
-    <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
-    <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="p">(</span><span class="n">en</span><span class="p">,</span> <span class="n">zh</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bboxes</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
-        <span class="n">x1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x1</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">w</span><span class="p">);</span> <span class="n">y1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y1</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
-        <span class="n">x2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x2</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">w</span><span class="p">);</span> <span class="n">y2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y2</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
-        <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">outline</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="mi">10</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">en</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">zh</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">image</span>
+def draw_multiple_bboxes(image: Image.Image, bboxes, names):
+    w, h = image.size
+    draw = ImageDraw.Draw(image)
+    for (x1, y1, x2, y2), (en, zh) in zip(bboxes, names):
+        x1 = int(x1 / 1000 * w); y1 = int(y1 / 1000 * h)
+        x2 = int(x2 / 1000 * w); y2 = int(y2 / 1000 * h)
+        draw.rectangle([x1, y1, x2, y2], outline=&quot;red&quot;, width=4)
+        draw.text((x1, y1 - 10), f&quot;{en} / {zh}&quot;, fill=&quot;red&quot;)
+    return image
 
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6&quot;</span>
-<span class="n">img_path</span> <span class="o">=</span> <span class="s2">&quot;./assets/doraemon.jpg&quot;</span>
-<span class="n">question</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;Identify all characters in the image and return their bounding boxes &quot;</span>
-    <span class="s2">&quot;and English name and Chinese name in JSON format, &quot;</span>
-    <span class="s1">&#39;a list of {&quot;name_en&quot;: &quot;Doraemon&quot;, &quot;name_zh&quot;: &quot;哆啦A梦&quot;, &quot;box&quot;: &quot;x1 y1 x2 y2&quot;}&#39;</span>
-<span class="p">)</span>
+model_path = &quot;openbmb/MiniCPM-V-4.6&quot;
+img_path = &quot;./assets/doraemon.jpg&quot;
+question = (
+    &quot;Identify all characters in the image and return their bounding boxes &quot;
+    &quot;and English name and Chinese name in JSON format, &quot;
+    'a list of {&quot;name_en&quot;: &quot;Doraemon&quot;, &quot;name_zh&quot;: &quot;哆啦A梦&quot;, &quot;box&quot;: &quot;x1 y1 x2 y2&quot;}'
+)
 
-<span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span> <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+processor = AutoProcessor.from_pretrained(model_path)
+model = AutoModelForImageTextToText.from_pretrained(
+    model_path, torch_dtype=torch.bfloat16, attn_implementation=&quot;sdpa&quot;,
+).eval().cuda()
 
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
-    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>  <span class="s2">&quot;text&quot;</span><span class="p">:</span>  <span class="n">question</span><span class="p">},</span>
-    <span class="p">],</span>
-<span class="p">}]</span>
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+image = Image.open(img_path).convert(&quot;RGB&quot;)
+messages = [{
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: [
+        {&quot;type&quot;: &quot;image&quot;, &quot;image&quot;: image},
+        {&quot;type&quot;: &quot;text&quot;,  &quot;text&quot;:  question},
+    ],
+}]
+inputs = processor.apply_chat_template(
+    messages, add_generation_prompt=True, tokenize=True,
+    return_dict=True, return_tensors=&quot;pt&quot;,
+).to(model.device)
 
-<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
-    <span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+with torch.inference_mode():
+    out_ids = model.generate(**inputs, max_new_tokens=1024)
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
-    <span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
-<span class="n">bboxes</span><span class="p">,</span> <span class="n">names</span> <span class="o">=</span> <span class="n">extract_bboxes_from_json_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-<span class="n">draw_multiple_bboxes</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bboxes</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;./assets/doraemon_multi_grounding.jpg&quot;</span><span class="p">)</span>
-</code></pre></div>
+response = processor.decode(
+    out_ids[0][inputs[&quot;input_ids&quot;].shape[-1]:], skip_special_tokens=True
+)
+bboxes, names = extract_bboxes_from_json_response(response)
+draw_multiple_bboxes(image, bboxes, names).save(&quot;./assets/doraemon_multi_grounding.jpg&quot;)
+</code></pre>
 
 <p>原图：</p>
 <p><img alt="alt text" src="./assets/doraemon.jpg"></p>

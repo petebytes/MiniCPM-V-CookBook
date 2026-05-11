@@ -270,39 +270,39 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="multi-images">Multi Images</h1>
 <h3 id="initialize-model">Initialize model</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<pre class="code"><code class="language-python">from PIL import Image
+import torch
+from transformers import AutoModel, AutoTokenizer
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>  <span class="c1"># sdpa or flash_attention_2, no eager</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
+model_path = 'openbmb/MiniCPM-V-4_5'
+model = AutoModel.from_pretrained(model_path, trust_remote_code=True,
+                                  attn_implementation='sdpa', torch_dtype=torch.bfloat16)  # sdpa or flash_attention_2, no eager
+model = model.eval().cuda()
+tokenizer = AutoTokenizer.from_pretrained(
+    model_path, trust_remote_code=True)
+</code></pre>
 
 <h3 id="chat-with-multiple-images">Chat with multiple images</h3>
-<div class="code"><pre><span></span><code><span class="n">image1</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;assets/multi1.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-<span class="n">image2</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;assets/multi2.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s1">&#39;Compare the two images, tell me about the differences between them.&#39;</span>
+<pre class="code"><code class="language-python">image1 = Image.open('assets/multi1.png').convert('RGB')
+image2 = Image.open('assets/multi2.png').convert('RGB')
+question = 'Compare the two images, tell me about the differences between them.'
 
-<span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">image1</span><span class="p">,</span> <span class="n">image2</span><span class="p">,</span> <span class="n">question</span><span class="p">]}]</span>
+msgs = [{'role': 'user', 'content': [image1, image2, question]}]
 
-<span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+answer = model.chat(
+    image=None,
+    msgs=msgs,
+    tokenizer=tokenizer
+)
+print(answer)
+</code></pre>
 
 <h3 id="sample-images">Sample Images</h3>
 <p><img alt="alt text" src="./assets/multi1.png"></p>
 <p><img alt="alt text" src="./assets/multi2.png"></p>
 <h3 id="example-output">Example Output</h3>
-<div class="code"><pre><span></span><code>The vases have different shapes, with the first being rounder and more bulbous. The patterns on the vases are also distinct: the first vase has red designs against a white background, while the second features green and blue floral motifs. Additionally, the neck of the first vase is narrower than that of the second one.
-</code></pre></div></article>
+<pre class="code"><code>The vases have different shapes, with the first being rounder and more bulbous. The patterns on the vases are also distinct: the first vase has red designs against a white background, while the second features green and blue floral motifs. Additionally, the neck of the first vase is narrower than that of the second one.
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

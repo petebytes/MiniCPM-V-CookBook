@@ -273,31 +273,31 @@ footer.page-footer a:hover { color: var(--primary); }
 </ul>
 <h2 id="部署步骤">部署步骤</h2>
 <h3 id="服务端">服务端</h3>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>server
-conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>gradio-server<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
-conda<span class="w"> </span>activate<span class="w"> </span>gradio-server
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-python<span class="w"> </span>gradio_server.py
-</code></pre></div>
+<pre class="code"><code class="language-bash">cd server
+conda create -n gradio-server python=3.10
+conda activate gradio-server
+pip install -r requirements.txt
+python gradio_server.py
+</code></pre>
 
 <p><strong>自定义参数：</strong></p>
-<div class="code"><pre><span></span><code><span class="c1"># 指定服务端口、日志目录、模型路径和模型类型 (MiniCPM-o 4.5)</span>
-<span class="c1"># 如果显存有限，可以使用 INT4 量化模型</span>
-python<span class="w"> </span>gradio_server.py<span class="w"> </span>--port<span class="o">=</span><span class="m">9999</span><span class="w"> </span>--log_dir<span class="o">=</span>logs_o45<span class="w"> </span>--model_path<span class="o">=</span>openbmb/MiniCPM-o-2_6<span class="w"> </span>--model_type<span class="o">=</span>minicpmo4_5
-</code></pre></div>
+<pre class="code"><code class="language-bash"># 指定服务端口、日志目录、模型路径和模型类型 (MiniCPM-o 4.5)
+# 如果显存有限，可以使用 INT4 量化模型
+python gradio_server.py --port=9999 --log_dir=logs_o45 --model_path=openbmb/MiniCPM-o-2_6 --model_type=minicpmo4_5
+</code></pre>
 
 <h3 id="客户端">客户端</h3>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>client
-conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>gradio-client<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
-conda<span class="w"> </span>activate<span class="w"> </span>gradio-client
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-python<span class="w"> </span>gradio_client_minicpmo4_5.py
-</code></pre></div>
+<pre class="code"><code class="language-bash">cd client
+conda create -n gradio-client python=3.10
+conda activate gradio-client
+pip install -r requirements.txt
+python gradio_client_minicpmo4_5.py
+</code></pre>
 
 <p><strong>自定义参数：</strong></p>
-<div class="code"><pre><span></span><code><span class="c1"># 指定前端端口和后端服务地址 (MiniCPM-o 4.5)</span>
-python<span class="w"> </span>gradio_client_minicpmo4_5.py<span class="w"> </span>--port<span class="o">=</span><span class="m">8889</span><span class="w"> </span>--server<span class="o">=</span>http://localhost:9999/api
-</code></pre></div>
+<pre class="code"><code class="language-bash"># 指定前端端口和后端服务地址 (MiniCPM-o 4.5)
+python gradio_client_minicpmo4_5.py --port=8889 --server=http://localhost:9999/api
+</code></pre>
 
 <h2 id="访问">访问</h2>
 <p>默认情况下，服务启动后，可以通过浏览器访问 http://localhost:8889 来使用 Web Demo。</p>

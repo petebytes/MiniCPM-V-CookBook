@@ -1,8 +1,14 @@
 # Demo Applications Guide
 
-Complete web demo applications to quickly experience and showcase MiniCPM-o's powerful capabilities.
+Complete demo applications to quickly experience and showcase MiniCPM-o / MiniCPM-V.
 
 📖 [中文版本](./README_zh.md) | [Back to Main](../)
+
+## Mobile & HarmonyOS demo (MiniCPM-V-Apps)
+
+For **on-device** inference with `llama.cpp` on **iOS**, **Android**, and **HarmonyOS NEXT**, use the official **[OpenBMB/MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)** repo (shared `llama.cpp` submodule, build instructions in [README](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md) / [README_zh](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md); prebuilt installers: [DOWNLOAD](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD.md) / [DOWNLOAD_zh](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD_zh.md)).
+
+Cookbook iOS quick path: [iOS demo](./ios_demo/ios.md).
 
 ## Web Demo
 

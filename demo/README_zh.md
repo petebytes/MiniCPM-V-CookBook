@@ -1,8 +1,14 @@
 # 演示应用指南
 
-提供完整的 Web 演示应用，帮助您快速体验和展示 MiniCPM-o 的强大功能。
+提供 Web 与端侧演示应用，帮助您快速体验和展示 MiniCPM-o / MiniCPM-V。
 
 📖 [English Version](./README.md) | [返回主页](../)
+
+## 移动端与鸿蒙 Demo（MiniCPM-V-Apps）
+
+在 **iOS / Android / HarmonyOS NEXT** 上通过 `llama.cpp` 做本地多模态推理，请使用官方仓库 **[OpenBMB/MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)**（三端共享根目录 `llama.cpp` submodule；完整说明见 [README](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md) / [README_zh](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md)；预编译包见 [DOWNLOAD](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD.md) / [DOWNLOAD_zh](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD_zh.md)）。
+
+Cookbook 中 iOS 快速入口：[iOS demo](./ios_demo/ios_zh.md)。
 
 ## Web Demo
 

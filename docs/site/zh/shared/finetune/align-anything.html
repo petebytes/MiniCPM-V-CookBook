@@ -270,48 +270,48 @@ footer.page-footer a:hover { color: var(--primary); }
 <strong>支持版本：</strong> MiniCPM-o 2.6
 :::</p>
 <h2 id="环境准备">环境准备</h2>
-<div class="code"><pre><span></span><code><span class="c1"># 克隆仓库</span>
-git<span class="w"> </span>clone<span class="w"> </span>git@github.com:PKU-Alignment/align-anything.git
-<span class="nb">cd</span><span class="w"> </span>align-anything
+<pre class="code"><code class="language-bash"># 克隆仓库
+git clone git@github.com:PKU-Alignment/align-anything.git
+cd align-anything
 
-<span class="c1"># 创建虚拟环境</span>
-conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>align-anything<span class="w"> </span><span class="nv">python</span><span class="o">==</span><span class="m">3</span>.11
-conda<span class="w"> </span>activate<span class="w"> </span>align-anything
-</code></pre></div>
+# 创建虚拟环境
+conda create -n align-anything python==3.11
+conda activate align-anything
+</code></pre>
 
 <p><strong>Nvidia GPU 上</strong></p>
 <ul>
 <li><strong><code>[可选]</code></strong> 推荐在 conda 环境中安装 <a href="https://anaconda.org/nvidia/cuda">CUDA</a> 并设置环境变量。</li>
 </ul>
-<div class="code"><pre><span></span><code><span class="c1"># 我们在 H800 计算集群上做了测试，下面这个 CUDA 版本工作良好。</span>
-<span class="c1"># 可以根据实际计算集群情况调整版本。</span>
+<pre class="code"><code class="language-bash"># 我们在 H800 计算集群上做了测试，下面这个 CUDA 版本工作良好。
+# 可以根据实际计算集群情况调整版本。
 
-conda<span class="w"> </span>install<span class="w"> </span>nvidia/label/cuda-12.2.0::cuda
-<span class="nb">export</span><span class="w"> </span><span class="nv">CUDA_HOME</span><span class="o">=</span><span class="nv">$CONDA_PREFIX</span>
-</code></pre></div>
+conda install nvidia/label/cuda-12.2.0::cuda
+export CUDA_HOME=$CONDA_PREFIX
+</code></pre>
 
 <blockquote>
 <p>如果 CUDA 装在别的位置（比如 <code>/usr/local/cuda/bin/nvcc</code>），按下面方式设置环境变量：</p>
 </blockquote>
-<div class="code"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">CUDA_HOME</span><span class="o">=</span><span class="s2">&quot;/usr/local/cuda&quot;</span>
-</code></pre></div>
+<pre class="code"><code class="language-bash">export CUDA_HOME=&quot;/usr/local/cuda&quot;
+</code></pre>
 
 <p>最后安装 <code>align-anything</code>：</p>
-<div class="code"><pre><span></span><code>pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+<pre class="code"><code class="language-bash">pip3 install -e .
 
-pip3<span class="w"> </span>install<span class="w"> </span><span class="nv">vllm</span><span class="o">==</span><span class="m">0</span>.7.2<span class="w"> </span><span class="c1"># 在 vllm 引擎上跑 ppo 时需要</span>
-</code></pre></div>
+pip3 install vllm==0.7.2 # 在 vllm 引擎上跑 ppo 时需要
+</code></pre>
 
 <h2 id="训练">训练</h2>
 <p><code>./scripts/minicpmo</code> 目录下提供了 SFT 和 DPO 的训练脚本。这些脚本会自动下载模型与数据集，并启动训练或评测。</p>
 <p>例如 <code>scripts/minicpmo/minicpmo_dpo_vision.sh</code> 是 <code>Text + Image -&gt; Text</code> 模态的训练脚本，运行：</p>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>scripts
-bash<span class="w"> </span>minicpmo/minicpmo_dpo_vision.sh
-</code></pre></div>
+<pre class="code"><code class="language-bash">cd scripts
+bash minicpmo/minicpmo_dpo_vision.sh
+</code></pre>
 
 <p><strong>注意：</strong> 脚本会自动从 huggingface 下载模型与数据集。如果国内访问受限，可以使用 <code>HF Mirror</code>：</p>
-<div class="code"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">HF_ENDPOINT</span><span class="o">=</span>https://hf-mirror.com
-</code></pre></div></article>
+<pre class="code"><code class="language-bash">export HF_ENDPOINT=https://hf-mirror.com
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

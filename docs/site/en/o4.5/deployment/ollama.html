@@ -285,43 +285,43 @@ footer.page-footer a:hover { color: var(--primary); }
 <li>C/C++ Compiler e.g. Clang on macOS, <a href="https://github.com/jmeubank/tdm-gcc/releases">TDM-GCC</a> (Windows amd64) or <a href="https://github.com/mstorsjo/llvm-mingw">llvm-mingw</a> (Windows arm64), GCC/Clang on Linux.</li>
 </ul>
 <p>Clone OpenBMB Ollama Fork:</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/ollama.git
-<span class="nb">cd</span><span class="w"> </span>ollama
-git<span class="w"> </span>checkout<span class="w"> </span>MIniCPM-V
-</code></pre></div>
+<pre class="code"><code class="language-sh">git clone https://github.com/tc-mb/ollama.git
+cd ollama
+git checkout MIniCPM-V
+</code></pre>
 
 <p>Then build and run Ollama from the root directory of the repository:</p>
-<div class="code"><pre><span></span><code>go<span class="w"> </span>build<span class="w"> </span>.
-./ollama<span class="w"> </span>serve
-</code></pre></div>
+<pre class="code"><code class="language-sh">go build .
+./ollama serve
+</code></pre>
 
 <h2 id="2-quick-start">2. Quick Start</h2>
 <p>The MiniCPM-o 4.5 model can be used directly:</p>
-<div class="code"><pre><span></span><code>./ollama<span class="w"> </span>run<span class="w"> </span>openbmb/minicpm-o4.5
-</code></pre></div>
+<pre class="code"><code class="language-shell">./ollama run openbmb/minicpm-o4.5
+</code></pre>
 
 <h3 id="command-line">Command Line</h3>
 <p>Separate the input prompt and the image path with space.</p>
-<div class="code"><pre><span></span><code>What is in the picture? xx.jpg
-</code></pre></div>
+<pre class="code"><code>What is in the picture? xx.jpg
+</code></pre>
 
 <h3 id="api">API</h3>
-<div class="code"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">image_file</span><span class="p">:</span>
-    <span class="c1"># Convert the image file to a base64 encoded string</span>
-    <span class="n">encoded_string</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">image_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="s2">&quot;minicpm-o4.5&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
-    <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">encoded_string</span><span class="p">]</span> <span class="c1"># The &#39;images&#39; list can hold multiple base64-encoded images.</span>
-    <span class="p">}</span>
+<pre class="code"><code class="language-python">with open(image_path, 'rb') as image_file:
+    # Convert the image file to a base64 encoded string
+    encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+    data = {
+    &quot;model&quot;: &quot;minicpm-o4.5&quot;,
+    &quot;prompt&quot;: query,
+    &quot;stream&quot;: False,
+    &quot;images&quot;: [encoded_string] # The 'images' list can hold multiple base64-encoded images.
+    }
 
-    <span class="c1"># Set request URL</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:11434/api/generate&quot;</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+    # Set request URL
+    url = &quot;http://localhost:11434/api/generate&quot;
+    response = requests.post(url, json=data)
 
-    <span class="k">return</span> <span class="n">response</span>
-</code></pre></div>
+    return response
+</code></pre>
 
 <h2 id="3-customize-model">3. Customize model</h2>
 <p><strong>If the method above fails, please refer to the following guide.</strong></p>
@@ -332,11 +332,11 @@ git<span class="w"> </span>checkout<span class="w"> </span>MIniCPM-V
 </ul>
 <h3 id="create-a-modelfile">Create a ModelFile</h3>
 <p>Create and edit a ModelFile:</p>
-<div class="code"><pre><span></span><code>vim<span class="w"> </span>minicpmv4.5.Modelfile
-</code></pre></div>
+<pre class="code"><code class="language-sh">vim minicpmv4.5.Modelfile
+</code></pre>
 
 <p>The content of the Modelfile should be as follows:</p>
-<div class="code"><pre><span></span><code>FROM ./MiniCPM-o-4_5/model/MiniCPM-o-4_5-Q4_K_M.gguf
+<pre class="code"><code class="language-plaintext">FROM ./MiniCPM-o-4_5/model/MiniCPM-o-4_5-Q4_K_M.gguf
 FROM ./MiniCPM-o-4_5/MiniCPM-o-4_5-vision-F16.gguf
 
 TEMPLATE &quot;&quot;&quot;{{- if .Messages }}{{- range $i, $_ := .Messages }}{{- $last := eq (len (slice $.Messages $i)) 1 -}}&lt;|im_start|&gt;{{ .Role }}{{ .Content }}{{- if $last }}{{- if (ne .Role &quot;assistant&quot;) }}&lt;|im_end|&gt;&lt;|im_start|&gt;assistant{{ end }}{{- else }}&lt;|im_end|&gt;{{ end }}{{- end }}{{- else }}{{- if .System }}&lt;|im_start|&gt;system{{ .System }}&lt;|im_end|&gt;{{ end }}{{ if .Prompt }}&lt;|im_start|&gt;user{{ .Prompt }}&lt;|im_end|&gt;{{ end }}&lt;|im_start|&gt;assistant{{ end }}{{ .Response }}{{ if .Response }}&lt;|im_end|&gt;{{ end }}&quot;&quot;&quot;
@@ -347,7 +347,7 @@ PARAMETER top_p 0.8
 PARAMETER num_ctx 4096
 PARAMETER stop [&quot;&lt;|im_start|&gt;&quot;,&quot;&lt;|im_end|&gt;&quot;]
 PARAMETER temperature 0.7
-</code></pre></div>
+</code></pre>
 
 <p>Parameter Descriptions:</p>
 <table>
@@ -367,18 +367,18 @@ PARAMETER temperature 0.7
 </tbody>
 </table>
 <h3 id="create-ollama-model">Create Ollama Model</h3>
-<div class="code"><pre><span></span><code>./ollama<span class="w"> </span>create<span class="w"> </span>minicpm-o4.5<span class="w"> </span>-f<span class="w"> </span>minicpmv4.5.Modelfile
-</code></pre></div>
+<pre class="code"><code class="language-bash">./ollama create minicpm-o4.5 -f minicpmv4.5.Modelfile
+</code></pre>
 
 <h3 id="run">Run</h3>
 <p>In a new terminal window, run the model instance:</p>
-<div class="code"><pre><span></span><code>./ollama<span class="w"> </span>run<span class="w"> </span>minicpm-o4.5
-</code></pre></div>
+<pre class="code"><code class="language-bash">./ollama run minicpm-o4.5
+</code></pre>
 
 <h3 id="input-prompt">Input Prompt</h3>
 <p>Enter the prompt and the image path, separated by a space.</p>
-<div class="code"><pre><span></span><code>What<span class="w"> </span>is<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>picture?<span class="w"> </span>xx.jpg
-</code></pre></div></article>
+<pre class="code"><code class="language-bash">What is in the picture? xx.jpg
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

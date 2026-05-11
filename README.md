@@ -29,19 +29,19 @@ Our ecosystem delivers optimal solution for a variety of hardware environments a
 
 - **Web demo**: Launch interactive multimodal AI web demo with [FastAPI](./demo/README.md).
 - **Quantized deployment**: Maximize efficiency and minimize resource consumption using [GGUF](./quantization/gguf/minicpm-v4_6_gguf_quantize.md), [BNB](./quantization/bnb/minicpm-v4_6_bnb_quantize.md), and [AWQ](./quantization/awq/minicpm-v4_6_awq_quantize.md).
-- **Edge devices**: Bring powerful AI experiences to [iPhone and iPad](./demo/ios_demo/ios.md), supporting offline and privacy-sensitive applications.
+- **Edge devices**: Local multimodal demos on **[MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)** (iOS / Android / HarmonyOS NEXT, `llama.cpp`); Cookbook iOS quickstart: [iPhone and iPad](./demo/ios_demo/ios.md).
 
 ## ⭐️ Live Demonstrations
 
 Explore real-world examples of MiniCPM-V deployed on edge devices using our curated recipes. These demos highlight the model’s high efficiency and robust performance in practical scenarios.
 
-- Run locally on iPhone with [iOS demo](./demo/ios_demo/ios.md).
+- Run locally on phone or tablet with [MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps) — see [README](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md) / [README_zh](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md); iOS flow also in [iOS demo](./demo/ios_demo/ios.md).
 
     
 
 
 
-- Run locally on iPad with [iOS demo](./demo/ios_demo/ios.md), observing the process of drawing a rabbit.
+- Run locally on iPad with [iOS demo](./demo/ios_demo/ios.md) (same repo family as MiniCPM-V-Apps above), e.g. watching the rabbit-drawing playground.
 
 
 

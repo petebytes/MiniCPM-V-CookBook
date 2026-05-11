@@ -265,64 +265,72 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-v-deployment-on-ios-device">MiniCPM-V - Deployment on iOS Device</h1>
-<h2 id="1-deploying-ios-app">1. Deploying iOS App</h2>
-<p><strong>NOTE: To deploy and test the app on an iOS device, you may need an Apple Developer account.</strong></p>
-<p>Clone our iOS demo (using <code>llama.cpp</code>) repository:</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/MiniCPM-o-demo-iOS.git
-<span class="nb">cd</span><span class="w"> </span>MiniCPM-o-demo-iOS
-</code></pre></div>
+  <article><h1 id="minicpm-v-ios-deployment-minicpm-v-apps">MiniCPM-V — iOS deployment (MiniCPM-V-Apps)</h1>
+<blockquote>
+<p><strong>Upstream project:</strong> <a href="https://github.com/OpenBMB/MiniCPM-V-Apps">OpenBMB/MiniCPM-V-Apps</a>\
+README: <a href="https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md">English</a> · <a href="https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md">简体中文</a></p>
+</blockquote>
+<p>That repository bundles <strong>iOS</strong>, <strong>Android</strong>, and <strong>HarmonyOS NEXT</strong> demos sharing one root <strong><code>llama.cpp</code> git submodule</strong> (branch <code>Support-iOS-Demo</code>). This page summarizes the <strong>iOS</strong> flow; Android / HarmonyOS build steps stay in the upstream README.</p>
+<p><strong>Prebuilt installers</strong> (TestFlight / APK / HAP): <a href="https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD.md"><strong>DOWNLOAD.md</strong></a> / <a href="https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD_zh.md"><strong>DOWNLOAD_zh.md</strong></a>. The sections below are for building from source.</p>
+<hr>
+<h2 id="1-clone-repo-and-submodule">1. Clone repo and submodule</h2>
+<pre class="code"><code class="language-bash">git clone https://github.com/OpenBMB/MiniCPM-V-Apps.git
+cd MiniCPM-V-Apps
+git submodule update --init --recursive
+</code></pre>
 
+<h2 id="2-open-the-xcode-project">2. Open the Xcode project</h2>
+<p><strong>NOTE:</strong> Deploying on a physical iPhone or iPad may require an Apple Developer membership.</p>
 <p>Install Xcode:</p>
 <ul>
-<li>Download Xcode from the App Store</li>
-<li>Install the Command Line Tools:</li>
+<li>Xcode from the App Store</li>
+<li>Command Line Tools:</li>
 </ul>
 <p><code>bash
-  xcode-select --install</code>
-* Agree to the software license agreement:</p>
+  xcode-select --install</code></p>
+<ul>
+<li>Accept the license:</li>
+</ul>
 <p><code>bash
   sudo xcodebuild -license</code></p>
-<p>Open <code>MiniCPM-V-demo.xcodeproj</code> with Xcode. It may take a moment for Xcode to automatically download the required dependencies.</p>
-<p>In Xcode, select the target device at the top of the window, then click the "Run" (triangle) button to launch the demo.</p>
-<p><strong>NOTE: If you encounter errors related to the <code>thirdparty/llama.xcframework</code> path, please follow the steps below to build the <code>llama.xcframework</code> manually.</strong></p>
-<h2 id="2-manually-building-the-llama-cpp-library-from-openbmb">2. Manually Building the llama.cpp Library From OpenBMB</h2>
-<p>Clone the llama.cpp repository:</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>Support-iOS-Demo<span class="w"> </span>https://github.com/tc-mb/llama.cpp.git
-<span class="nb">cd</span><span class="w"> </span>llama.cpp
-</code></pre></div>
+<p>Open <strong><code>MiniCPM-V-demo/MiniCPM-V-demo.xcodeproj</code></strong> in Xcode, pick a destination device, then tap <strong>Run</strong>.</p>
+<p><strong>NOTE:</strong> If something fails related to <strong><code>thirdparty/llama.xcframework</code></strong>, build it manually using section 3.</p>
+<hr>
+<h2 id="3-manually-build-llama-xcframework">3. Manually build <code>llama.xcframework</code></h2>
+<p>From the <strong>repository root</strong> (after submodules are in place):</p>
+<pre class="code"><code class="language-bash">cd llama.cpp
+./build-xcframework.sh
+cp -r ./build-apple/llama.xcframework ../MiniCPM-V-demo/thirdparty
+</code></pre>
 
-<p>Build the llama.cpp library for iOS using the script:</p>
-<div class="code"><pre><span></span><code>./build-xcframework.sh
-</code></pre></div>
-
-<p>Copy the built library into the corresponding directory of the iOS demo project:</p>
-<div class="code"><pre><span></span><code>cp<span class="w"> </span>-r<span class="w"> </span>./build-apple/llama.xcframework<span class="w"> </span>../MiniCPM-o-demo-iOS/MiniCPM-V-demo/thirdparty
-</code></pre></div>
-
-<h2 id="3-gguf-files">3. GGUF Files</h2>
-<h3 id="1-download-official-gguf-files">1: Download Official GGUF Files</h3>
+<hr>
+<h2 id="4-gguf-model-files-for-the-demos">4. GGUF model files for the demos</h2>
+<p>Upstream currently targets <strong>MiniCPM-V 2.6</strong>, <strong>4.0</strong>, and <strong>4.6</strong>. Download matching <strong>language-model</strong> GGUF (e.g. Q4_K_M) plus <strong><code>mmproj-model-f16.gguf</code></strong> for the projector / vision stack. Typical total size and RAM guidance are summarized in the upstream README (hardware section).</p>
+<h3 id="minicpm-v-2-6-official-gguf">MiniCPM-V 2.6 — official GGUF</h3>
 <ul>
-<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4-gguf">https://huggingface.co/openbmb/MiniCPM-V-4-gguf</a></li>
-<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf</a></li>
+<li>Hugging Face: <a href="https://huggingface.co/openbmb/MiniCPM-V-2_6-gguf">openbmb/MiniCPM-V-2_6-gguf</a></li>
+<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-2_6-gguf">OpenBMB/MiniCPM-V-2_6-gguf</a></li>
 </ul>
-<p>Download the language model file (e.g., <code>ggml-model-Q4_0.gguf</code>) and the vision model file (<code>mmproj-model-f16-iOS.gguf</code>) from the repository.</p>
-<h3 id="2-convert-from-pytorch-model">2: Convert from PyTorch Model</h3>
-<p>Download the MiniCPM-V-4 PyTorch model into a folder named <code>MiniCPM-V-4</code>:</p>
+<h3 id="minicpm-v-4-0-official-gguf">MiniCPM-V 4.0 — official GGUF</h3>
 <ul>
-<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM-V-4">https://huggingface.co/openbmb/MiniCPM-V-4</a></li>
-<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4</a></li>
+<li>Hugging Face: <a href="https://huggingface.co/openbmb/MiniCPM-V-4-gguf">openbmb/MiniCPM-V-4-gguf</a></li>
+<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf">OpenBMB/MiniCPM-V-4-gguf</a></li>
 </ul>
-<p>Convert the PyTorch model to GGUF format:</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-surgery.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4
-
-python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4<span class="w"> </span>--minicpmv-projector<span class="w"> </span>../MiniCPM-V-4/minicpmv.projector<span class="w"> </span>--output-dir<span class="w"> </span>../MiniCPM-V-4/<span class="w"> </span>--minicpmv_version<span class="w"> </span><span class="m">5</span>
-
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>../MiniCPM-V-4/model
-
-<span class="c1"># int4 quantized</span>
-./llama-quantize<span class="w"> </span>../MiniCPM-V-4/model/Model-3.6B-f16.gguf<span class="w"> </span>../MiniCPM-V-4/model/ggml-model-Q4_0.gguf<span class="w"> </span>Q4_0
-</code></pre></div></article>
+<h3 id="minicpm-v-4-6-official-gguf">MiniCPM-V 4.6 — official GGUF</h3>
+<ul>
+<li>Hugging Face: <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf">openbmb/MiniCPM-V-4.6-gguf</a></li>
+<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf">OpenBMB/MiniCPM-V-4.6-gguf</a></li>
+</ul>
+<p><em>(Example filenames for 4.6 may appear as <code>MiniCPM-V-4_6-Q4_K_M.gguf</code>; always follow filenames listed in each HF / ModelScope repo.)</em></p>
+<hr>
+<h2 id="5-convert-pytorch-gguf-optional">5. Convert PyTorch → GGUF (optional)</h2>
+<p>For server-side conversion recipes in this Cookbook, see:</p>
+<ul>
+<li><a href="../quantization/gguf.html">MiniCPM-V 4.6 GGUF</a></li>
+<li><a href="../../quantization/gguf/minicpm-v4_gguf_quantize.md">MiniCPM-V 4.0 GGUF</a></li>
+<li>Further versions: sibling files under <a href="../../quantization/gguf/"><code>quantization/gguf/</code></a></li>
+</ul>
+<p>Run conversion commands inside the <strong><code>llama.cpp</code></strong> subtree at the MiniCPM-V-Apps repo root.</p></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

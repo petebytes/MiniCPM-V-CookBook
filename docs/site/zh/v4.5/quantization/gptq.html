@@ -279,71 +279,71 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><strong>HuggingFace</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ">https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ</a></li>
 <li><strong>ModelScope</strong> — <a href="https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_5-GPTQ">https://modelscope.cn/models/OpenBMB/MiniCPM-V-4_5-GPTQ</a></li>
 </ul>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ
-</code></pre></div>
+<pre class="code"><code class="language-Bash">git clone https://huggingface.co/openbmb/MiniCPM-V-4_5-GPTQ
+</code></pre>
 
 <h3 id="2-用-vllm-运行">2. 用 vLLM 运行</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
-<span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<pre class="code"><code class="language-python">import os
+from PIL import Image
+from transformers import AutoTokenizer
+from vllm import LLM, SamplingParams
 
 
-<span class="c1"># 量化模型名称或本地路径</span>
-<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_5-GPTQ&quot;</span>
+# 量化模型名称或本地路径
+MODEL_NAME = &quot;openbmb/MiniCPM-V-4_5-GPTQ&quot;
 
-<span class="c1"># 图片文件列表</span>
-<span class="n">IMAGES</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;image.png&quot;</span><span class="p">,</span>
-<span class="p">]</span>
+# 图片文件列表
+IMAGES = [
+    &quot;image.png&quot;,
+]
 
-<span class="c1"># 加载并转换图片</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">IMAGES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
+# 加载并转换图片
+image = Image.open(IMAGES[0]).convert(&quot;RGB&quot;)
 
-<span class="c1"># 初始化 tokenizer</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+# 初始化 tokenizer
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
 
-<span class="c1"># 初始化 LLM</span>
-<span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">MODEL_NAME</span><span class="p">,</span> 
-    <span class="c1"># gpu_memory_utilization=0.9,</span>
-    <span class="n">max_model_len</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>
-    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># disable_mm_preprocessor_cache=True,</span>
-    <span class="c1"># limit_mm_per_prompt={&quot;image&quot;: 5}</span>
-<span class="p">)</span>
+# 初始化 LLM
+llm = LLM(
+    model=MODEL_NAME, 
+    # gpu_memory_utilization=0.9,
+    max_model_len=2048,
+    trust_remote_code=True,
+    # disable_mm_preprocessor_cache=True,
+    # limit_mm_per_prompt={&quot;image&quot;: 5}
+)
 
-<span class="c1"># 构建消息</span>
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
-    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;(&lt;image&gt;./&lt;/image&gt;)</span><span class="se">\n</span><span class="s2">请描述这张图片的内容&quot;</span><span class="p">,</span>
-    <span class="c1"># &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\nPlease describe the content of this image&quot;,</span>
-<span class="p">}]</span>
+# 构建消息
+messages = [{
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\n请描述这张图片的内容&quot;,
+    # &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\nPlease describe the content of this image&quot;,
+}]
 
-<span class="c1"># 应用 chat template</span>
-<span class="n">prompt</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+# 应用 chat template
+prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
-<span class="c1"># 设置 stop token IDs</span>
-<span class="n">stop_tokens</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;|im_end|&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;/s&gt;&#39;</span><span class="p">]</span>
-<span class="n">stop_token_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_tokens_to_ids</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">stop_tokens</span><span class="p">]</span>
+# 设置 stop token IDs
+stop_tokens = ['&lt;|im_end|&gt;', '&lt;/s&gt;']
+stop_token_ids = [tokenizer.convert_tokens_to_ids(i) for i in stop_tokens]
 
-<span class="c1"># 采样参数</span>
-<span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span>
-    <span class="n">stop_token_ids</span><span class="o">=</span><span class="n">stop_token_ids</span><span class="p">,</span>
-    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-    <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
-<span class="p">)</span>
+# 采样参数
+sampling_params = SamplingParams(
+    stop_token_ids=stop_token_ids,
+    temperature=0.7,
+    top_p=0.8,
+    max_tokens=1024,
+)
 
-<span class="c1"># 推理</span>
-<span class="n">outputs</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">({</span>
-    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
-    <span class="s2">&quot;multi_modal_data&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span>
-    <span class="p">}</span>
-<span class="p">},</span> <span class="n">sampling_params</span><span class="o">=</span><span class="n">sampling_params</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
+# 推理
+outputs = llm.generate({
+    &quot;prompt&quot;: prompt,
+    &quot;multi_modal_data&quot;: {
+        &quot;image&quot;: image
+    }
+}, sampling_params=sampling_params)
+print(outputs[0].outputs[0].text)
+</code></pre>
 
 <h2 id="方法-2-自己进行-gptq-量化">方法 2（自己进行 GPTQ 量化）</h2>
 <h3 id="1-下载模型_1">1. 下载模型</h3>
@@ -352,8 +352,8 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5
  -->
 
 <p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a> 下载 MiniCPM-V 4.5 模型。</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5
-</code></pre></div>
+<pre class="code"><code class="language-Bash">git clone https://huggingface.co/openbmb/MiniCPM-V-4_5
+</code></pre>
 
 <h3 id="2-安装-autogptq-并为-qwen3-minicpm-v-4_5-打补丁">2. 安装 AutoGPTQ 并为 Qwen3 (MiniCPM-V-4_5) 打补丁</h3>
 <p>clone 一份 AutoGPTQ 源码（如 <code>https://github.com/AutoGPTQ/AutoGPTQ</code>），按下方修改后从源码安装。本 cookbook 的脚本会把 <code>llm.config.model_type</code> 设为 <code>"qwen3"</code> 并使用 <code>Qwen3GPTQForCausalLM</code>；Qwen3 的 layer 可能直接返回 hidden state tensor 而不是 tuple，所以 <code>_base.py</code> 也需要兼容这两种情况。</p>
@@ -389,290 +389,290 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5
 </tbody>
 </table>
 <h4 id="2-1-新增-auto_gptq-modeling-qwen3-py">2.1 新增 <code>auto_gptq/modeling/qwen3.py</code></h4>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">._base</span> <span class="kn">import</span> <span class="n">BaseGPTQForCausalLM</span>
+<pre class="code"><code class="language-python">from ._base import BaseGPTQForCausalLM
 
 
-<span class="k">class</span> <span class="nc">Qwen3GPTQForCausalLM</span><span class="p">(</span><span class="n">BaseGPTQForCausalLM</span><span class="p">):</span>
-    <span class="n">layer_type</span> <span class="o">=</span> <span class="s2">&quot;Qwen3DecoderLayer&quot;</span>
-    <span class="n">layers_block_name</span> <span class="o">=</span> <span class="s2">&quot;model.layers&quot;</span>
-    <span class="n">outside_layer_modules</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;model.embed_tokens&quot;</span><span class="p">,</span> <span class="s2">&quot;model.norm&quot;</span><span class="p">]</span>
-    <span class="n">inside_layer_modules</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s2">&quot;self_attn.q_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;self_attn.k_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;self_attn.v_proj&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;self_attn.o_proj&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;mlp.gate_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;mlp.up_proj&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;mlp.down_proj&quot;</span><span class="p">],</span>
-    <span class="p">]</span>
+class Qwen3GPTQForCausalLM(BaseGPTQForCausalLM):
+    layer_type = &quot;Qwen3DecoderLayer&quot;
+    layers_block_name = &quot;model.layers&quot;
+    outside_layer_modules = [&quot;model.embed_tokens&quot;, &quot;model.norm&quot;]
+    inside_layer_modules = [
+        [&quot;self_attn.q_proj&quot;, &quot;self_attn.k_proj&quot;, &quot;self_attn.v_proj&quot;],
+        [&quot;self_attn.o_proj&quot;],
+        [&quot;mlp.gate_proj&quot;, &quot;mlp.up_proj&quot;],
+        [&quot;mlp.down_proj&quot;],
+    ]
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Qwen3GPTQForCausalLM&quot;</span><span class="p">]</span>
-</code></pre></div>
+__all__ = [&quot;Qwen3GPTQForCausalLM&quot;]
+</code></pre>
 
 <h4 id="2-2-修改-auto_gptq-modeling-auto-py">2.2 修改 <code>auto_gptq/modeling/auto.py</code></h4>
 <p>在文件顶部其它 <code>from .xxx import ...</code> 行旁加上：</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">.qwen3</span> <span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
-</code></pre></div>
+<pre class="code"><code class="language-python">from .qwen3 import Qwen3GPTQForCausalLM
+</code></pre>
 
 <p>并在 <code>GPTQ_CAUSAL_LM_MODEL_MAP</code> 中加：</p>
-<div class="code"><pre><span></span><code>    <span class="s2">&quot;qwen3&quot;</span><span class="p">:</span> <span class="n">Qwen3GPTQForCausalLM</span><span class="p">,</span>
-</code></pre></div>
+<pre class="code"><code class="language-python">    &quot;qwen3&quot;: Qwen3GPTQForCausalLM,
+</code></pre>
 
 <h4 id="2-3-修改-auto_gptq-modeling-__init__-py">2.3 修改 <code>auto_gptq/modeling/__init__.py</code></h4>
 <p>在其它 modeling 导入旁追加：</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">.qwen3</span> <span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
-</code></pre></div>
+<pre class="code"><code class="language-python">from .qwen3 import Qwen3GPTQForCausalLM
+</code></pre>
 
 <h4 id="2-4-修改-auto_gptq-modeling-_const-py">2.4 修改 <code>auto_gptq/modeling/_const.py</code></h4>
 <p>在 <code>SUPPORTED_MODELS</code> 列表中追加字符串 <code>"qwen3"</code>（注意保持有效的 Python 列表语法，例如前一项加逗号）。</p>
 <h4 id="2-5-修改-auto_gptq-modeling-_base-py">2.5 修改 <code>auto_gptq/modeling/_base.py</code></h4>
 <p>在 <code>BaseGPTQForCausalLM.quantize</code> 中找到调用 <code>layer(*layer_input, **additional_layer_inputs)</code> 并把结果传给 <code>move_to_device</code> 的内层循环。把原来直接 <code>[0]</code> 取值的写法替换为既能处理 tuple/list（取第一个元素）也能直接处理 tensor 的逻辑：</p>
-<div class="code"><pre><span></span><code>                <span class="n">raw_output</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="o">*</span><span class="n">layer_input</span><span class="p">,</span> <span class="o">**</span><span class="n">additional_layer_inputs</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_output</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
-                    <span class="n">raw_output</span> <span class="o">=</span> <span class="n">raw_output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">layer_output</span> <span class="o">=</span> <span class="n">move_to_device</span><span class="p">(</span>
-                    <span class="n">raw_output</span><span class="p">,</span>
-                    <span class="n">cur_layer_device</span> <span class="k">if</span> <span class="n">cache_examples_on_gpu</span> <span class="k">else</span> <span class="n">CPU</span><span class="p">,</span>
-                <span class="p">)</span>
-</code></pre></div>
+<pre class="code"><code class="language-python">                raw_output = layer(*layer_input, **additional_layer_inputs)
+                if isinstance(raw_output, (tuple, list)):
+                    raw_output = raw_output[0]
+                layer_output = move_to_device(
+                    raw_output,
+                    cur_layer_device if cache_examples_on_gpu else CPU,
+                )
+</code></pre>
 
 <p>（删除原来假设 <code>layer(...)[0]</code> 一定存在的写法。）</p>
 <h4 id="2-6-从源码安装">2.6 从源码安装</h4>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>AutoGPTQ
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</code></pre></div>
+<pre class="code"><code class="language-Bash">cd AutoGPTQ
+pip install -e .
+</code></pre>
 
 <p>如果扩展构建失败，按 AutoGPTQ README 安装对应 CUDA / PyTorch 版本依赖。</p>
 <h3 id="3-量化脚本">3. 量化脚本</h3>
 <p>下方脚本会从 MiniCPM-V-4_5 中提取 LLM backbone（Qwen3），用 GPTQ 量化为 4-bit，再把量化后的权重与原始多模态部分重新组装。</p>
 <p>执行下方脚本（按需替换 <code>MODEL_PATH</code> 与 <code>OUTPUT_PATH</code>）：</p>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<pre class="code"><code class="language-python">import os
+import sys
+import json
+import shutil
+import logging
+from pathlib import Path
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoConfig</span>
-
-
-<span class="k">def</span> <span class="nf">_ensure_hf_dynamic_module_cache</span><span class="p">(</span><span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;提前复制所有 .py 文件，确保间接相对导入能解析。&quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">transformers.dynamic_module_utils</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">HF_MODULES_CACHE</span><span class="p">,</span>
-        <span class="n">TRANSFORMERS_DYNAMIC_MODULE_NAME</span><span class="p">,</span>
-        <span class="n">_sanitize_module_name</span><span class="p">,</span>
-        <span class="n">init_hf_modules</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">init_hf_modules</span><span class="p">()</span>
-    <span class="n">submodule</span> <span class="o">=</span> <span class="n">_sanitize_module_name</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">HF_MODULES_CACHE</span><span class="p">)</span> <span class="o">/</span> <span class="n">TRANSFORMERS_DYNAMIC_MODULE_NAME</span> <span class="o">/</span> <span class="n">submodule</span>
-    <span class="n">cache_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">py</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.py&quot;</span><span class="p">):</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="n">cache_dir</span> <span class="o">/</span> <span class="n">py</span><span class="o">.</span><span class="n">name</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">dst</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">py</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">))</span>
+import torch
+from datasets import load_dataset
+from transformers import AutoModel, AutoTokenizer, AutoConfig
 
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
-    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> [</span><span class="si">%(name)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
-    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
-    <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="n">MODEL_PATH</span> <span class="o">=</span> <span class="s1">&#39;/model/MiniCPM-V-4_5&#39;</span>
-<span class="n">OUTPUT_PATH</span> <span class="o">=</span> <span class="s1">&#39;./model/MiniCPM-V-4_5-gptq-int4&#39;</span>
-
-<span class="n">BITS</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">GROUP_SIZE</span> <span class="o">=</span> <span class="mi">128</span>
-<span class="n">NUM_CALIBRATION_SAMPLES</span> <span class="o">=</span> <span class="mi">128</span>
-<span class="n">MAX_SEQ_LEN</span> <span class="o">=</span> <span class="mi">512</span>
-
-
-<span class="k">def</span> <span class="nf">prepare_calibration_data</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">max_length</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;从 Alpaca 数据集准备校准数据。&quot;&quot;&quot;</span>
-    <span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;tatsu-lab/alpaca&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
-    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">))))</span>
-
-    <span class="n">examples</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">sample</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">sample</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;instruction&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
-            <span class="k">continue</span>
-        <span class="n">tokenized</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span>
-            <span class="n">text</span><span class="p">,</span>
-            <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">max_length</span><span class="o">=</span><span class="n">max_length</span><span class="p">,</span>
-            <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">examples</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-            <span class="s2">&quot;input_ids&quot;</span><span class="p">:</span> <span class="n">tokenized</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-            <span class="s2">&quot;attention_mask&quot;</span><span class="p">:</span> <span class="n">tokenized</span><span class="p">[</span><span class="s2">&quot;attention_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-        <span class="p">})</span>
-
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prepared </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span><span class="si">}</span><span class="s2"> calibration samples&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">examples</span>
+def _ensure_hf_dynamic_module_cache(model_path: str) -&gt; None:
+    &quot;&quot;&quot;提前复制所有 .py 文件，确保间接相对导入能解析。&quot;&quot;&quot;
+    from transformers.dynamic_module_utils import (
+        HF_MODULES_CACHE,
+        TRANSFORMERS_DYNAMIC_MODULE_NAME,
+        _sanitize_module_name,
+        init_hf_modules,
+    )
+    init_hf_modules()
+    submodule = _sanitize_module_name(Path(model_path).name)
+    cache_dir = Path(HF_MODULES_CACHE) / TRANSFORMERS_DYNAMIC_MODULE_NAME / submodule
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    for py in Path(model_path).glob(&quot;*.py&quot;):
+        dst = cache_dir / py.name
+        if not dst.exists():
+            shutil.copy2(str(py), str(dst))
 
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading tokenizer from </span><span class="si">{</span><span class="n">MODEL_PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+logging.basicConfig(
+    format=&quot;%(asctime)s %(levelname)s [%(name)s] %(message)s&quot;,
+    level=logging.INFO,
+    datefmt=&quot;%Y-%m-%d %H:%M:%S&quot;,
+)
+logger = logging.getLogger(__name__)
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Preparing calibration data...&quot;</span><span class="p">)</span>
-    <span class="n">examples</span> <span class="o">=</span> <span class="n">prepare_calibration_data</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">NUM_CALIBRATION_SAMPLES</span><span class="p">,</span> <span class="n">MAX_SEQ_LEN</span><span class="p">)</span>
+MODEL_PATH = '/model/MiniCPM-V-4_5'
+OUTPUT_PATH = './model/MiniCPM-V-4_5-gptq-int4'
 
-    <span class="n">_ensure_hf_dynamic_module_cache</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading full MiniCPM-V model from </span><span class="si">{</span><span class="n">MODEL_PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">full_model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-        <span class="n">MODEL_PATH</span><span class="p">,</span>
-        <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span>
-        <span class="n">device_map</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">llm</span> <span class="o">=</span> <span class="n">full_model</span><span class="o">.</span><span class="n">llm</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extracted LLM backbone: </span><span class="si">{</span><span class="n">llm</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="n">original_model_type</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span>
-    <span class="n">llm</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span> <span class="o">=</span> <span class="s2">&quot;qwen3&quot;</span>
-
-    <span class="kn">from</span> <span class="nn">auto_gptq</span> <span class="kn">import</span> <span class="n">BaseQuantizeConfig</span>
-    <span class="kn">from</span> <span class="nn">auto_gptq.modeling.qwen3</span> <span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
-
-    <span class="n">quantize_config</span> <span class="o">=</span> <span class="n">BaseQuantizeConfig</span><span class="p">(</span>
-        <span class="n">bits</span><span class="o">=</span><span class="n">BITS</span><span class="p">,</span>
-        <span class="n">group_size</span><span class="o">=</span><span class="n">GROUP_SIZE</span><span class="p">,</span>
-        <span class="n">desc_act</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">sym</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Quantize config: bits=</span><span class="si">{</span><span class="n">BITS</span><span class="si">}</span><span class="s2">, group_size=</span><span class="si">{</span><span class="n">GROUP_SIZE</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="n">llm</span><span class="o">.</span><span class="n">seqlen</span> <span class="o">=</span> <span class="n">MAX_SEQ_LEN</span>
-    <span class="n">gptq_model</span> <span class="o">=</span> <span class="n">Qwen3GPTQForCausalLM</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">quantize_config</span><span class="p">)</span>
-
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting GPTQ quantization...&quot;</span><span class="p">)</span>
-    <span class="n">gptq_model</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Quantization complete!&quot;</span><span class="p">)</span>
-
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">llm_temp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="s2">&quot;_llm_temp&quot;</span><span class="p">)</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">llm_temp_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">gptq_model</span><span class="o">.</span><span class="n">save_quantized</span><span class="p">(</span><span class="n">llm_temp_dir</span><span class="p">,</span> <span class="n">use_safetensors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="c1"># 把原始模型中的非权重文件复制过来</span>
-    <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">):</span>
-        <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.safetensors&quot;</span><span class="p">):</span>
-            <span class="k">continue</span>
-        <span class="k">if</span> <span class="n">fname</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span> <span class="s2">&quot;quantize_config.json&quot;</span><span class="p">,</span> <span class="s2">&quot;model.safetensors.index.json&quot;</span><span class="p">):</span>
-            <span class="k">continue</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dst</span><span class="p">):</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dst</span><span class="p">):</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
-
-    <span class="c1"># 把量化后的 LLM 权重和原始多模态权重组合</span>
-    <span class="kn">from</span> <span class="nn">safetensors.torch</span> <span class="kn">import</span> <span class="n">load_file</span> <span class="k">as</span> <span class="n">safe_load</span><span class="p">,</span> <span class="n">save_file</span> <span class="k">as</span> <span class="n">safe_save</span>
-
-    <span class="n">quantized_llm_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">llm_temp_dir</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.safetensors&quot;</span><span class="p">)]</span>
-    <span class="n">llm_state_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">quantized_llm_files</span><span class="p">:</span>
-        <span class="n">sd</span> <span class="o">=</span> <span class="n">safe_load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">llm_temp_dir</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
-        <span class="n">llm_state_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sd</span><span class="p">)</span>
-
-    <span class="n">non_llm_state_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">full_model_sd</span> <span class="o">=</span> <span class="n">full_model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">full_model_sd</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;llm.&quot;</span><span class="p">):</span>
-            <span class="n">non_llm_state_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-
-    <span class="n">combined_sd</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">llm_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">combined_sd</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;llm.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">non_llm_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">combined_sd</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-
-    <span class="n">MAX_SHARD_SIZE_BYTES</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span>  <span class="c1"># 每分片 4GB</span>
-    <span class="n">sorted_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">combined_sd</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-
-    <span class="n">shards</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">current_shard</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">current_size</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">weight_map</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sorted_keys</span><span class="p">:</span>
-        <span class="n">tensor</span> <span class="o">=</span> <span class="n">combined_sd</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="n">tensor_size</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">nelement</span><span class="p">()</span> <span class="o">*</span> <span class="n">tensor</span><span class="o">.</span><span class="n">element_size</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">current_size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">current_size</span> <span class="o">+</span> <span class="n">tensor_size</span> <span class="o">&gt;</span> <span class="n">MAX_SHARD_SIZE_BYTES</span><span class="p">:</span>
-            <span class="n">shards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_shard</span><span class="p">)</span>
-            <span class="n">current_shard</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">current_size</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">current_shard</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
-        <span class="n">current_size</span> <span class="o">+=</span> <span class="n">tensor_size</span>
-
-    <span class="k">if</span> <span class="n">current_shard</span><span class="p">:</span>
-        <span class="n">shards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_shard</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shards</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">shard_name</span> <span class="o">=</span> <span class="s2">&quot;model.safetensors&quot;</span>
-        <span class="n">safe_save</span><span class="p">(</span><span class="n">shards</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="n">shard_name</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">shards</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="n">weight_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">shard_name</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">shard</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">shards</span><span class="p">):</span>
-            <span class="n">shard_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;model-</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">-of-</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">shards</span><span class="p">)</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">.safetensors&quot;</span>
-            <span class="n">safe_save</span><span class="p">(</span><span class="n">shard</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="n">shard_name</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">shard</span><span class="p">:</span>
-                <span class="n">weight_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">shard_name</span>
-
-    <span class="n">index</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;total_size&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">nelement</span><span class="p">()</span> <span class="o">*</span> <span class="n">t</span><span class="o">.</span><span class="n">element_size</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">combined_sd</span><span class="o">.</span><span class="n">values</span><span class="p">())},</span>
-        <span class="s2">&quot;weight_map&quot;</span><span class="p">:</span> <span class="n">weight_map</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="s2">&quot;model.safetensors.index.json&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="c1"># 保存带量化信息的 config</span>
-    <span class="n">config</span> <span class="o">=</span> <span class="n">AutoConfig</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">config_dict</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-    <span class="n">config_dict</span><span class="p">[</span><span class="s2">&quot;quantization_config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;bits&quot;</span><span class="p">:</span> <span class="n">BITS</span><span class="p">,</span>
-        <span class="s2">&quot;group_size&quot;</span><span class="p">:</span> <span class="n">GROUP_SIZE</span><span class="p">,</span>
-        <span class="s2">&quot;damp_percent&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
-        <span class="s2">&quot;desc_act&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;static_groups&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;sym&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;true_sequential&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;quant_method&quot;</span><span class="p">:</span> <span class="s2">&quot;gptq&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;checkpoint_format&quot;</span><span class="p">:</span> <span class="s2">&quot;gptq&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;model_name_or_path&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;model_file_base_name&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="n">config_dict</span><span class="p">[</span><span class="s2">&quot;model_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">original_model_type</span>
-
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="s2">&quot;config.json&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">config_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="n">quant_config_dict</span> <span class="o">=</span> <span class="n">quantize_config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="s2">&quot;quantize_config.json&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">quant_config_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">llm_temp_dir</span><span class="p">)</span>
-
-    <span class="k">del</span> <span class="n">combined_sd</span><span class="p">,</span> <span class="n">llm_state_dict</span><span class="p">,</span> <span class="n">non_llm_state_dict</span><span class="p">,</span> <span class="n">full_model_sd</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
-
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Done! Quantized model saved to: </span><span class="si">{</span><span class="n">OUTPUT_PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Quantization: W</span><span class="si">{</span><span class="n">BITS</span><span class="si">}</span><span class="s2">A16 GPTQ (weight-only </span><span class="si">{</span><span class="n">BITS</span><span class="si">}</span><span class="s2">-bit, activation fp16)&quot;</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compatible with: transformers (via optimum) and vLLM&quot;</span><span class="p">)</span>
+BITS = 4
+GROUP_SIZE = 128
+NUM_CALIBRATION_SAMPLES = 128
+MAX_SEQ_LEN = 512
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
-</code></pre></div></article>
+def prepare_calibration_data(tokenizer, num_samples, max_length):
+    &quot;&quot;&quot;从 Alpaca 数据集准备校准数据。&quot;&quot;&quot;
+    dataset = load_dataset(&quot;tatsu-lab/alpaca&quot;, split=&quot;train&quot;)
+    dataset = dataset.shuffle(seed=42).select(range(min(num_samples, len(dataset))))
+
+    examples = []
+    for sample in dataset:
+        text = sample.get(&quot;text&quot;, &quot;&quot;) or sample.get(&quot;output&quot;, &quot;&quot;) or sample.get(&quot;instruction&quot;, &quot;&quot;)
+        if not text:
+            continue
+        tokenized = tokenizer(
+            text,
+            truncation=True,
+            max_length=max_length,
+            return_tensors=&quot;pt&quot;,
+        )
+        examples.append({
+            &quot;input_ids&quot;: tokenized[&quot;input_ids&quot;].squeeze(0),
+            &quot;attention_mask&quot;: tokenized[&quot;attention_mask&quot;].squeeze(0),
+        })
+
+    logger.info(f&quot;Prepared {len(examples)} calibration samples&quot;)
+    return examples
+
+
+def main():
+    logger.info(f&quot;Loading tokenizer from {MODEL_PATH}&quot;)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
+
+    logger.info(&quot;Preparing calibration data...&quot;)
+    examples = prepare_calibration_data(tokenizer, NUM_CALIBRATION_SAMPLES, MAX_SEQ_LEN)
+
+    _ensure_hf_dynamic_module_cache(MODEL_PATH)
+    logger.info(f&quot;Loading full MiniCPM-V model from {MODEL_PATH}&quot;)
+    full_model = AutoModel.from_pretrained(
+        MODEL_PATH,
+        trust_remote_code=True,
+        torch_dtype=torch.float16,
+        device_map=&quot;cpu&quot;,
+    )
+
+    llm = full_model.llm
+    logger.info(f&quot;Extracted LLM backbone: {llm.__class__.__name__}&quot;)
+
+    original_model_type = llm.config.model_type
+    llm.config.model_type = &quot;qwen3&quot;
+
+    from auto_gptq import BaseQuantizeConfig
+    from auto_gptq.modeling.qwen3 import Qwen3GPTQForCausalLM
+
+    quantize_config = BaseQuantizeConfig(
+        bits=BITS,
+        group_size=GROUP_SIZE,
+        desc_act=False,
+        sym=True,
+    )
+    logger.info(f&quot;Quantize config: bits={BITS}, group_size={GROUP_SIZE}&quot;)
+
+    llm.seqlen = MAX_SEQ_LEN
+    gptq_model = Qwen3GPTQForCausalLM(llm, False, quantize_config)
+
+    logger.info(&quot;Starting GPTQ quantization...&quot;)
+    gptq_model.quantize(examples, batch_size=1)
+    logger.info(&quot;Quantization complete!&quot;)
+
+    os.makedirs(OUTPUT_PATH, exist_ok=True)
+
+    llm_temp_dir = os.path.join(OUTPUT_PATH, &quot;_llm_temp&quot;)
+    os.makedirs(llm_temp_dir, exist_ok=True)
+    gptq_model.save_quantized(llm_temp_dir, use_safetensors=True)
+
+    # 把原始模型中的非权重文件复制过来
+    for fname in os.listdir(MODEL_PATH):
+        src = os.path.join(MODEL_PATH, fname)
+        dst = os.path.join(OUTPUT_PATH, fname)
+        if fname.startswith(&quot;model&quot;) and fname.endswith(&quot;.safetensors&quot;):
+            continue
+        if fname in (&quot;config.json&quot;, &quot;quantize_config.json&quot;, &quot;model.safetensors.index.json&quot;):
+            continue
+        if os.path.isfile(src) and not os.path.exists(dst):
+            shutil.copy2(src, dst)
+        elif os.path.isdir(src) and not os.path.exists(dst):
+            shutil.copytree(src, dst)
+
+    # 把量化后的 LLM 权重和原始多模态权重组合
+    from safetensors.torch import load_file as safe_load, save_file as safe_save
+
+    quantized_llm_files = [f for f in os.listdir(llm_temp_dir) if f.endswith(&quot;.safetensors&quot;)]
+    llm_state_dict = {}
+    for f in quantized_llm_files:
+        sd = safe_load(os.path.join(llm_temp_dir, f))
+        llm_state_dict.update(sd)
+
+    non_llm_state_dict = {}
+    full_model_sd = full_model.state_dict()
+    for key, value in full_model_sd.items():
+        if not key.startswith(&quot;llm.&quot;):
+            non_llm_state_dict[key] = value
+
+    combined_sd = {}
+    for key, value in llm_state_dict.items():
+        combined_sd[f&quot;llm.{key}&quot;] = value
+    for key, value in non_llm_state_dict.items():
+        combined_sd[key] = value
+
+    MAX_SHARD_SIZE_BYTES = 4 * 1024 * 1024 * 1024  # 每分片 4GB
+    sorted_keys = sorted(combined_sd.keys())
+
+    shards = []
+    current_shard = {}
+    current_size = 0
+    weight_map = {}
+
+    for key in sorted_keys:
+        tensor = combined_sd[key]
+        tensor_size = tensor.nelement() * tensor.element_size()
+        if current_size &gt; 0 and current_size + tensor_size &gt; MAX_SHARD_SIZE_BYTES:
+            shards.append(current_shard)
+            current_shard = {}
+            current_size = 0
+        current_shard[key] = tensor.clone().contiguous()
+        current_size += tensor_size
+
+    if current_shard:
+        shards.append(current_shard)
+
+    if len(shards) == 1:
+        shard_name = &quot;model.safetensors&quot;
+        safe_save(shards[0], os.path.join(OUTPUT_PATH, shard_name))
+        for key in shards[0]:
+            weight_map[key] = shard_name
+    else:
+        for i, shard in enumerate(shards):
+            shard_name = f&quot;model-{i+1:05d}-of-{len(shards):05d}.safetensors&quot;
+            safe_save(shard, os.path.join(OUTPUT_PATH, shard_name))
+            for key in shard:
+                weight_map[key] = shard_name
+
+    index = {
+        &quot;metadata&quot;: {&quot;total_size&quot;: sum(t.nelement() * t.element_size() for t in combined_sd.values())},
+        &quot;weight_map&quot;: weight_map,
+    }
+    with open(os.path.join(OUTPUT_PATH, &quot;model.safetensors.index.json&quot;), &quot;w&quot;) as f:
+        json.dump(index, f, indent=2)
+
+    # 保存带量化信息的 config
+    config = AutoConfig.from_pretrained(MODEL_PATH, trust_remote_code=True)
+    config_dict = config.to_dict()
+    config_dict[&quot;quantization_config&quot;] = {
+        &quot;bits&quot;: BITS,
+        &quot;group_size&quot;: GROUP_SIZE,
+        &quot;damp_percent&quot;: 0.01,
+        &quot;desc_act&quot;: False,
+        &quot;static_groups&quot;: False,
+        &quot;sym&quot;: True,
+        &quot;true_sequential&quot;: True,
+        &quot;quant_method&quot;: &quot;gptq&quot;,
+        &quot;checkpoint_format&quot;: &quot;gptq&quot;,
+        &quot;model_name_or_path&quot;: None,
+        &quot;model_file_base_name&quot;: None,
+    }
+    config_dict[&quot;model_type&quot;] = original_model_type
+
+    with open(os.path.join(OUTPUT_PATH, &quot;config.json&quot;), &quot;w&quot;) as f:
+        json.dump(config_dict, f, indent=2)
+
+    quant_config_dict = quantize_config.to_dict()
+    with open(os.path.join(OUTPUT_PATH, &quot;quantize_config.json&quot;), &quot;w&quot;) as f:
+        json.dump(quant_config_dict, f, indent=2)
+
+    shutil.rmtree(llm_temp_dir)
+
+    del combined_sd, llm_state_dict, non_llm_state_dict, full_model_sd
+    torch.cuda.empty_cache()
+
+    logger.info(f&quot;Done! Quantized model saved to: {OUTPUT_PATH}&quot;)
+    logger.info(f&quot;Quantization: W{BITS}A16 GPTQ (weight-only {BITS}-bit, activation fp16)&quot;)
+    logger.info(&quot;Compatible with: transformers (via optimum) and vLLM&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

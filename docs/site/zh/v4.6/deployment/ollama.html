@@ -288,43 +288,43 @@ footer.page-footer a:hover { color: var(--primary); }
 <li>C/C++ 编译工具链（macOS：Clang；Windows：<a href="https://github.com/jmeubank/tdm-gcc/releases">TDM-GCC</a> / <a href="https://github.com/mstorsjo/llvm-mingw">llvm-mingw</a>；Linux：GCC/Clang）</li>
 </ul>
 <p>获取支持 MiniCPM-V 4.6 的 OpenBMB Ollama 分支：</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/ollama.git
-<span class="nb">cd</span><span class="w"> </span>ollama
-git<span class="w"> </span>checkout<span class="w"> </span>MIniCPM-V
-</code></pre></div>
+<pre class="code"><code class="language-bash">git clone https://github.com/tc-mb/ollama.git
+cd ollama
+git checkout MIniCPM-V
+</code></pre>
 
 <p>在仓库根目录下编译并运行：</p>
-<div class="code"><pre><span></span><code>go<span class="w"> </span>build<span class="w"> </span>.
-./ollama<span class="w"> </span>serve
-</code></pre></div>
+<pre class="code"><code class="language-bash">go build .
+./ollama serve
+</code></pre>
 
 <h2 id="2-快速使用">2. 快速使用</h2>
 <p>OpenBMB 在 Ollama registry 上发布的模型可直接运行：</p>
-<div class="code"><pre><span></span><code>./ollama<span class="w"> </span>run<span class="w"> </span>openbmb/minicpm-v4.6
-<span class="c1"># 或 Thinking 版本</span>
-./ollama<span class="w"> </span>run<span class="w"> </span>openbmb/minicpm-v4.6-thinking
-</code></pre></div>
+<pre class="code"><code class="language-bash">./ollama run openbmb/minicpm-v4.6
+# 或 Thinking 版本
+./ollama run openbmb/minicpm-v4.6-thinking
+</code></pre>
 
 <h3 id="命令行">命令行</h3>
 <p>用空格分隔输入问题和图片路径：</p>
-<div class="code"><pre><span></span><code>这张图片描述了什么？ xx.jpg
-</code></pre></div>
+<pre class="code"><code class="language-text">这张图片描述了什么？ xx.jpg
+</code></pre>
 
 <h3 id="api">API</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">base64</span><span class="o">,</span> <span class="nn">requests</span>
+<pre class="code"><code class="language-python">import base64, requests
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">image_file</span><span class="p">:</span>
-    <span class="c1"># 将图片文件转换为 base64 编码</span>
-    <span class="n">encoded_string</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">image_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="s2">&quot;minicpm-v4.6&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
-        <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">encoded_string</span><span class="p">],</span>  <span class="c1"># 列表可以放多张图，每张图用上面的方式转化为 base64</span>
-    <span class="p">}</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:11434/api/generate&quot;</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-</code></pre></div>
+with open(image_path, 'rb') as image_file:
+    # 将图片文件转换为 base64 编码
+    encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+    data = {
+        &quot;model&quot;: &quot;minicpm-v4.6&quot;,
+        &quot;prompt&quot;: query,
+        &quot;stream&quot;: False,
+        &quot;images&quot;: [encoded_string],  # 列表可以放多张图，每张图用上面的方式转化为 base64
+    }
+    url = &quot;http://localhost:11434/api/generate&quot;
+    response = requests.post(url, json=data)
+</code></pre>
 
 <h2 id="3-自定义方式">3. 自定义方式</h2>
 <p><strong>若上述方式无法运行，请按下面的步骤手动加载 v4.6 GGUF 权重。</strong></p>
@@ -335,11 +335,11 @@ git<span class="w"> </span>checkout<span class="w"> </span>MIniCPM-V
 </ul>
 <p>（Thinking 版本：<code>openbmb/MiniCPM-V-4.6-Thinking-gguf</code>）</p>
 <h3 id="创建-modelfile">创建 ModelFile</h3>
-<div class="code"><pre><span></span><code>vim<span class="w"> </span>minicpmv4.6.Modelfile
-</code></pre></div>
+<pre class="code"><code class="language-bash">vim minicpmv4.6.Modelfile
+</code></pre>
 
 <p>ModelFile 的内容如下：</p>
-<div class="code"><pre><span></span><code>FROM ./MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf
+<pre class="code"><code class="language-plaintext">FROM ./MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf
 FROM ./MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf
 
 TEMPLATE &quot;&quot;&quot;{{- if .Messages }}{{- range $i, $_ := .Messages }}{{- $last := eq (len (slice $.Messages $i)) 1 -}}&lt;|im_start|&gt;{{ .Role }}{{ .Content }}{{- if $last }}{{- if (ne .Role &quot;assistant&quot;) }}&lt;|im_end|&gt;&lt;|im_start|&gt;assistant{{ end }}{{- else }}&lt;|im_end|&gt;{{ end }}{{- end }}{{- else }}{{- if .System }}&lt;|im_start|&gt;system{{ .System }}&lt;|im_end|&gt;{{ end }}{{ if .Prompt }}&lt;|im_start|&gt;user{{ .Prompt }}&lt;|im_end|&gt;{{ end }}&lt;|im_start|&gt;assistant{{ end }}{{ .Response }}{{ if .Response }}&lt;|im_end|&gt;{{ end }}&quot;&quot;&quot;
@@ -350,7 +350,7 @@ PARAMETER top_p 0.8
 PARAMETER num_ctx 8192
 PARAMETER stop [&quot;&lt;|im_start|&gt;&quot;, &quot;&lt;|im_end|&gt;&quot;]
 PARAMETER temperature 0.7
-</code></pre></div>
+</code></pre>
 
 <p>参数说明：</p>
 <table>
@@ -370,16 +370,16 @@ PARAMETER temperature 0.7
 </tbody>
 </table>
 <h3 id="创建-ollama-模型实例">创建 Ollama 模型实例</h3>
-<div class="code"><pre><span></span><code>./ollama<span class="w"> </span>create<span class="w"> </span>minicpm-v4.6<span class="w"> </span>-f<span class="w"> </span>minicpmv4.6.Modelfile
-</code></pre></div>
+<pre class="code"><code class="language-bash">./ollama create minicpm-v4.6 -f minicpmv4.6.Modelfile
+</code></pre>
 
 <h3 id="另起一个命令行窗口-运行-ollama-模型实例">另起一个命令行窗口，运行 Ollama 模型实例</h3>
-<div class="code"><pre><span></span><code>./ollama<span class="w"> </span>run<span class="w"> </span>minicpm-v4.6
-</code></pre></div>
+<pre class="code"><code class="language-bash">./ollama run minicpm-v4.6
+</code></pre>
 
 <h3 id="输入问题和图片路径-以空格分隔">输入问题和图片路径，以空格分隔</h3>
-<div class="code"><pre><span></span><code>这张图片描述了什么？ xx.jpg
-</code></pre></div></article>
+<pre class="code"><code class="language-text">这张图片描述了什么？ xx.jpg
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

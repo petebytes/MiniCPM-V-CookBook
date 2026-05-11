@@ -279,20 +279,20 @@ footer.page-footer a:hover { color: var(--primary); }
 </ul>
 <h3 id="2-将-pytorch-模型转换为-gguf-格式">2. 将 PyTorch 模型转换为 GGUF 格式</h3>
 <p>请依次执行以下命令，以完成模型结构调整、视觉编码器转换和语言模型转换。</p>
-<div class="code"><pre><span></span><code><span class="c1"># 步骤 1: 对模型结构进行预处理</span>
-python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-surgery.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5
+<pre class="code"><code class="language-bash"># 步骤 1: 对模型结构进行预处理
+python ./tools/mtmd/legacy-models/minicpmv-surgery.py -m ../MiniCPM-V-4_5
 
-<span class="c1"># 步骤 2: 将视觉编码器转换为 GGUF 格式</span>
-python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5<span class="w"> </span>--minicpmv-projector<span class="w"> </span>../MiniCPM-V-4_5/minicpmv.projector<span class="w"> </span>--output-dir<span class="w"> </span>../MiniCPM-V-4_5/<span class="w"> </span>--minicpmv_version<span class="w"> </span><span class="m">6</span>
+# 步骤 2: 将视觉编码器转换为 GGUF 格式
+python ./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py -m ../MiniCPM-V-4_5 --minicpmv-projector ../MiniCPM-V-4_5/minicpmv.projector --output-dir ../MiniCPM-V-4_5/ --minicpmv_version 6
 
-<span class="c1"># 步骤 3: 将语言模型转换为 GGUF 格式</span>
-python<span class="w"> </span>./convert-hf-to-gguf.py<span class="w"> </span>../MiniCPM-V-4_5/model
-</code></pre></div>
+# 步骤 3: 将语言模型转换为 GGUF 格式
+python ./convert-hf-to-gguf.py ../MiniCPM-V-4_5/model
+</code></pre>
 
 <h3 id="3-执行-int4-量化">3. 执行 INT4 量化</h3>
 <p>转换完成后，使用 <code>llama-quantize</code> 工具对 F16 精度的 GGUF 模型进行 INT4 量化。</p>
-<div class="code"><pre><span></span><code>./llama-quantize<span class="w"> </span>../MiniCPM-V-4_5/model/ggml-model-f16.gguf<span class="w"> </span>../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf<span class="w"> </span>Q4_K_M
-</code></pre></div></article>
+<pre class="code"><code class="language-bash">./llama-quantize ../MiniCPM-V-4_5/model/ggml-model-f16.gguf ../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf Q4_K_M
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

@@ -279,75 +279,75 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ
  -->
 
 <p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ">HuggingFace</a> 下载 AutoAWQ 量化的 4-bit MiniCPM-V-4_5 模型。</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ
-</code></pre></div>
+<pre class="code"><code class="language-Bash">git clone https://huggingface.co/openbmb/MiniCPM-V-4_5-AWQ
+</code></pre>
 
 <h3 id="2-用-vllm-运行">2. 用 vLLM 运行</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
-<span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<pre class="code"><code class="language-python">import os
+from PIL import Image
+from transformers import AutoTokenizer
+from vllm import LLM, SamplingParams
 
 
-<span class="c1"># 量化模型名称或本地路径</span>
-<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_5-AWQ&quot;</span>
+# 量化模型名称或本地路径
+MODEL_NAME = &quot;openbmb/MiniCPM-V-4_5-AWQ&quot;
 
-<span class="c1"># 图片文件列表</span>
-<span class="n">IMAGES</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;image.png&quot;</span><span class="p">,</span>
-<span class="p">]</span>
+# 图片文件列表
+IMAGES = [
+    &quot;image.png&quot;,
+]
 
-<span class="c1"># 加载并转换图片</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">IMAGES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
+# 加载并转换图片
+image = Image.open(IMAGES[0]).convert(&quot;RGB&quot;)
 
-<span class="c1"># 初始化 tokenizer</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+# 初始化 tokenizer
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
 
-<span class="c1"># 初始化 LLM</span>
-<span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">MODEL_NAME</span><span class="p">,</span> 
-    <span class="c1"># gpu_memory_utilization=0.9,</span>
-    <span class="n">max_model_len</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>
-    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># disable_mm_preprocessor_cache=True,</span>
-    <span class="c1"># limit_mm_per_prompt={&quot;image&quot;: 5}</span>
-<span class="p">)</span>
+# 初始化 LLM
+llm = LLM(
+    model=MODEL_NAME, 
+    # gpu_memory_utilization=0.9,
+    max_model_len=2048,
+    trust_remote_code=True,
+    # disable_mm_preprocessor_cache=True,
+    # limit_mm_per_prompt={&quot;image&quot;: 5}
+)
 
-<span class="c1"># 构建消息</span>
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
-    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;(&lt;image&gt;./&lt;/image&gt;)</span><span class="se">\n</span><span class="s2">请描述这张图片的内容&quot;</span><span class="p">,</span>
-    <span class="c1"># &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\nPlease describe the content of this image&quot;,</span>
-<span class="p">}]</span>
+# 构建消息
+messages = [{
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\n请描述这张图片的内容&quot;,
+    # &quot;content&quot;: &quot;(&lt;image&gt;./&lt;/image&gt;)\nPlease describe the content of this image&quot;,
+}]
 
-<span class="c1"># 应用 chat template</span>
-<span class="n">prompt</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+# 应用 chat template
+prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
-<span class="c1"># 设置 stop token IDs</span>
-<span class="n">stop_tokens</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;|im_end|&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;/s&gt;&#39;</span><span class="p">]</span>
-<span class="n">stop_token_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_tokens_to_ids</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">stop_tokens</span><span class="p">]</span>
+# 设置 stop token IDs
+stop_tokens = ['&lt;|im_end|&gt;', '&lt;/s&gt;']
+stop_token_ids = [tokenizer.convert_tokens_to_ids(i) for i in stop_tokens]
 
-<span class="c1"># 采样参数</span>
-<span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span>
-    <span class="n">stop_token_ids</span><span class="o">=</span><span class="n">stop_token_ids</span><span class="p">,</span>
-    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-    <span class="c1"># detokenize=True,</span>
-    <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-    <span class="c1"># top_k=100,</span>
-    <span class="c1"># seed=3472,</span>
-    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
-    <span class="c1"># min_tokens=150,</span>
-<span class="p">)</span>
+# 采样参数
+sampling_params = SamplingParams(
+    stop_token_ids=stop_token_ids,
+    temperature=0.7,
+    # detokenize=True,
+    top_p=0.8,
+    # top_k=100,
+    # seed=3472,
+    max_tokens=1024,
+    # min_tokens=150,
+)
 
-<span class="c1"># 推理</span>
-<span class="n">outputs</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">({</span>
-    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
-    <span class="s2">&quot;multi_modal_data&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span>
-    <span class="p">}</span>
-<span class="p">},</span> <span class="n">sampling_params</span><span class="o">=</span><span class="n">sampling_params</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
+# 推理
+outputs = llm.generate({
+    &quot;prompt&quot;: prompt,
+    &quot;multi_modal_data&quot;: {
+        &quot;image&quot;: image
+    }
+}, sampling_params=sampling_params)
+print(outputs[0].outputs[0].text)
+</code></pre>
 
 <h2 id="方法-2-直接用-awq-量化模型推理">方法 2（直接用 AWQ 量化模型推理）</h2>
 <h3 id="1-下载模型_1">1. 下载模型</h3>
@@ -356,47 +356,47 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5
  -->
 
 <p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a> 下载 MiniCPM-V 4.5 模型。</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5
-</code></pre></div>
+<pre class="code"><code class="language-Bash">git clone https://huggingface.co/openbmb/MiniCPM-V-4_5
+</code></pre>
 
 <h3 id="2-从源码安装-autoawq">2. 从源码安装 AutoAWQ</h3>
 <p>官方 AutoAWQ 仓库已不再维护，请下载并从源码安装我们的 fork。</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/AutoAWQ.git
-<span class="nb">cd</span><span class="w"> </span>AutoAWQ
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</code></pre></div>
+<pre class="code"><code class="language-Bash">git clone https://github.com/tc-mb/AutoAWQ.git
+cd AutoAWQ
+pip install -e .
+</code></pre>
 
 <h3 id="3-推理脚本">3. 推理脚本</h3>
 <p>直接使用 AWQ 量化模型推理：</p>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">TextStreamer</span>
-<span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<pre class="code"><code class="language-python">import os
+from PIL import Image
+from transformers import AutoTokenizer, TextStreamer
+from awq import AutoAWQForCausalLM
+import torch
 
-<span class="c1"># 量化模型名称或本地路径</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4_5-AWQ&quot;</span>
-<span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span>
-<span class="c1"># 图片文件路径</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s1">&#39;./assets/airplane.jpeg&#39;</span>
+# 量化模型名称或本地路径
+model_path = &quot;openbmb/MiniCPM-V-4_5-AWQ&quot;
+device = 'cuda'
+# 图片文件路径
+image_path = './assets/airplane.jpeg'
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoAWQForCausalLM</span><span class="o">.</span><span class="n">from_quantized</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+model = AutoAWQForCausalLM.from_quantized(model_path, trust_remote_code=True).to('cuda')
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
-<span class="n">gpu_usage</span> <span class="o">=</span> <span class="n">GPUtil</span><span class="o">.</span><span class="n">getGPUs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">memoryUsed</span>  
-<span class="n">response</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">image</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">),</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="p">[</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;图中是什么？&quot;</span>
-        <span class="p">}</span>
-    <span class="p">],</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span>
-<span class="p">)</span> <span class="c1"># 模型推理</span>
+gpu_usage = GPUtil.getGPUs()[0].memoryUsed  
+response = model.chat(
+    image=Image.open(image_path).convert(&quot;RGB&quot;),
+    msgs=[
+        {
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: &quot;图中是什么？&quot;
+        }
+    ],
+    tokenizer=tokenizer
+) # 模型推理
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;输出:&#39;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
-</code></pre></div>
+print('输出:', response)
+</code></pre>
 
 <h2 id="方法-3-自己进行-awq-量化">方法 3（自己进行 AWQ 量化）</h2>
 <h3 id="1-下载模型_2">1. 下载模型</h3>
@@ -405,121 +405,121 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5
  -->
 
 <p>从 <a href="https://huggingface.co/openbmb/MiniCPM-V-4_5">HuggingFace</a> 下载 MiniCPM-V 4.5 模型。</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4_5
-</code></pre></div>
+<pre class="code"><code class="language-Bash">git clone https://huggingface.co/openbmb/MiniCPM-V-4_5
+</code></pre>
 
 <h3 id="2-从源码安装-autoawq_1">2. 从源码安装 AutoAWQ</h3>
 <p>官方 AutoAWQ 仓库已不再维护，请下载并从源码安装我们的 fork。</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/AutoAWQ.git
-<span class="nb">cd</span><span class="w"> </span>AutoAWQ
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</code></pre></div>
+<pre class="code"><code class="language-Bash">git clone https://github.com/tc-mb/AutoAWQ.git
+cd AutoAWQ
+pip install -e .
+</code></pre>
 
 <h3 id="3-量化脚本">3. 量化脚本</h3>
 <p>执行下方量化脚本（按需替换 <code>model_path</code> 和 <code>quant_path</code> 为原始模型与量化模型保存路径）：</p>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span><span class="p">,</span> <span class="n">load_from_disk</span>
-<span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
+<pre class="code"><code class="language-python">import os
+from datasets import load_dataset, load_from_disk
+from awq import AutoAWQForCausalLM
+import torch
+from transformers import AutoTokenizer
+import shutil
 
-<span class="c1"># 原始模型路径（可以是本地路径或 HF 模型 ID）</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;/openbmb/MiniCPM-V-4_5&#39;</span>
+# 原始模型路径（可以是本地路径或 HF 模型 ID）
+model_path = '/openbmb/MiniCPM-V-4_5'
 
-<span class="c1"># 量化模型保存路径</span>
-<span class="n">quant_path</span> <span class="o">=</span> <span class="s1">&#39;/model_quantized/minicpmv4_5_awq&#39;</span>
+# 量化模型保存路径
+quant_path = '/model_quantized/minicpmv4_5_awq'
 
-<span class="c1"># 量化配置：4-bit 权重，group size 128，GEMM 后端</span>
-<span class="n">quant_config</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;zero_point&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;q_group_size&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span> <span class="s2">&quot;w_bit&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;GEMM&quot;</span> <span class="p">}</span> <span class="c1"># &quot;w_bit&quot;:4 or 8  </span>
-
-
-<span class="c1"># 加载原始模型与 tokenizer</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoAWQForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># 把 model_path 中存在但 quant_path 中没有的文件复制过去（跳过权重文件）</span>
-<span class="k">def</span> <span class="nf">copy_files_not_in_B</span><span class="p">(</span><span class="n">A_path</span><span class="p">,</span> <span class="n">B_path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    如果文件在 A 中存在但 B 中不存在，则从 A 拷贝到 B。</span>
-
-<span class="sd">    :param A_path: 源目录 (A)</span>
-<span class="sd">    :param B_path: 目标目录 (B)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># 确保源目录存在</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">A_path</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The directory </span><span class="si">{</span><span class="n">A_path</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">B_path</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">B_path</span><span class="p">)</span>
-
-    <span class="c1"># 列出 A 中所有文件，排除权重文件 (.bin / safetensors)</span>
-    <span class="n">files_in_A</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">A_path</span><span class="p">)</span>
-    <span class="n">files_in_A</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files_in_A</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s2">&quot;.bin&quot;</span> <span class="ow">in</span> <span class="n">file</span> <span class="ow">or</span> <span class="s2">&quot;safetensors&quot;</span> <span class="ow">in</span> <span class="n">file</span> <span class="p">)])</span>
-    <span class="c1"># 列出 B 中所有文件</span>
-    <span class="n">files_in_B</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">B_path</span><span class="p">))</span>
-
-    <span class="c1"># 计算需要复制的文件</span>
-    <span class="n">files_to_copy</span> <span class="o">=</span> <span class="n">files_in_A</span> <span class="o">-</span> <span class="n">files_in_B</span>
-
-    <span class="c1"># 逐个复制</span>
-    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files_to_copy</span><span class="p">:</span>
-        <span class="n">src_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">A_path</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-        <span class="n">dst_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">B_path</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">src_file</span><span class="p">):</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">src_file</span><span class="p">,</span> <span class="n">dst_file</span><span class="p">)</span>
-
-<span class="c1"># 数据加载方法</span>
-<span class="c1"># 加载 Alpaca 数据集</span>
-<span class="k">def</span> <span class="nf">load_alpaca</span><span class="p">():</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;tatsu-lab/alpaca&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
-
-    <span class="c1"># 把每条样本转换成 chat 风格的 prompt</span>
-    <span class="k">def</span> <span class="nf">concatenate_data</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;instruction&#39;</span><span class="p">]:</span>
-            <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;instruction&#39;</span><span class="p">]},</span>
-                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]},</span>
-                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]},</span>
-            <span class="p">]</span>
-        <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]:</span>
-            <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]}</span>
-            <span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;instruction&#39;</span><span class="p">]},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]}</span>
-            <span class="p">]</span>
-
-        <span class="n">data</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span><span class="n">msgs</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
-
-    <span class="n">concatenated</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">concatenate_data</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">text</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">concatenated</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]][:</span><span class="mi">1024</span><span class="p">]</span>
-
-<span class="c1"># 加载 Wikitext 数据集</span>
-<span class="k">def</span> <span class="nf">load_wikitext</span><span class="p">():</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;wikitext&#39;</span><span class="p">,</span> <span class="s1">&#39;wikitext-2-raw-v1&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">text</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">]</span>
+# 量化配置：4-bit 权重，group size 128，GEMM 后端
+quant_config = { &quot;zero_point&quot;: True, &quot;q_group_size&quot;: 128, &quot;w_bit&quot;: 4, &quot;version&quot;: &quot;GEMM&quot; } # &quot;w_bit&quot;:4 or 8  
 
 
-<span class="c1"># 加载校准数据</span>
-<span class="n">calib_data</span> <span class="o">=</span> <span class="n">load_alpaca</span><span class="p">()</span>
-<span class="c1"># 量化</span>
-<span class="n">model</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">quant_config</span><span class="o">=</span><span class="n">quant_config</span><span class="p">,</span> <span class="n">calib_data</span><span class="o">=</span><span class="n">calib_data</span><span class="p">)</span>
+# 加载原始模型与 tokenizer
+model = AutoAWQForCausalLM.from_pretrained(model_path, trust_remote_code=True, torch_dtype=torch.bfloat16)
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
-<span class="c1"># shutil.rmtree(quant_path, ignore_errors=True)</span>
+# 把 model_path 中存在但 quant_path 中没有的文件复制过去（跳过权重文件）
+def copy_files_not_in_B(A_path, B_path):
+    &quot;&quot;&quot;
+    如果文件在 A 中存在但 B 中不存在，则从 A 拷贝到 B。
 
-<span class="c1"># 保存量化模型</span>
-<span class="n">model</span><span class="o">.</span><span class="n">save_quantized</span><span class="p">(</span><span class="n">quant_path</span><span class="p">)</span>
-<span class="n">tokenizer</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">quant_path</span><span class="p">)</span>
+    :param A_path: 源目录 (A)
+    :param B_path: 目标目录 (B)
+    &quot;&quot;&quot;
+    # 确保源目录存在
+    if not os.path.exists(A_path):
+        raise FileNotFoundError(f&quot;The directory {A_path} does not exist.&quot;)
+    if not os.path.exists(B_path):
+        os.makedirs(B_path)
 
-<span class="n">copy_files_not_in_B</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">quant_path</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Model is quantized and saved at &quot;</span><span class="si">{</span><span class="n">quant_path</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
-</code></pre></div></article>
+    # 列出 A 中所有文件，排除权重文件 (.bin / safetensors)
+    files_in_A = os.listdir(A_path)
+    files_in_A = set([file for file in files_in_A if not (&quot;.bin&quot; in file or &quot;safetensors&quot; in file )])
+    # 列出 B 中所有文件
+    files_in_B = set(os.listdir(B_path))
+
+    # 计算需要复制的文件
+    files_to_copy = files_in_A - files_in_B
+
+    # 逐个复制
+    for file in files_to_copy:
+        src_file = os.path.join(A_path, file)
+        dst_file = os.path.join(B_path, file)
+        if os.path.isfile(src_file):
+            shutil.copy2(src_file, dst_file)
+
+# 数据加载方法
+# 加载 Alpaca 数据集
+def load_alpaca():
+    data = load_dataset(&quot;tatsu-lab/alpaca&quot;, split=&quot;train&quot;)
+
+    # 把每条样本转换成 chat 风格的 prompt
+    def concatenate_data(x):
+        if x['input'] and x['instruction']:
+            msgs = [
+                    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: x['instruction']},
+                    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: x['input']},
+                    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: x['output']},
+            ]
+        elif x['input']:
+            msgs = [
+                {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+                {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: x['input']},
+                {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: x['output']}
+            ]
+        else:
+            msgs = [
+                {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+                {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: x['instruction']},
+                {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: x['output']}
+            ]
+
+        data = tokenizer.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
+        return {&quot;text&quot;: data}
+
+    concatenated = data.map(concatenate_data)
+    return [text for text in concatenated[&quot;text&quot;]][:1024]
+
+# 加载 Wikitext 数据集
+def load_wikitext():
+    data = load_dataset('wikitext', 'wikitext-2-raw-v1', split=&quot;train&quot;)
+    return [text for text in data[&quot;text&quot;] if text.strip() != '' and len(text.split(' ')) &gt; 20]
+
+
+# 加载校准数据
+calib_data = load_alpaca()
+# 量化
+model.quantize(tokenizer, quant_config=quant_config, calib_data=calib_data)
+
+# shutil.rmtree(quant_path, ignore_errors=True)
+
+# 保存量化模型
+model.save_quantized(quant_path)
+tokenizer.save_pretrained(quant_path)
+
+copy_files_not_in_B(model_path, quant_path)
+print(f'Model is quantized and saved at &quot;{quant_path}&quot;')
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

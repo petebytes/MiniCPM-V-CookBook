@@ -270,48 +270,48 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="multi-images">Multi Images</h1>
 <h3 id="initialize-model">Initialize model</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<pre class="code"><code class="language-python">from PIL import Image
+import torch
+from transformers import AutoModel, AutoTokenizer
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>  <span class="c1"># sdpa or flash_attention_2, no eager</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
+model_path = 'openbmb/MiniCPM-V-4_5'
+model = AutoModel.from_pretrained(model_path, trust_remote_code=True,
+                                  attn_implementation='sdpa', torch_dtype=torch.bfloat16)  # sdpa or flash_attention_2, no eager
+model = model.eval().cuda()
+tokenizer = AutoTokenizer.from_pretrained(
+    model_path, trust_remote_code=True)
+</code></pre>
 
 <h3 id="chat-with-multiple-images">Chat with multiple images</h3>
-<div class="code"><pre><span></span><code><span class="n">image1</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;assets/multi1.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-<span class="n">image2</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;assets/multi2.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-<span class="n">question</span> <span class="o">=</span> <span class="s1">&#39;Compare the two images, tell me about the differences between them.&#39;</span>
-<span class="c1"># question = &#39;比较这两张图片，告诉我它们的不同之处。&#39;</span>
+<pre class="code"><code class="language-python">image1 = Image.open('assets/multi1.png').convert('RGB')
+image2 = Image.open('assets/multi2.png').convert('RGB')
+question = 'Compare the two images, tell me about the differences between them.'
+# question = '比较这两张图片，告诉我它们的不同之处。'
 
-<span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">image1</span><span class="p">,</span> <span class="n">image2</span><span class="p">,</span> <span class="n">question</span><span class="p">]}]</span>
+msgs = [{'role': 'user', 'content': [image1, image2, question]}]
 
-<span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
-    <span class="n">enable_thinking</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+answer = model.chat(
+    image=None,
+    msgs=msgs,
+    tokenizer=tokenizer,
+    enable_thinking=True
+)
+print(answer)
+</code></pre>
 
 <h3 id="second-round-chat">Second round chat</h3>
-<div class="code"><pre><span></span><code><span class="c1"># Second round chat, pass history context of multi-turn conversation</span>
-<span class="n">msgs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">answer</span><span class="p">]})</span>
-<span class="n">msgs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Tell me about the similarities between them.&quot;</span><span class="p">]})</span>
-<span class="c1"># msgs.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [&quot;告诉我它们的相似之处。&quot;]})</span>
-<span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
-    <span class="n">enable_thinking</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+<pre class="code"><code class="language-python"># Second round chat, pass history context of multi-turn conversation
+msgs.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: [answer]})
+msgs.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [&quot;Tell me about the similarities between them.&quot;]})
+# msgs.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [&quot;告诉我它们的相似之处。&quot;]})
+answer = model.chat(
+    image=None,
+    msgs=msgs,
+    tokenizer=tokenizer,
+    enable_thinking=True
+)
+print(answer)
+</code></pre>
 
 <h3 id="sample-images">Sample Images</h3>
 <p><img alt="alt text" src="./assets/multi1.png"></p>
@@ -319,8 +319,8 @@ footer.page-footer a:hover { color: var(--primary); }
 <h3 id="example-output">Example Output</h3>
 <h4 id="english-answer">English Answer</h4>
 <p>First Round</p>
-<div class="code"><pre><span></span><code>&lt;think&gt;
-So, let&#39;s analyze the two images. First, look at the colors: the first vase (the first image) is red and white, while the second one (the second image) is green, blue, and maybe other colors. Then check the patterns: the first has red cloud-like designs and possibly figures, the second has green floral patterns and different motifs. Also, the shapes might be similar (gourd-shaped) but the decoration styles are different. Wait, the first image&#39;s vase has red on white, the second uses green, blue, red, and other colors. The patterns are different too. Let me list the differences:
+<pre class="code"><code>&lt;think&gt;
+So, let's analyze the two images. First, look at the colors: the first vase (the first image) is red and white, while the second one (the second image) is green, blue, and maybe other colors. Then check the patterns: the first has red cloud-like designs and possibly figures, the second has green floral patterns and different motifs. Also, the shapes might be similar (gourd-shaped) but the decoration styles are different. Wait, the first image's vase has red on white, the second uses green, blue, red, and other colors. The patterns are different too. Let me list the differences:
 
 1. Color scheme: the first image is predominantly red on white, the second is green, blue, and multicolor with floral and geometric patterns.
 2. Design patterns: the first has cloud motifs and maybe mythical figures in red, the second has floral designs with green vines, blue borders, and different symbols.
@@ -343,11 +343,11 @@ To compare the two images, we analyze the following differences:
 
 
 These differences highlight variations in color, pattern complexity, and design themes between the two vases.
-</code></pre></div>
+</code></pre>
 
 <p>Second Round</p>
-<div class="code"><pre><span></span><code>&lt;think&gt;
-To identify the similarities between the two vases, let&#39;s analyze their shared features:
+<pre class="code"><code>&lt;think&gt;
+To identify the similarities between the two vases, let's analyze their shared features:
 
 1. **Shape and Form**:  
    Both vases have a distinctive double-gourd (or gourd-shaped) silhouette, with a narrower neck and a bulbous, rounded body that tapers into a smaller upper section. This classic gourd shape is a common design element in traditional porcelain.
@@ -362,11 +362,11 @@ To identify the similarities between the two vases, let&#39;s analyze their shar
    The gourd shape and elaborate painted designs suggest both are influenced by traditional Chinese ceramic art, where such forms and decorative themes are prevalent.
 
 These similarities highlight their shared cultural roots, material quality, and artistic tradition, even as they differ in color and specific motifs.
-</code></pre></div>
+</code></pre>
 
 <h4 id="中文回答">中文回答</h4>
 <p>第一轮</p>
-<div class="code"><pre><span></span><code>&lt;think&gt;
+<pre class="code"><code>&lt;think&gt;
 那么，让我们从分析每个花瓶的细节开始。首先看第一个花瓶（the first image）：它是一个白色底色的葫芦形花瓶，上面有红色的图案。图案包括人物和云朵，可能还有植物或花卉元素。形状是经典的葫芦形，上下两个球体。
 
 第二个花瓶（the second image）：也是葫芦形，但颜色和图案不同。它有绿色、蓝色、红色和橙色的多彩图案。上半部分有绿色图案，带有红色和橙色的圆形元素。下半部分有绿色藤蔓和花卉设计，更复杂。颜色更丰富，图案种类更多。
@@ -384,10 +384,10 @@ These similarities highlight their shared cultural roots, material quality, and 
 
 
 简而言之，不同之处在于颜色方案（第一个是红色，第二个是多种颜色）、图案主题（第一个有红色人物/云朵，第二个有绿色藤蔓/花卉/几何形状）以及整体设计风格（第一个更简约，第二个更复杂）。
-</code></pre></div>
+</code></pre>
 
 <p>第二轮</p>
-<div class="code"><pre><span></span><code>&lt;think&gt;
+<pre class="code"><code>&lt;think&gt;
 明白了，让我们找出它们的相似之处。首先，观察两个花瓶的形状。两者的形状都是双球体（gourd-shaped），由一个较细的上部（neck）和一个较宽的底部（bulbous body）组成。颜色方案？等等，第一个是白色底色上有红色图案，第二个是白色底色上有多种颜色的图案，但它们都是白色底色。等等，是形状吗？是的，形状都是“葫芦形”或双球体花瓶。图案的分布方式？两者都有复杂的装饰图案，覆盖了花瓶的表面。材质？看起来都是陶瓷，可能是瓷器。等等，形状：都是gourd-shaped（双球体），一个较细的上部和一个较宽的底部。颜色方面，都是白色底色，但第一个是红色图案，第二个是多种颜色。但它们都具有双球体形状。图案：两者都有装饰图案，覆盖了花瓶的表面。材质：都是陶瓷。总结相似点：都具有双球体（葫芦形）形状，都有装饰图案，材质可能是瓷器（或类似的陶瓷），都是花瓶。让我们再确认一下。形状：两者的形状都是gourd-shaped（双球体），一个较细的上部和一个较宽的底部。颜色：都是白色底色，尽管第一个是红色图案，第二个是多种颜色，但底色都是白色。图案：两者都有复杂的装饰图案，覆盖了花瓶的表面。材质：看起来都是陶瓷（瓷器）。
 
 因此，它们的相似之处：两者都是双球体花瓶（gourd-shaped），都有装饰图案，材质可能是瓷器或类似的陶瓷，形状都具有类似的葫芦形结构，都用于装饰（花瓶）。
@@ -398,7 +398,7 @@ These similarities highlight their shared cultural roots, material quality, and 
 - 材质：都看起来是陶瓷（可能是瓷器），有白色底色。  
 - 功能：两者都作为装饰花瓶使用。  
 - 装饰：都具有复杂的表面图案，虽然图案设计和颜色不同，但都覆盖了花瓶的表面。
-</code></pre></div></article>
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

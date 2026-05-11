@@ -275,204 +275,204 @@ footer.page-footer a:hover { color: var(--primary); }
 </blockquote>
 <h2 id="method-1-use-the-pre-quantized-model-with-vllm">Method 1 — Use the pre-quantized model with vLLM</h2>
 <h3 id="1-download-the-pre-quantized-model">1. Download the pre-quantized model</h3>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4.6-AWQ
-</code></pre></div>
+<pre class="code"><code class="language-bash">git clone https://huggingface.co/openbmb/MiniCPM-V-4.6-AWQ
+</code></pre>
 
 <p>(Or <code>openbmb/MiniCPM-V-4.6-Thinking-AWQ</code> for the Thinking variant once published.)</p>
 <h3 id="2-run-with-vllm">2. Run with vLLM</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span>
-<span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<pre class="code"><code class="language-python">from PIL import Image
+from transformers import AutoProcessor
+from vllm import LLM, SamplingParams
 
-<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6-AWQ&quot;</span>
-<span class="n">IMAGES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;image.png&quot;</span><span class="p">]</span>
+MODEL_NAME = &quot;openbmb/MiniCPM-V-4.6-AWQ&quot;
+IMAGES = [&quot;image.png&quot;]
 
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">IMAGES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
-<span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_NAME</span><span class="p">)</span>
+image = Image.open(IMAGES[0]).convert(&quot;RGB&quot;)
+processor = AutoProcessor.from_pretrained(MODEL_NAME)
 
-<span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">MODEL_NAME</span><span class="p">,</span>
-    <span class="n">max_model_len</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span>
-    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># limit_mm_per_prompt={&quot;image&quot;: 5},</span>
-<span class="p">)</span>
+llm = LLM(
+    model=MODEL_NAME,
+    max_model_len=8192,
+    trust_remote_code=True,
+    # limit_mm_per_prompt={&quot;image&quot;: 5},
+)
 
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
-    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Please describe the content of this image&quot;</span><span class="p">},</span>
-    <span class="p">],</span>
-<span class="p">}]</span>
+messages = [{
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: [
+        {&quot;type&quot;: &quot;image&quot;},
+        {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;Please describe the content of this image&quot;},
+    ],
+}]
 
-<span class="n">prompt</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
+prompt = processor.apply_chat_template(
+    messages, tokenize=False, add_generation_prompt=True
+)
 
-<span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span>
-    <span class="n">stop_token_ids</span><span class="o">=</span><span class="p">[</span><span class="mi">248044</span><span class="p">,</span> <span class="mi">248046</span><span class="p">],</span>   <span class="c1"># v4.6 uses Qwen3.5 vocab</span>
-    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-    <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
-<span class="p">)</span>
+sampling_params = SamplingParams(
+    stop_token_ids=[248044, 248046],   # v4.6 uses Qwen3.5 vocab
+    temperature=0.7,
+    top_p=0.8,
+    max_tokens=1024,
+)
 
-<span class="n">outputs</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-    <span class="p">{</span>
-        <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
-        <span class="s2">&quot;multi_modal_data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
-    <span class="p">},</span>
-    <span class="n">sampling_params</span><span class="o">=</span><span class="n">sampling_params</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
+outputs = llm.generate(
+    {
+        &quot;prompt&quot;: prompt,
+        &quot;multi_modal_data&quot;: {&quot;image&quot;: image},
+    },
+    sampling_params=sampling_params,
+)
+print(outputs[0].outputs[0].text)
+</code></pre>
 
 <h2 id="method-2-run-the-awq-checkpoint-with-autoawq-directly">Method 2 — Run the AWQ checkpoint with AutoAWQ directly</h2>
 <h3 id="1-download-the-model">1. Download the model</h3>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4.6-AWQ
-</code></pre></div>
+<pre class="code"><code class="language-bash">git clone https://huggingface.co/openbmb/MiniCPM-V-4.6-AWQ
+</code></pre>
 
 <h3 id="2-build-autoawq-from-source">2. Build AutoAWQ from source</h3>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/AutoAWQ.git
-<span class="nb">cd</span><span class="w"> </span>AutoAWQ
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</code></pre></div>
+<pre class="code"><code class="language-bash">git clone https://github.com/tc-mb/AutoAWQ.git
+cd AutoAWQ
+pip install -e .
+</code></pre>
 
 <h3 id="3-inference-script">3. Inference script</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span>
-<span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
+<pre class="code"><code class="language-python">import torch
+from PIL import Image
+from transformers import AutoProcessor
+from awq import AutoAWQForCausalLM
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6-AWQ&quot;</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;./assets/airplane.jpeg&quot;</span>
+model_path = &quot;openbmb/MiniCPM-V-4.6-AWQ&quot;
+image_path = &quot;./assets/airplane.jpeg&quot;
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoAWQForCausalLM</span><span class="o">.</span><span class="n">from_quantized</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span>
-<span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+model = AutoAWQForCausalLM.from_quantized(
+    model_path, trust_remote_code=True
+).to(&quot;cuda&quot;)
+processor = AutoProcessor.from_pretrained(model_path)
 
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
-    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;What is in this picture?&quot;</span><span class="p">},</span>
-    <span class="p">],</span>
-<span class="p">}]</span>
+image = Image.open(image_path).convert(&quot;RGB&quot;)
+messages = [{
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: [
+        {&quot;type&quot;: &quot;image&quot;, &quot;image&quot;: image},
+        {&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;What is in this picture?&quot;},
+    ],
+}]
 
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span>
-    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">tokenize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span>
+inputs = processor.apply_chat_template(
+    messages,
+    add_generation_prompt=True,
+    tokenize=True,
+    return_dict=True,
+    return_tensors=&quot;pt&quot;,
+).to(&quot;cuda&quot;)
 
-<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">inference_mode</span><span class="p">():</span>
-    <span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+with torch.inference_mode():
+    out_ids = model.generate(**inputs, max_new_tokens=256)
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
-    <span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span>
-    <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
-</code></pre></div>
+response = processor.decode(
+    out_ids[0][inputs[&quot;input_ids&quot;].shape[-1]:],
+    skip_special_tokens=True,
+)
+print(&quot;Output:&quot;, response)
+</code></pre>
 
 <h2 id="method-3-quantize-the-model-yourself">Method 3 — Quantize the model yourself</h2>
 <h3 id="1-download-the-original-model">1. Download the original model</h3>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM-V-4.6
-</code></pre></div>
+<pre class="code"><code class="language-bash">git clone https://huggingface.co/openbmb/MiniCPM-V-4.6
+</code></pre>
 
 <h3 id="2-build-autoawq-from-source_1">2. Build AutoAWQ from source</h3>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/AutoAWQ.git
-<span class="nb">cd</span><span class="w"> </span>AutoAWQ
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</code></pre></div>
+<pre class="code"><code class="language-bash">git clone https://github.com/tc-mb/AutoAWQ.git
+cd AutoAWQ
+pip install -e .
+</code></pre>
 
 <h3 id="3-quantization-script">3. Quantization script</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
-<span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
+<pre class="code"><code class="language-python">import os
+import shutil
+import torch
+from datasets import load_dataset
+from transformers import AutoTokenizer
+from awq import AutoAWQForCausalLM
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/openbmb/MiniCPM-V-4.6&quot;</span>
-<span class="n">quant_path</span> <span class="o">=</span> <span class="s2">&quot;/model_quantized/minicpmv4_6_awq&quot;</span>
+model_path = &quot;/openbmb/MiniCPM-V-4.6&quot;
+quant_path = &quot;/model_quantized/minicpmv4_6_awq&quot;
 
-<span class="c1"># AWQ config — 4-bit weights, group size 128, GEMM backend</span>
-<span class="n">quant_config</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;zero_point&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;q_group_size&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
-    <span class="s2">&quot;w_bit&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-    <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;GEMM&quot;</span><span class="p">,</span>
-<span class="p">}</span>
+# AWQ config — 4-bit weights, group size 128, GEMM backend
+quant_config = {
+    &quot;zero_point&quot;: True,
+    &quot;q_group_size&quot;: 128,
+    &quot;w_bit&quot;: 4,
+    &quot;version&quot;: &quot;GEMM&quot;,
+}
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoAWQForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
-<span class="p">)</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">copy_files_not_in_B</span><span class="p">(</span><span class="n">A_path</span><span class="p">,</span> <span class="n">B_path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Copy non-weight files from A to B if missing.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">A_path</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The directory </span><span class="si">{</span><span class="n">A_path</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">B_path</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">B_path</span><span class="p">)</span>
-
-    <span class="n">files_in_A</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
-        <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">A_path</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s2">&quot;.bin&quot;</span> <span class="ow">in</span> <span class="n">f</span> <span class="ow">or</span> <span class="s2">&quot;safetensors&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">files_in_B</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">B_path</span><span class="p">))</span>
-
-    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files_in_A</span> <span class="o">-</span> <span class="n">files_in_B</span><span class="p">:</span>
-        <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">A_path</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">B_path</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
+model = AutoAWQForCausalLM.from_pretrained(
+    model_path, trust_remote_code=True, torch_dtype=torch.bfloat16
+)
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
 
-<span class="k">def</span> <span class="nf">load_alpaca</span><span class="p">():</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;tatsu-lab/alpaca&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+def copy_files_not_in_B(A_path, B_path):
+    &quot;&quot;&quot;Copy non-weight files from A to B if missing.&quot;&quot;&quot;
+    if not os.path.exists(A_path):
+        raise FileNotFoundError(f&quot;The directory {A_path} does not exist.&quot;)
+    if not os.path.exists(B_path):
+        os.makedirs(B_path)
 
-    <span class="k">def</span> <span class="nf">concatenate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;instruction&quot;</span><span class="p">]:</span>
-            <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;instruction&quot;</span><span class="p">]},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">]},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]},</span>
-            <span class="p">]</span>
-        <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">]:</span>
-            <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">]},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]},</span>
-            <span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;instruction&quot;</span><span class="p">]},</span>
-                <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]},</span>
-            <span class="p">]</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-            <span class="n">msgs</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">}</span>
+    files_in_A = set(
+        f for f in os.listdir(A_path)
+        if not (&quot;.bin&quot; in f or &quot;safetensors&quot; in f)
+    )
+    files_in_B = set(os.listdir(B_path))
 
-    <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">concatenate</span><span class="p">)][:</span><span class="mi">1024</span><span class="p">]</span>
+    for f in files_in_A - files_in_B:
+        src = os.path.join(A_path, f)
+        dst = os.path.join(B_path, f)
+        if os.path.isfile(src):
+            shutil.copy2(src, dst)
 
 
-<span class="n">calib_data</span> <span class="o">=</span> <span class="n">load_alpaca</span><span class="p">()</span>
-<span class="n">model</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">quant_config</span><span class="o">=</span><span class="n">quant_config</span><span class="p">,</span> <span class="n">calib_data</span><span class="o">=</span><span class="n">calib_data</span><span class="p">)</span>
+def load_alpaca():
+    data = load_dataset(&quot;tatsu-lab/alpaca&quot;, split=&quot;train&quot;)
 
-<span class="n">model</span><span class="o">.</span><span class="n">save_quantized</span><span class="p">(</span><span class="n">quant_path</span><span class="p">)</span>
-<span class="n">tokenizer</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">quant_path</span><span class="p">)</span>
+    def concatenate(x):
+        if x[&quot;input&quot;] and x[&quot;instruction&quot;]:
+            msgs = [
+                {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: x[&quot;instruction&quot;]},
+                {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: x[&quot;input&quot;]},
+                {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: x[&quot;output&quot;]},
+            ]
+        elif x[&quot;input&quot;]:
+            msgs = [
+                {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+                {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: x[&quot;input&quot;]},
+                {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: x[&quot;output&quot;]},
+            ]
+        else:
+            msgs = [
+                {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+                {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: x[&quot;instruction&quot;]},
+                {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: x[&quot;output&quot;]},
+            ]
+        text = tokenizer.apply_chat_template(
+            msgs, tokenize=False, add_generation_prompt=True
+        )
+        return {&quot;text&quot;: text}
 
-<span class="n">copy_files_not_in_B</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">quant_path</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Model is quantized and saved at &quot;</span><span class="si">{</span><span class="n">quant_path</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
-</code></pre></div></article>
+    return [r[&quot;text&quot;] for r in data.map(concatenate)][:1024]
+
+
+calib_data = load_alpaca()
+model.quantize(tokenizer, quant_config=quant_config, calib_data=calib_data)
+
+model.save_quantized(quant_path)
+tokenizer.save_pretrained(quant_path)
+
+copy_files_not_in_B(model_path, quant_path)
+print(f'Model is quantized and saved at &quot;{quant_path}&quot;')
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

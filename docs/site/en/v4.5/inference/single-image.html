@@ -270,58 +270,58 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="single-image">Single Image</h1>
 <h3 id="initialize-model">Initialize model</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<pre class="code"><code class="language-python">from PIL import Image
+import torch
+from transformers import AutoModel, AutoTokenizer
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="c1"># sdpa or flash_attention_2, no eager</span>
-                                  <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
+model_path = 'openbmb/MiniCPM-V-4_5'
+model = AutoModel.from_pretrained(model_path, trust_remote_code=True,
+                                  # sdpa or flash_attention_2, no eager
+                                  attn_implementation='sdpa', torch_dtype=torch.bfloat16)
+model = model.eval().cuda()
+tokenizer = AutoTokenizer.from_pretrained(
+    model_path, trust_remote_code=True)
+</code></pre>
 
 <h3 id="chat-with-single-image">Chat with single image</h3>
-<div class="code"><pre><span></span><code><span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;./assets/single.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+<pre class="code"><code class="language-python">image = Image.open('./assets/single.png').convert('RGB')
 
-<span class="c1"># First round chat </span>
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;What is the landform in the picture?&quot;</span>
-<span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">question</span><span class="p">]}]</span>
+# First round chat 
+question = &quot;What is the landform in the picture?&quot;
+msgs = [{'role': 'user', 'content': [image, question]}]
 
-<span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-    <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+answer = model.chat(
+    msgs=msgs,
+    image=image,
+    tokenizer=tokenizer
+)
+print(answer)
+</code></pre>
 
 <h3 id="second-round-chat">Second round chat</h3>
-<div class="code"><pre><span></span><code><span class="c1"># Second round chat, pass history context of multi-turn conversation</span>
-<span class="n">msgs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">answer</span><span class="p">]})</span>
-<span class="n">msgs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;What should I pay attention to when traveling here?&quot;</span><span class="p">]})</span>
+<pre class="code"><code class="language-python"># Second round chat, pass history context of multi-turn conversation
+msgs.append({&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: [answer]})
+msgs.append({&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [
+            &quot;What should I pay attention to when traveling here?&quot;]})
 
-<span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-    <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+answer = model.chat(
+    msgs=msgs,
+    image=None,
+    tokenizer=tokenizer
+)
+print(answer)
+</code></pre>
 
 <h3 id="sample-image">Sample Image</h3>
 <p><img alt="alt text" src="./assets/single.png"></p>
 <h3 id="example-output">Example Output</h3>
 <p>First round</p>
-<div class="code"><pre><span></span><code>The landform in the picture is a mountain range. The image shows steep cliffs, rugged terrain, and a winding path that ascends between two prominent rocky peaks covered with green vegetation. This type of landscape features high elevations and dramatic slopes characteristic of mountains.
-</code></pre></div>
+<pre class="code"><code>The landform in the picture is a mountain range. The image shows steep cliffs, rugged terrain, and a winding path that ascends between two prominent rocky peaks covered with green vegetation. This type of landscape features high elevations and dramatic slopes characteristic of mountains.
+</code></pre>
 
 <p>Second round</p>
-<div class="code"><pre><span></span><code>When traveling to a mountainous area like this, it&#39;s important to pay attention to several factors. Firstly, be mindful of the steep paths and uneven terrain; wear appropriate footwear with good grip for safety. Secondly, stay hydrated as high altitudes can lead to dehydration more quickly than at sea level. Thirdly, check weather conditions before your trip since mountains can have sudden changes in weather which might affect visibility and trail conditions. Lastly, if you plan to hike or climb, carry essential supplies such as food, water, first aid kits, and navigation tools (maps or GPS) because help may not be readily available on remote trails.
-</code></pre></div></article>
+<pre class="code"><code>When traveling to a mountainous area like this, it's important to pay attention to several factors. Firstly, be mindful of the steep paths and uneven terrain; wear appropriate footwear with good grip for safety. Secondly, stay hydrated as high altitudes can lead to dehydration more quickly than at sea level. Thirdly, check weather conditions before your trip since mountains can have sudden changes in weather which might affect visibility and trail conditions. Lastly, if you plan to hike or climb, carry essential supplies such as food, water, first aid kits, and navigation tools (maps or GPS) because help may not be readily available on remote trails.
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

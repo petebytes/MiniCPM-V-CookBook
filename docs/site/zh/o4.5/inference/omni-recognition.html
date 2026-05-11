@@ -263,68 +263,68 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="物体识别">物体识别</h1>
 <p>可以用 MiniCPM-V-4_5 在图片上做物体识别任务。</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<pre class="code"><code class="language-python">from PIL import Image
+import torch
+from transformers import AutoModel, AutoTokenizer
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="c1"># sdpa 或 flash_attention_2，不要用 eager</span>
-                                  <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+model_path = 'openbmb/MiniCPM-V-4_5'
+model = AutoModel.from_pretrained(model_path, trust_remote_code=True,
+                                  # sdpa 或 flash_attention_2，不要用 eager
+                                  attn_implementation='sdpa', torch_dtype=torch.bfloat16)
+model = model.eval().cuda()
+tokenizer = AutoTokenizer.from_pretrained(
+    model_path, trust_remote_code=True)
 
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;./assets/single.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+image = Image.open('./assets/single.png').convert('RGB')
 
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;图片中的地貌是什么？&quot;</span>
-<span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">question</span><span class="p">]}]</span>
+question = &quot;图片中的地貌是什么？&quot;
+msgs = [{'role': 'user', 'content': [image, question]}]
 
-<span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-    <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+answer = model.chat(
+    msgs=msgs,
+    image=image,
+    tokenizer=tokenizer
+)
+print(answer)
+</code></pre>
 
 <p>图片：
 <img alt="alt text" src="./assets/single.png"></p>
 <p>结果：</p>
-<div class="code"><pre><span></span><code>The landform in the picture is a mountain range. The image shows steep cliffs, rugged terrain, and a winding path that ascends between two prominent rocky peaks covered with green vegetation. This type of landscape features high elevations and dramatic slopes characteristic of mountains.
-</code></pre></div>
+<pre class="code"><code>The landform in the picture is a mountain range. The image shows steep cliffs, rugged terrain, and a winding path that ascends between two prominent rocky peaks covered with green vegetation. This type of landscape features high elevations and dramatic slopes characteristic of mountains.
+</code></pre>
 
 <h1 id="物体定位">物体定位</h1>
 <p>也可以用 MiniCPM-V-4_5 做物体定位任务。</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<pre class="code"><code class="language-python">from PIL import Image
+import torch
+from transformers import AutoModel, AutoTokenizer
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="c1"># sdpa 或 flash_attention_2，不要用 eager</span>
-                                  <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+model_path = 'openbmb/MiniCPM-V-4_5'
+model = AutoModel.from_pretrained(model_path, trust_remote_code=True,
+                                  # sdpa 或 flash_attention_2，不要用 eager
+                                  attn_implementation='sdpa', torch_dtype=torch.bfloat16)
+model = model.eval().cuda()
+tokenizer = AutoTokenizer.from_pretrained(
+    model_path, trust_remote_code=True)
 
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;./assets/multi_object.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+image = Image.open('./assets/multi_object.png').convert('RGB')
 
-<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;识别图片中的食物，以 JSON 格式返回它们的 bounding box 与中英文名称。&quot;</span>
-<span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">question</span><span class="p">]}]</span>
+question = &quot;识别图片中的食物，以 JSON 格式返回它们的 bounding box 与中英文名称。&quot;
+msgs = [{'role': 'user', 'content': [image, question]}]
 
-<span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-    <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+answer = model.chat(
+    msgs=msgs,
+    image=image,
+    tokenizer=tokenizer
+)
+print(answer)
+</code></pre>
 
 <p>图片：
 <img alt="alt text" src="./assets/multi_object.png"></p>
 <p>结果：</p>
-<div class="code"><pre><span></span><code>{
+<pre class="code"><code>{
   &quot;food_1&quot;: {
     &quot;bounding_box&quot;: &quot;&lt;box&gt;520 637 644 782&lt;/box&gt;&quot;,
     &quot;chinese_name&quot;: &quot;炒鸡蛋&quot;,
@@ -366,7 +366,7 @@ footer.page-footer a:hover { color: var(--primary); }
     &quot;english_name&quot;: &quot;Cherry tomatoes&quot;
   }
 }
-</code></pre></div></article>
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

@@ -272,79 +272,79 @@ footer.page-footer a:hover { color: var(--primary); }
 <p>SWIFT is an efficient and scalable framework for fine-tuning large pre-trained models with support for various parameter-efficient methods like LoRA, Adapter, and Prompt Tuning.</p>
 <h2 id="swift-install">SWIFT Install</h2>
 <p>You can quickly install SWIFT using bash commands.</p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/modelscope/swift.git
-<span class="nb">cd</span><span class="w"> </span>swift
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.[llm]&#39;</span>
-</code></pre></div>
+<pre class="code"><code class="language-bash">git clone https://github.com/modelscope/swift.git
+cd swift
+pip install -r requirements.txt
+pip install -e '.[llm]'
+</code></pre>
 
 <h2 id="train">Train</h2>
 <h3 id="prepare-the-data">Prepare the data</h3>
 <p>You can refer to the format below to construct your dataset. Custom datasets support JSON and JSONL formats.</p>
-<div class="code"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;What does this picture describe?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This picture has a giant panda.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;images&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;local_image_path&quot;</span><span class="p">]}</span>
-<span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;What does this picture describe?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This picture has a giant panda.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">&quot;images&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;local_image_path&quot;</span><span class="p">]}</span>
-<span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Is bamboo tasty?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;It seems pretty tasty judging by the panda&#39;s expression.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;What&#39;s in this picture?&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;There&#39;s a giant panda in this picture.&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;What is the panda doing?&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Eating bamboo.&quot;</span><span class="p">]],</span><span class="w"> </span><span class="nt">&quot;images&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;image_url&quot;</span><span class="p">]}</span>
-</code></pre></div>
+<pre class="code"><code class="language-json">{&quot;query&quot;: &quot;What does this picture describe?&quot;, &quot;response&quot;: &quot;This picture has a giant panda.&quot;, &quot;images&quot;: [&quot;local_image_path&quot;]}
+{&quot;query&quot;: &quot;What does this picture describe?&quot;, &quot;response&quot;: &quot;This picture has a giant panda.&quot;, &quot;history&quot;: [], &quot;images&quot;: [&quot;local_image_path&quot;]}
+{&quot;query&quot;: &quot;Is bamboo tasty?&quot;, &quot;response&quot;: &quot;It seems pretty tasty judging by the panda's expression.&quot;, &quot;history&quot;: [[&quot;What's in this picture?&quot;, &quot;There's a giant panda in this picture.&quot;], [&quot;What is the panda doing?&quot;, &quot;Eating bamboo.&quot;]], &quot;images&quot;: [&quot;image_url&quot;]}
+</code></pre>
 
 <p>Alternatively, you can also use datasets from ModelScope, such as the image dataset <a href="https://modelscope.cn/datasets/modelscope/coco_2014_caption/summary">coco-en-mini</a> or the video dataset <a href="https://modelscope.cn/datasets/swift/VideoChatGPT">video-chatgpt</a>.</p>
 <h3 id="image-fine-tuning">Image Fine-tuning</h3>
 <p>We use the <code>coco-en-mini</code> dataset for fine-tuning, which involves describing the content of images. </p>
 <p>The following is the code configuration:</p>
-<div class="code"><pre><span></span><code><span class="c1"># By default, `lora_target_modules` will be set to all linear layers in `llm` and `resampler`</span>
-<span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1,2,3<span class="w"> </span><span class="nv">NPROC_PER_NODE</span><span class="o">=</span><span class="m">4</span><span class="w"> </span>swift<span class="w"> </span>sft<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model_type<span class="w"> </span>minicpm-v-v2_6-chat<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model_id_or_path<span class="w"> </span>OpenBMB/MiniCPM-V-2_6<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--sft_type<span class="w"> </span>lora<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dataset<span class="w"> </span>coco-en-mini#20000<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--deepspeed<span class="w"> </span>default-zero2
-</code></pre></div>
+<pre class="code"><code class="language-bash"># By default, `lora_target_modules` will be set to all linear layers in `llm` and `resampler`
+CUDA_VISIBLE_DEVICES=0,1,2,3 NPROC_PER_NODE=4 swift sft \
+  --model_type minicpm-v-v2_6-chat \
+  --model_id_or_path OpenBMB/MiniCPM-V-2_6 \
+  --sft_type lora \
+  --dataset coco-en-mini#20000 \
+  --deepspeed default-zero2
+</code></pre>
 
 <p>If you want to use a custom dataset, simply specify it as follows:</p>
-<div class="code"><pre><span></span><code><span class="w">  </span>--dataset<span class="w"> </span>train.jsonl<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--val_dataset<span class="w"> </span>val.jsonl<span class="w"> </span><span class="se">\</span>
-</code></pre></div>
+<pre class="code"><code class="language-bash">  --dataset train.jsonl \
+  --val_dataset val.jsonl \
+</code></pre>
 
 <p>The inference script after fine-tuning is as follows:</p>
-<div class="code"><pre><span></span><code><span class="c1"># Set `--show_dataset_sample -1` to run full evaluation</span>
-<span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>swift<span class="w"> </span>infer<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--ckpt_dir<span class="w"> </span>output/minicpm-v-v2_6-chat/vx-xxx/checkpoint-xxx<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--load_dataset_config<span class="w"> </span><span class="nb">true</span><span class="w"> </span>--merge_lora<span class="w"> </span><span class="nb">true</span>
-</code></pre></div>
+<pre class="code"><code class="language-bash"># Set `--show_dataset_sample -1` to run full evaluation
+CUDA_VISIBLE_DEVICES=0 swift infer \
+    --ckpt_dir output/minicpm-v-v2_6-chat/vx-xxx/checkpoint-xxx \
+    --load_dataset_config true --merge_lora true
+</code></pre>
 
 <h3 id="video-fine-tuning">Video Fine-tuning</h3>
 <p>We use the <code>video-chatgpt</code> dataset for fine-tuning, which involves describing the content of images. </p>
 <p>The following is the code configuration:</p>
-<div class="code"><pre><span></span><code><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1,2,3<span class="w"> </span><span class="nv">NPROC_PER_NODE</span><span class="o">=</span><span class="m">4</span><span class="w"> </span>swift<span class="w"> </span>sft<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model_type<span class="w"> </span>minicpm-v-v2_6-chat<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model_id_or_path<span class="w"> </span>OpenBMB/MiniCPM-V-2_6<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--sft_type<span class="w"> </span>lora<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--dataset<span class="w"> </span>video-chatgpt<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--deepspeed<span class="w"> </span>default-zero2
-</code></pre></div>
+<pre class="code"><code class="language-bash">CUDA_VISIBLE_DEVICES=0,1,2,3 NPROC_PER_NODE=4 swift sft \
+  --model_type minicpm-v-v2_6-chat \
+  --model_id_or_path OpenBMB/MiniCPM-V-2_6 \
+  --sft_type lora \
+  --dataset video-chatgpt \
+  --deepspeed default-zero2
+</code></pre>
 
 <p>If you want to use a custom dataset, simply specify it as follows:</p>
-<div class="code"><pre><span></span><code><span class="w">  </span>--dataset<span class="w"> </span>train.jsonl<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--val_dataset<span class="w"> </span>val.jsonl<span class="w"> </span><span class="se">\</span>
-</code></pre></div>
+<pre class="code"><code class="language-bash">  --dataset train.jsonl \
+  --val_dataset val.jsonl \
+</code></pre>
 
 <p>Custom datasets support JSON and JSONL formats. Below is an example of the video dataset:</p>
-<div class="code"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;video&gt;Describe what is happening in this video.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A dog is playing with a ball in a park.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;videos&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;path/to/video1.mp4&quot;</span><span class="p">]}</span>
-<span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;What are the people doing in the video?&lt;video&gt;Can you see any vehicles?&lt;video&gt;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;People are walking on the street, and there are cars and bicycles.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">&quot;videos&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;path/to/video2.mp4&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;path/to/video3.mp4&quot;</span><span class="p">]}</span>
-<span class="p">{</span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Was there a red car in the previous video?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Yes, there was a red car parked near the sidewalk.&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;What did you see in the video?&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;There was a car, a bicycle, and several pedestrians.&quot;</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;What time was it?&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;It seemed to be in the afternoon.&quot;</span><span class="p">]],</span><span class="w"> </span><span class="nt">&quot;videos&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]}</span>
-</code></pre></div>
+<pre class="code"><code class="language-json">{&quot;query&quot;: &quot;&lt;video&gt;Describe what is happening in this video.&quot;, &quot;response&quot;: &quot;A dog is playing with a ball in a park.&quot;, &quot;videos&quot;: [&quot;path/to/video1.mp4&quot;]}
+{&quot;query&quot;: &quot;What are the people doing in the video?&lt;video&gt;Can you see any vehicles?&lt;video&gt;&quot;, &quot;response&quot;: &quot;People are walking on the street, and there are cars and bicycles.&quot;, &quot;history&quot;: [], &quot;videos&quot;: [&quot;path/to/video2.mp4&quot;, &quot;path/to/video3.mp4&quot;]}
+{&quot;query&quot;: &quot;Was there a red car in the previous video?&quot;, &quot;response&quot;: &quot;Yes, there was a red car parked near the sidewalk.&quot;, &quot;history&quot;: [[&quot;What did you see in the video?&quot;, &quot;There was a car, a bicycle, and several pedestrians.&quot;], [&quot;What time was it?&quot;, &quot;It seemed to be in the afternoon.&quot;]], &quot;videos&quot;: []}
+</code></pre>
 
 <p>The inference script after fine-tuning is as follows:</p>
-<div class="code"><pre><span></span><code><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>swift<span class="w"> </span>infer<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--ckpt_dir<span class="w"> </span>output/minicpm-v-v2_6-chat/vx-xxx/checkpoint-xxx<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--load_dataset_config<span class="w"> </span><span class="nb">true</span><span class="w"> </span>--merge_lora<span class="w"> </span><span class="nb">true</span>
-</code></pre></div>
+<pre class="code"><code class="language-bash">CUDA_VISIBLE_DEVICES=0 swift infer \
+    --ckpt_dir output/minicpm-v-v2_6-chat/vx-xxx/checkpoint-xxx \
+    --load_dataset_config true --merge_lora true
+</code></pre>
 
 <h2 id="infer">Infer</h2>
 <p>Run the bash code will download the model of MiniCPM-V 2.6 and run the inference</p>
-<div class="code"><pre><span></span><code><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>swift<span class="w"> </span>infer<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model_type<span class="w"> </span>minicpm-v-v2_6-chat<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--model_id_or_path<span class="w"> </span>OpenBMB/MiniCPM-V-2_6
-</code></pre></div></article>
+<pre class="code"><code class="language-bash">CUDA_VISIBLE_DEVICES=0 swift infer \
+  --model_type minicpm-v-v2_6-chat \
+  --model_id_or_path OpenBMB/MiniCPM-V-2_6
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

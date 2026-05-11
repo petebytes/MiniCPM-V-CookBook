@@ -263,41 +263,41 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="语音克隆">语音克隆</h1>
 <h3 id="加载模型">加载模型</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">librosa</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<pre class="code"><code class="language-python">import torch
+import librosa
+from transformers import AutoModel, AutoTokenizer
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-o-2_6&#39;</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="c1"># sdpa 或 flash_attention_2，不要用 eager</span>
-                                  <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+model_path = 'openbmb/MiniCPM-o-2_6'
+model = AutoModel.from_pretrained(model_path, trust_remote_code=True,
+                                  # sdpa 或 flash_attention_2，不要用 eager
+                                  attn_implementation='sdpa', torch_dtype=torch.bfloat16)
+model = model.eval().cuda()
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
-<span class="n">model</span><span class="o">.</span><span class="n">init_tts</span><span class="p">()</span>
-<span class="n">model</span><span class="o">.</span><span class="n">tts</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
-</code></pre></div>
+model.init_tts()
+model.tts.float()
+</code></pre>
 
 <h3 id="使用示例">使用示例</h3>
 <p><audio controls>
   <source src="./assets/male_example.wav" type="audio/wav">
   example audio case
 </audio></p>
-<div class="code"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;Please repeat the user&#39;s speech, including voice style and speech content.&quot;</span>
-<span class="n">audio_input</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;./assets/male_example.wav&#39;</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span> <span class="n">mono</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">prompt</span><span class="p">,</span> <span class="n">audio_input</span><span class="p">]}]</span>
-<span class="n">res</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span>
-    <span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span>
-    <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
-    <span class="n">sampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span>
-    <span class="n">use_tts_template</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-    <span class="n">generate_audio</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">output_audio_path</span><span class="o">=</span><span class="s1">&#39;./voice_clone_output.wav&#39;</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div>
+<pre class="code"><code class="language-python">prompt = &quot;Please repeat the user's speech, including voice style and speech content.&quot;
+audio_input, _ = librosa.load('./assets/male_example.wav', sr=16000, mono=True)
+msgs = [{'role': 'user', 'content': [prompt, audio_input]}]
+res = model.chat(
+    msgs=msgs,
+    image=None,
+    tokenizer=tokenizer,
+    sampling=True,
+    max_new_tokens=4096,
+    use_tts_template=True,
+    temperature=0.3,
+    generate_audio=True,
+    output_audio_path='./voice_clone_output.wav',
+)
+</code></pre>
 
 <h3 id="示例输出">示例输出</h3>
 <p><audio controls>

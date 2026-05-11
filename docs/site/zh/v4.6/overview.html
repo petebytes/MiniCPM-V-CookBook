@@ -280,56 +280,56 @@ footer.page-footer a:hover { color: var(--primary); }
 </ul>
 <h2 id="快速上手">快速上手</h2>
 <h3 id="推理-hf-transformers">推理（HF Transformers）</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
+<pre class="code"><code class="language-python">import torch
+from PIL import Image
+from transformers import AutoProcessor, AutoModelForImageTextToText
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6&quot;</span>   <span class="c1"># 或 MiniCPM-V-4.6-Thinking</span>
-<span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForImageTextToText</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span> <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;sdpa&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+model_path = &quot;openbmb/MiniCPM-V-4.6&quot;   # 或 MiniCPM-V-4.6-Thinking
+processor = AutoProcessor.from_pretrained(model_path)
+model = AutoModelForImageTextToText.from_pretrained(
+    model_path, torch_dtype=torch.bfloat16, attn_implementation=&quot;sdpa&quot;,
+).eval().cuda()
 
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;example.jpg&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span>
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>  <span class="s2">&quot;text&quot;</span><span class="p">:</span>  <span class="s2">&quot;请描述这张图片&quot;</span><span class="p">},</span>
-<span class="p">]}]</span>
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+image = Image.open(&quot;example.jpg&quot;).convert(&quot;RGB&quot;)
+messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: [
+    {&quot;type&quot;: &quot;image&quot;, &quot;image&quot;: image},
+    {&quot;type&quot;: &quot;text&quot;,  &quot;text&quot;:  &quot;请描述这张图片&quot;},
+]}]
+inputs = processor.apply_chat_template(
+    messages, add_generation_prompt=True, tokenize=True,
+    return_dict=True, return_tensors=&quot;pt&quot;,
+).to(model.device)
 
-<span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-</code></pre></div>
+out = model.generate(**inputs, max_new_tokens=256)
+print(processor.decode(out[0][inputs[&quot;input_ids&quot;].shape[-1]:], skip_special_tokens=True))
+</code></pre>
 
 <h3 id="用-vllm-部署">用 vLLM 部署</h3>
-<div class="code"><pre><span></span><code><span class="c1"># v4.6 在 vllm-project/vllm#41254 合并前请使用 PR 分支</span>
-git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>Support-MiniCPM-V-4.6<span class="w"> </span>https://github.com/tc-mb/vllm.git
-<span class="nb">cd</span><span class="w"> </span>vllm
-<span class="nv">MAX_JOBS</span><span class="o">=</span><span class="m">6</span><span class="w"> </span><span class="nv">VLLM_USE_PRECOMPILED</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--editable<span class="w"> </span>.<span class="w"> </span>-v
+<pre class="code"><code class="language-bash"># v4.6 在 vllm-project/vllm#41254 合并前请使用 PR 分支
+git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/vllm.git
+cd vllm
+MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v
 
-vllm<span class="w"> </span>serve<span class="w"> </span>openbmb/MiniCPM-V-4.6<span class="w"> </span>--trust-remote-code<span class="w"> </span>--max-model-len<span class="w"> </span><span class="m">8192</span>
-</code></pre></div>
+vllm serve openbmb/MiniCPM-V-4.6 --trust-remote-code --max-model-len 8192
+</code></pre>
 
 <p>详见 <a href="deployment/vllm.html">vLLM 部署指南</a>。</p>
 <h3 id="用-llama-cpp-部署">用 llama.cpp 部署</h3>
-<div class="code"><pre><span></span><code><span class="c1"># release b9049 起包含 v4.6 支持</span>
-git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ggml-org/llama.cpp.git<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>llama.cpp
-cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
+<pre class="code"><code class="language-bash"># release b9049 起包含 v4.6 支持
+git clone https://github.com/ggml-org/llama.cpp.git &amp;&amp; cd llama.cpp
+cmake -B build &amp;&amp; cmake --build build --config Release
 
-<span class="c1"># 用标准脚本转换（v4.6 不再需要 surgery 脚本！）</span>
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM-V-4.6-F16.gguf<span class="w"> </span>--outtype<span class="w"> </span>f16
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM-V-4.6<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>--outfile<span class="w"> </span>/path/to/mmproj-MiniCPM-V-4.6-F16.gguf
+# 用标准脚本转换（v4.6 不再需要 surgery 脚本！）
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --outfile /path/to/MiniCPM-V-4.6-F16.gguf --outtype f16
+python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
+    --mmproj --outfile /path/to/mmproj-MiniCPM-V-4.6-F16.gguf
 
-./build/bin/llama-mtmd-cli<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-m<span class="w"> </span>/path/to/MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--mmproj<span class="w"> </span>/path/to/mmproj-MiniCPM-V-4.6-F16.gguf<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--image<span class="w"> </span>example.jpg<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;请描述这张图片&quot;</span>
-</code></pre></div>
+./build/bin/llama-mtmd-cli \
+    -m /path/to/MiniCPM-V-4.6-F16.gguf \
+    --mmproj /path/to/mmproj-MiniCPM-V-4.6-F16.gguf \
+    -c 8192 --image example.jpg -p &quot;请描述这张图片&quot;
+</code></pre>
 
 <p>详见 <a href="deployment/llamacpp.html">llama.cpp 部署指南</a>。</p>
 <h2 id="与-v4-5-的关键差异">与 v4.5 的关键差异</h2>

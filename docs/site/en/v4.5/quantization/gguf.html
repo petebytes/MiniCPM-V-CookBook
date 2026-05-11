@@ -279,20 +279,20 @@ footer.page-footer a:hover { color: var(--primary); }
 </ul>
 <h3 id="2-convert-the-pytorch-model-to-gguf-format">2. Convert the PyTorch Model to GGUF Format</h3>
 <p>Run the following commands in sequence to perform model surgery, convert the vision encoder, and then convert the language model.</p>
-<div class="code"><pre><span></span><code><span class="c1"># Step 1: Pre-process the model structure</span>
-python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-surgery.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5
+<pre class="code"><code class="language-bash"># Step 1: Pre-process the model structure
+python ./tools/mtmd/legacy-models/minicpmv-surgery.py -m ../MiniCPM-V-4_5
 
-<span class="c1"># Step 2: Convert the vision encoder to GGUF format</span>
-python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4_5<span class="w"> </span>--minicpmv-projector<span class="w"> </span>../MiniCPM-V-4_5/minicpmv.projector<span class="w"> </span>--output-dir<span class="w"> </span>../MiniCPM-V-4_5/<span class="w"> </span>--minicpmv_version<span class="w"> </span><span class="m">6</span>
+# Step 2: Convert the vision encoder to GGUF format
+python ./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py -m ../MiniCPM-V-4_5 --minicpmv-projector ../MiniCPM-V-4_5/minicpmv.projector --output-dir ../MiniCPM-V-4_5/ --minicpmv_version 6
 
-<span class="c1"># Step 3: Convert the language model to GGUF format</span>
-python<span class="w"> </span>./convert-hf-to-gguf.py<span class="w"> </span>../MiniCPM-V-4_5/model
-</code></pre></div>
+# Step 3: Convert the language model to GGUF format
+python ./convert-hf-to-gguf.py ../MiniCPM-V-4_5/model
+</code></pre>
 
 <h3 id="3-perform-int4-quantization">3. Perform INT4 Quantization</h3>
 <p>Once the conversion is complete, use the <code>llama-quantize</code> tool to quantize the F16 precision GGUF model to INT4.</p>
-<div class="code"><pre><span></span><code>./llama-quantize<span class="w"> </span>../MiniCPM-V-4_5/model/ggml-model-f16.gguf<span class="w"> </span>../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf<span class="w"> </span>Q4_K_M
-</code></pre></div></article>
+<pre class="code"><code class="language-bash">./llama-quantize ../MiniCPM-V-4_5/model/ggml-model-f16.gguf ../MiniCPM-V-4_5/model/ggml-model-Q4_K_M.gguf Q4_K_M
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

@@ -270,115 +270,115 @@ footer.page-footer a:hover { color: var(--primary); }
 <ol>
 <li>Clone the LlamaFactory GitHub repository:</li>
 </ol>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>https://github.com/hiyouga/LLaMA-Factory.git
-</code></pre></div>
+<pre class="code"><code class="language-bash">git clone --depth 1 https://github.com/hiyouga/LLaMA-Factory.git
+</code></pre>
 
 <ol>
 <li>Install LlamaFactory dependencies:</li>
 </ol>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>LLaMA-Factory
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[torch,metrics,deepspeed,minicpm_v]&quot;</span>
-</code></pre></div>
+<pre class="code"><code class="language-bash">cd LLaMA-Factory
+pip install -e &quot;.[torch,metrics,deepspeed,minicpm_v]&quot;
+</code></pre>
 
 <h2 id="prepare-the-dataset">Prepare the Dataset</h2>
 <h3 id="building-image-dataset">Building Image Dataset</h3>
 <p>Refer to the <strong>mllm_demo.json</strong> dataset under <a href="https://github.com/hiyouga/LLaMA-Factory/blob/main/data/dataset_info.json">LLaMA-Factory/data</a> and construct your data in the same format. The structure is as follows:</p>
 <p>To use images in multi-turn conversations, add the <code>&lt;image&gt;</code> tag in the user's content for each turn, and add the corresponding image paths in the <code>images</code> field. The number of <code>&lt;image&gt;</code> tags should match the number of values in <code>images</code>.</p>
-<div class="code"><pre><span></span><code><span class="p">[</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;messages&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;image&gt;Who are they?&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;They&#39;re Kane and Gretzka from Bayern Munich.&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;What are they doing?&lt;image&gt;&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;They are celebrating on the soccer field.&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;images&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="s2">&quot;mllm_demo_data/1.jpg&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="s2">&quot;mllm_demo_data/1.jpg&quot;</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;messages&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;image&gt;Who is he?&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;He&#39;s Thomas Muller from Bayern Munich.&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Why is he on the ground?&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Because he&#39;s sliding on his knees to celebrate.&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;images&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="s2">&quot;mllm_demo_data/2.jpg&quot;</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">]</span>
-</code></pre></div>
+<pre class="code"><code class="language-json">[
+  {
+    &quot;messages&quot;: [
+      {
+        &quot;content&quot;: &quot;&lt;image&gt;Who are they?&quot;,
+        &quot;role&quot;: &quot;user&quot;
+      },
+      {
+        &quot;content&quot;: &quot;They're Kane and Gretzka from Bayern Munich.&quot;,
+        &quot;role&quot;: &quot;assistant&quot;
+      },
+      {
+        &quot;content&quot;: &quot;What are they doing?&lt;image&gt;&quot;,
+        &quot;role&quot;: &quot;user&quot;
+      },
+      {
+        &quot;content&quot;: &quot;They are celebrating on the soccer field.&quot;,
+        &quot;role&quot;: &quot;assistant&quot;
+      }
+    ],
+    &quot;images&quot;: [
+      &quot;mllm_demo_data/1.jpg&quot;,
+      &quot;mllm_demo_data/1.jpg&quot;
+    ]
+  },
+  {
+    &quot;messages&quot;: [
+      {
+        &quot;content&quot;: &quot;&lt;image&gt;Who is he?&quot;,
+        &quot;role&quot;: &quot;user&quot;
+      },
+      {
+        &quot;content&quot;: &quot;He's Thomas Muller from Bayern Munich.&quot;,
+        &quot;role&quot;: &quot;assistant&quot;
+      },
+      {
+        &quot;content&quot;: &quot;Why is he on the ground?&quot;,
+        &quot;role&quot;: &quot;user&quot;
+      },
+      {
+        &quot;content&quot;: &quot;Because he's sliding on his knees to celebrate.&quot;,
+        &quot;role&quot;: &quot;assistant&quot;
+      }
+    ],
+    &quot;images&quot;: [
+      &quot;mllm_demo_data/2.jpg&quot;
+    ]
+  }
+]
+</code></pre>
 
 <h3 id="building-video-dataset">Building Video Dataset</h3>
 <p>Refer to the <strong>mllm_video_demo.json</strong> dataset under <a href="https://github.com/hiyouga/LLaMA-Factory/blob/main/data/dataset_info.json">LLaMA-Factory/data</a> and construct your data in the same format. The structure is as follows:</p>
 <p>To use videos in multi-turn conversations, add the <code>&lt;video&gt;</code> tag in the user's content for each turn, and add the corresponding video paths in the <code>videos</code> field. The number of <code>&lt;video&gt;</code> tags should match the number of values in <code>videos</code>.</p>
-<div class="code"><pre><span></span><code><span class="p">[</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;messages&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;video&gt;Why is this video funny?&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Because a baby is reading, and he is so cute!&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;videos&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="s2">&quot;mllm_demo_data/1.mp4&quot;</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">]</span>
-</code></pre></div>
+<pre class="code"><code class="language-json">[
+  {
+    &quot;messages&quot;: [
+      {
+        &quot;content&quot;: &quot;&lt;video&gt;Why is this video funny?&quot;,
+        &quot;role&quot;: &quot;user&quot;
+      },
+      {
+        &quot;content&quot;: &quot;Because a baby is reading, and he is so cute!&quot;,
+        &quot;role&quot;: &quot;assistant&quot;
+      }
+    ],
+    &quot;videos&quot;: [
+      &quot;mllm_demo_data/1.mp4&quot;
+    ]
+  }
+]
+</code></pre>
 
 <h3 id="building-audio-dataset">Building Audio Dataset</h3>
 <p><strong>Note: Only MiniCPM-o 2.6 model supports audio fine-tuning</strong></p>
 <p>Refer to the <strong>mllm_audio_demo.json</strong> dataset under <a href="https://github.com/hiyouga/LLaMA-Factory/blob/main/data/dataset_info.json">LLaMA-Factory/data</a> and construct your data in the same format. The structure is as follows:</p>
 <p>To use audio in multi-turn conversations, add the <code>&lt;audio&gt;</code> tag in the user's content for each turn, and add the corresponding audio paths in the <code>audios</code> field. The number of <code>&lt;audio&gt;</code> tags should match the number of values in <code>audios</code>.</p>
-<div class="code"><pre><span></span><code><span class="p">[</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;messages&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;audio&gt;What&#39;s that sound?&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;It is the sound of glass shattering.&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;audios&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="s2">&quot;mllm_demo_data/1.mp3&quot;</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">]</span>
-</code></pre></div>
+<pre class="code"><code class="language-json">[
+  {
+    &quot;messages&quot;: [
+      {
+        &quot;content&quot;: &quot;&lt;audio&gt;What's that sound?&quot;,
+        &quot;role&quot;: &quot;user&quot;
+      },
+      {
+        &quot;content&quot;: &quot;It is the sound of glass shattering.&quot;,
+        &quot;role&quot;: &quot;assistant&quot;
+      }
+    ],
+    &quot;audios&quot;: [
+      &quot;mllm_demo_data/1.mp3&quot;
+    ]
+  }
+]
+</code></pre>
 
 <h3 id="register-dataset">Register Dataset</h3>
 <ol>
@@ -446,128 +446,128 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <h2 id="create-training-configuration-yaml-files">Create Training Configuration YAML Files</h2>
 <h3 id="lora-fine-tuning">LoRA Fine-tuning</h3>
 <p>Create a configuration file named <code>minicpmv4_5_lora_sft.yaml</code> and place it in <code>LLaMA-Factory/minicpm_config</code>.</p>
-<div class="code"><pre><span></span><code><span class="c1">### model</span>
-<span class="nt">model_name_or_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openbmb/MiniCPM-V-4_5</span><span class="w"> </span><span class="c1"># Can be MiniCPM-V or MiniCPM-o local model</span>
-<span class="nt">trust_remote_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<pre class="code"><code class="language-yaml">### model
+model_name_or_path: openbmb/MiniCPM-V-4_5 # Can be MiniCPM-V or MiniCPM-o local model
+trust_remote_code: true
 
-<span class="c1">### method</span>
-<span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sft</span><span class="w"> </span><span class="c1"># sft training</span>
-<span class="nt">do_train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">finetuning_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lora</span><span class="w"> </span><span class="c1"># LoRA fine-tuning</span>
-<span class="nt">lora_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">q_proj,v_proj</span><span class="w"> </span><span class="c1"># LoRA layers to insert</span>
+### method
+stage: sft # sft training
+do_train: true
+finetuning_type: lora # LoRA fine-tuning
+lora_target: q_proj,v_proj # LoRA layers to insert
 
-<span class="c1">### dataset</span>
-<span class="nt">dataset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpmv_img</span><span class="w"> </span><span class="c1"># Use the key you added in data/dataset_info.json</span>
-<span class="nt">template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minicpm_v</span><span class="w"> </span><span class="c1"># Do not change</span>
-<span class="nt">cutoff_len</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3072</span><span class="w"> </span><span class="c1"># Model token length including multimodal</span>
-<span class="nt">max_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w"> </span><span class="c1"># Max number of samples</span>
-<span class="nt">overwrite_cache</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">preprocessing_num_workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+### dataset
+dataset: cpmv_img # Use the key you added in data/dataset_info.json
+template: minicpm_v # Do not change
+cutoff_len: 3072 # Model token length including multimodal
+max_samples: 1000 # Max number of samples
+overwrite_cache: true
+preprocessing_num_workers: 16
 
-<span class="c1">### output</span>
-<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">saves/minicpmv4_5/lora/sft</span>
-<span class="nt">logging_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="nt">save_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w"> </span><span class="c1"># Save every N steps</span>
-<span class="nt">plot_loss</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># Plot loss curve</span>
-<span class="nt">overwrite_output_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># Overwrite previous outputs</span>
-<span class="nt">save_total_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+### output
+output_dir: saves/minicpmv4_5/lora/sft
+logging_steps: 1
+save_steps: 100 # Save every N steps
+plot_loss: true # Plot loss curve
+overwrite_output_dir: true # Overwrite previous outputs
+save_total_limit: 10
 
-<span class="c1">### train</span>
-<span class="nt">per_device_train_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="nt">gradient_accumulation_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0e-5</span>
-<span class="nt">num_train_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20.0</span>
-<span class="nt">lr_scheduler_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cosine</span>
-<span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
-<span class="nt">bf16</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">ddp_timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">180000000</span>
-<span class="nt">save_only_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 1
+learning_rate: 1.0e-5
+num_train_epochs: 20.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+save_only_model: true
 
-<span class="c1">### eval</span>
-<span class="nt">do_eval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</code></pre></div>
+### eval
+do_eval: false
+</code></pre>
 
 <h3 id="full-fine-tuning">Full Fine-tuning</h3>
 <p>Create a full training configuration file <code>minicpmv4_5_full_sft.yaml</code> and place it in <code>LLaMA-Factory/minicpm_config</code>:</p>
-<div class="code"><pre><span></span><code><span class="c1">### model</span>
-<span class="nt">model_name_or_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openbmb/MiniCPM-V-4_5</span><span class="w"> </span><span class="c1"># MiniCPM-o-2_6 or MiniCPM-V-2_6 or local path</span>
-<span class="nt">trust_remote_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">freeze_vision_tower</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># Freeze vision module</span>
-<span class="nt">print_param_status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">flash_attn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fa2</span><span class="w"> </span><span class="c1"># Use flash attention 2</span>
+<pre class="code"><code class="language-yaml">### model
+model_name_or_path: openbmb/MiniCPM-V-4_5 # MiniCPM-o-2_6 or MiniCPM-V-2_6 or local path
+trust_remote_code: true
+freeze_vision_tower: true # Freeze vision module
+print_param_status: true
+flash_attn: fa2 # Use flash attention 2
 
-<span class="c1">### method</span>
-<span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sft</span>
-<span class="nt">do_train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">finetuning_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full</span><span class="w"> </span><span class="c1"># Full fine-tuning</span>
-<span class="nt">deepspeed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configs/deepspeed/ds_z2_config.json</span><span class="w"> </span><span class="c1"># Use deepspeed zero2 distributed training</span>
+### method
+stage: sft
+do_train: true
+finetuning_type: full # Full fine-tuning
+deepspeed: configs/deepspeed/ds_z2_config.json # Use deepspeed zero2 distributed training
 
-<span class="c1">### dataset</span>
-<span class="nt">dataset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpmv_img</span><span class="w"> </span><span class="c1"># Use the key you added in data/dataset_info.json</span>
-<span class="nt">template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minicpm_v</span>
-<span class="nt">cutoff_len</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3072</span>
-<span class="nt">max_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
-<span class="nt">overwrite_cache</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">preprocessing_num_workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+### dataset
+dataset: cpmv_img # Use the key you added in data/dataset_info.json
+template: minicpm_v
+cutoff_len: 3072
+max_samples: 1000
+overwrite_cache: true
+preprocessing_num_workers: 16
 
-<span class="c1">### output</span>
-<span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">saves/minicpmv4_5/full/sft</span>
-<span class="nt">logging_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="nt">save_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
-<span class="nt">plot_loss</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">overwrite_output_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">save_total_limit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+### output
+output_dir: saves/minicpmv4_5/full/sft
+logging_steps: 1
+save_steps: 100
+plot_loss: true
+overwrite_output_dir: true
+save_total_limit: 10
 
-<span class="c1">### train</span>
-<span class="nt">per_device_train_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="nt">gradient_accumulation_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="nt">learning_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0e-5</span>
-<span class="nt">num_train_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20.0</span>
-<span class="nt">lr_scheduler_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cosine</span>
-<span class="nt">warmup_ratio</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w"> </span><span class="c1"># 10% warmup</span>
-<span class="nt">bf16</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">ddp_timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">180000000</span>
-<span class="nt">save_only_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 1
+learning_rate: 1.0e-5
+num_train_epochs: 20.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1 # 10% warmup
+bf16: true
+ddp_timeout: 180000000
+save_only_model: true
 
-<span class="c1">### eval</span>
-<span class="nt">do_eval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</code></pre></div>
+### eval
+do_eval: false
+</code></pre>
 
 <h2 id="model-training">Model Training</h2>
 <h3 id="full-training">Full Training</h3>
-<div class="code"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>LLaMA-Factory
-llamafactory-cli<span class="w"> </span>train<span class="w"> </span>configs/minicpmv4_5_full_sft.yaml
-</code></pre></div>
+<pre class="code"><code class="language-bash">cd LLaMA-Factory
+llamafactory-cli train configs/minicpmv4_5_full_sft.yaml
+</code></pre>
 
 <h3 id="lora-training">LoRA Training</h3>
 <ol>
 <li>Start training:</li>
 </ol>
-<div class="code"><pre><span></span><code>llamafactory-cli<span class="w"> </span>train<span class="w"> </span>configs/minicpmv4_5_lora_sft.yaml
-</code></pre></div>
+<pre class="code"><code class="language-bash">llamafactory-cli train configs/minicpmv4_5_lora_sft.yaml
+</code></pre>
 
 <ol>
 <li>Create a merge script <code>merge.yaml</code>:</li>
 </ol>
-<div class="code"><pre><span></span><code><span class="c1">### model</span>
-<span class="nt">model_name_or_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openbmb/MiniCPM-V-4_5</span><span class="w"> </span><span class="c1"># Original model path, can be local</span>
-<span class="nt">adapter_name_or_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">saves/minicpm_v4_5/lora/sft</span><span class="w"> </span><span class="c1"># Path to saved LoRA model</span>
-<span class="nt">template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minicpm_v</span>
-<span class="nt">finetuning_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lora</span>
-<span class="nt">trust_remote_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<pre class="code"><code class="language-yaml">### model
+model_name_or_path: openbmb/MiniCPM-V-4_5 # Original model path, can be local
+adapter_name_or_path: saves/minicpm_v4_5/lora/sft # Path to saved LoRA model
+template: minicpm_v
+finetuning_type: lora
+trust_remote_code: true
 
-<span class="c1">### export</span>
-<span class="nt">export_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">models/minicpmv4_5_lora_sft</span>
-<span class="nt">export_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="nt">export_device</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpu</span>
-<span class="nt">export_legacy_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</code></pre></div>
+### export
+export_dir: models/minicpmv4_5_lora_sft
+export_size: 2
+export_device: cpu
+export_legacy_format: false
+</code></pre>
 
 <ol>
 <li>Merge the model:</li>
 </ol>
-<div class="code"><pre><span></span><code>llamafactory-cli<span class="w"> </span><span class="nb">export</span><span class="w"> </span>configs/minicpmv4_5_lora_export.yaml
-</code></pre></div></article>
+<pre class="code"><code class="language-bash">llamafactory-cli export configs/minicpmv4_5_lora_export.yaml
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

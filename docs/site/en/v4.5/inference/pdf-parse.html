@@ -270,54 +270,54 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="pdf-parse">PDF Parse</h1>
 <h3 id="initialize-model">Initialize model</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<pre class="code"><code class="language-python">import torch
+from transformers import AutoModel, AutoTokenizer
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;openbmb/MiniCPM-V-4_5&#39;</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="n">attn_implementation</span><span class="o">=</span><span class="s1">&#39;sdpa&#39;</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>  <span class="c1"># sdpa or flash_attention_2, no eager</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
+model_path = 'openbmb/MiniCPM-V-4_5'
+model = AutoModel.from_pretrained(model_path, trust_remote_code=True,
+                                  attn_implementation='sdpa', torch_dtype=torch.bfloat16)  # sdpa or flash_attention_2, no eager
+model = model.eval().cuda()
+tokenizer = AutoTokenizer.from_pretrained(
+    model_path, trust_remote_code=True)
+</code></pre>
 
 <h3 id="pdf-to-image-function">PDF to image function</h3>
-<div class="code"><pre><span></span><code><span class="ch">#! need to install poppler-utils</span>
-<span class="c1"># sudo apt-get update</span>
-<span class="c1"># sudo apt-get install poppler-utils</span>
-<span class="kn">from</span> <span class="nn">pdf2image</span> <span class="kn">import</span> <span class="n">convert_from_path</span>
+<pre class="code"><code class="language-python">#! need to install poppler-utils
+# sudo apt-get update
+# sudo apt-get install poppler-utils
+from pdf2image import convert_from_path
 
 
-<span class="k">def</span> <span class="nf">pdf_to_images</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
-    <span class="n">images</span> <span class="o">=</span> <span class="n">convert_from_path</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
-    <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">images</span>
-</code></pre></div>
+def pdf_to_images(pdf_path, dpi=200):
+    images = convert_from_path(pdf_path, dpi=dpi)
+    images = [image.convert('RGB') for image in images]
+    return images
+</code></pre>
 
 <h3 id="usage-example">Usage example</h3>
-<div class="code"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">You are an OCR assistant. Your task is to identify and extract all visible text from the image provided. Preserve the original formatting as closely as possible, including:</span>
+<pre class="code"><code class="language-python">prompt = &quot;&quot;&quot;
+You are an OCR assistant. Your task is to identify and extract all visible text from the image provided. Preserve the original formatting as closely as possible, including:
 
-<span class="s2">- Line breaks and paragraphs  </span>
-<span class="s2">- Headings and subheadings  </span>
-<span class="s2">- Any tables, lists, bullet points, or numbered items  </span>
-<span class="s2">- Special characters, spacing, and alignment  </span>
+- Line breaks and paragraphs  
+- Headings and subheadings  
+- Any tables, lists, bullet points, or numbered items  
+- Special characters, spacing, and alignment  
 
-<span class="s2">Output strictly the extracted text in Markdown format, reflecting the layout and structure of the original image. Do not add commentary, interpretation, or summarization—only return the raw text content with its formatting.</span>
-<span class="s2">&quot;&quot;&quot;</span>
+Output strictly the extracted text in Markdown format, reflecting the layout and structure of the original image. Do not add commentary, interpretation, or summarization—only return the raw text content with its formatting.
+&quot;&quot;&quot;
 
-<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">prompt</span><span class="p">]</span>
-<span class="n">contents</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pdf_to_images</span><span class="p">(</span><span class="s1">&#39;assets/parse.pdf&#39;</span><span class="p">))</span>
-<span class="n">msgs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="n">contents</span><span class="p">}]</span>
+contents = [prompt]
+contents.extend(pdf_to_images('assets/parse.pdf'))
+msgs = [{'role': 'user', 'content': contents}]
 
-<span class="n">answer</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="n">msgs</span><span class="o">=</span><span class="n">msgs</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
+answer = model.chat(msgs=msgs, image=None, tokenizer=tokenizer)
+print(answer)
+</code></pre>
 
 <h3 id="sample-pdf">Sample PDF</h3>
 <p><img alt="alt text" src="./assets/parse.png"></p>
 <h3 id="example-output">Example Output</h3>
-<div class="code"><pre><span></span><code>For chatbot demo:
+<pre class="code"><code>For chatbot demo:
 
 pip install -r requirements_o2.6.txt
 python web_demos/minicpm-o_2.6/chatbot_web_demo_o2.6.py
@@ -336,7 +336,7 @@ Model Zoo
 | MiniCPM-V 2.6 | GPU | 17 GB | Strong end-side multimodal performance for single image, multi-image and video understanding. |
 | MiniCPM-V 2.6 gguf | CPU | 6 GB | The gguf version, lower memory usage and faster inference. |
 | MiniCPM-V 2.6 int4 | GPU | 7 GB | The int4 quantized version, lower GPU memory usage. |
-</code></pre></div></article>
+</code></pre></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>
