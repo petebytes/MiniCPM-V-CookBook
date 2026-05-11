@@ -22,8 +22,8 @@ Training task:
 - __Minimum runnable installation steps__
 
 ```bash
-conda create -n "MiniCPM-V_4.6-Counting" python=3.10 -y
-conda activate "MiniCPM-V_4.6-Counting"
+conda create -n "MiniCPM-V-4.6-Counting" python=3.10 -y
+conda activate "MiniCPM-V-4.6-Counting"
 
 pip install torch==2.8.0 torchvision==0.23.0
 
@@ -182,9 +182,9 @@ ${SWIFT_BIN} sft \
 - Output example:
 
 ```text
-Q: Carefully observe the image. Are there any people in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
+Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
 
-A: The respective coordinates of people: <point>79 638</point>, <point>179 630</point>, <point>261 654</point>, <point>345 648</point>, <point>432 628</point>, <point>532 625</point>, <point>620 628</point>, <point>712 626</point>, <point>800 616</point>, <point>915 626</point>. So the total count is 10.
+A: The respective coordinates of airplanes: <point>310 370</point>, <point>365 277</point>, <point>388 486</point>, <point>405 185</point>, <point>437 368</point>, <point>474 611</point>, <point>503 250</point>, <point>527 451</point>, <point>535 818</point>, <point>597 331</point>. So the total count is 10.
 ```
 
 <img src="./assets/finetune_minicpmv46/sample_1.png" alt="ms-swift sample" />
@@ -196,8 +196,8 @@ A: The respective coordinates of people: <point>79 638</point>, <point>179 630</
 - __Minimum runnable installation steps__
 
 ```bash
-conda create -n "MiniCPM-V_4.6-Counting" python=3.11 -y
-conda activate "MiniCPM-V_4.6-Counting"
+conda create -n "MiniCPM-V-4.6-Counting" python=3.11 -y
+conda activate "MiniCPM-V-4.6-Counting"
 
 pip install torch==2.8.0 torchvision==0.23.0
 
