@@ -242,11 +242,11 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="single-image.html">单图问答</a></li>
 <li><a class="" href="multi-images.html">多图问答</a></li>
 <li><a class="" href="video-understanding.html">视频理解</a></li>
-<li><a class="" href="ocr.html">OCR</a></li>
-<li><a class="" href="pdf-parse.html">PDF 解析</a></li>
-<li><a class="active" href="grounding.html">视觉定位</a></li>
+<li><a class="" href="single-image-think.html">单图（思考模式）</a></li>
 <li><a class="" href="multi-images-think.html">多图（思考模式）</a></li>
-<li><a class="" href="single-image-think.html">单图（思考模式）</a></li></ul></li>
+<li class="nav-group collapsed"><div class="nav-group-header">其他视觉任务</div><ul class="nav-group-children"><li><a class="" href="ocr.html">OCR</a></li>
+<li><a class="" href="pdf-parse.html">PDF 解析</a></li>
+<li><a class="active" href="grounding.html">视觉定位</a></li></ul></li></ul></li>
 <li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
 <li><a class="" href="../deployment/sglang.html">SGLang</a></li>
 <li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
@@ -255,30 +255,26 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><a class="" href="../quantization/bnb.html">BNB</a></li>
 <li><a class="" href="../quantization/awq.html">AWQ</a></li>
 <li><a class="" href="../quantization/gptq.html">GPTQ</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
+<li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/dataset.html">数据集准备</a></li>
-<li><a class="" href="../../shared/finetune/full.html">全参数微调</a></li>
-<li><a class="" href="../../shared/finetune/lora.html">LoRA</a></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
 <li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
 <li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../../shared/demos/fastapi.html">FastAPI 全模态流式</a></li>
-<li><a class="" href="../../shared/demos/gradio.html">Gradio</a></li>
-<li><a class="" href="../../shared/demos/ios.html">iOS</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
   <article><h1 id="视觉定位-grounding">视觉定位 Grounding</h1>
 <h2 id="示例代码">示例代码</h2>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
-<span class="k">def</span> <span class="nf">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">):</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
@@ -286,7 +282,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span>
 
-<span class="k">def</span> <span class="nf">extract_bbox_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_bbox_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
     <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;box&gt;([\d\s]+)&lt;/box&gt;&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
         <span class="n">bbox_str</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -295,7 +291,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t find bbox in response&quot;</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">draw_bbox_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">draw_bbox_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox</span><span class="p">):</span>
     <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
     <span class="n">x1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span>
     <span class="n">y1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
@@ -305,7 +301,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">outline</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">image</span>
 
-<span class="k">def</span> <span class="nf">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
     <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">question</span><span class="p">,</span> <span class="n">image</span><span class="p">]},</span>
@@ -372,12 +368,12 @@ footer.page-footer a:hover { color: var(--primary); }
 <p>定位后：
 <img alt="alt text" src="./assets/doraemon-grounding.jpg"></p>
 <h3 id="多目标">多目标</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="k">def</span> <span class="nf">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">):</span>
+<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_model_and_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">):</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
@@ -385,7 +381,7 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span>
 
-<span class="k">def</span> <span class="nf">extract_bbox_from_json_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_bbox_from_json_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
     <span class="n">response_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
     <span class="n">bbox_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">name_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -398,7 +394,7 @@ footer.page-footer a:hover { color: var(--primary); }
         <span class="n">bbox_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">bbox_list</span><span class="p">,</span> <span class="n">name_list</span>
 
-<span class="k">def</span> <span class="nf">draw_multiple_bboxes_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox_list</span><span class="p">,</span> <span class="n">name_list</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">draw_multiple_bboxes_on_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">bbox_list</span><span class="p">,</span> <span class="n">name_list</span><span class="p">):</span>
     <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
     <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">names</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bbox_list</span><span class="p">,</span> <span class="n">name_list</span><span class="p">):</span>
@@ -410,7 +406,7 @@ footer.page-footer a:hover { color: var(--primary); }
         <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="mi">10</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">image</span>
 
-<span class="k">def</span> <span class="nf">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">model_infer_and_draw</span><span class="p">(</span><span class="n">img_path</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
     <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">question</span><span class="p">,</span> <span class="n">image</span><span class="p">]},</span>

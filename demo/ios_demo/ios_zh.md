@@ -1,4 +1,4 @@
-# MiniCPM-V 4.0 - iOS 设备部署
+# MiniCPM-V - iOS 设备部署
 
 ## 1. 部署 iOS App
 

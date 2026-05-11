@@ -242,9 +242,9 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../inference/single-image.html">单图问答</a></li>
 <li><a class="" href="../inference/multi-images.html">多图问答</a></li>
 <li><a class="" href="../inference/video-understanding.html">视频理解</a></li>
-<li><a class="" href="../inference/ocr.html">OCR</a></li>
+<li class="nav-group collapsed"><div class="nav-group-header">其他视觉任务</div><ul class="nav-group-children"><li><a class="" href="../inference/ocr.html">OCR</a></li>
 <li><a class="" href="../inference/pdf-parse.html">PDF 解析</a></li>
-<li><a class="" href="../inference/grounding.html">视觉定位</a></li></ul></li>
+<li><a class="" href="../inference/grounding.html">视觉定位</a></li></ul></li></ul></li>
 <li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
 <li><a class="" href="../deployment/sglang.html">SGLang</a></li>
 <li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
@@ -252,18 +252,14 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="gguf.html">GGUF</a></li>
 <li><a class="" href="bnb.html">BNB</a></li>
 <li><a class="active" href="awq.html">AWQ</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
+<li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/dataset.html">数据集准备</a></li>
-<li><a class="" href="../../shared/finetune/full.html">全参数微调</a></li>
-<li><a class="" href="../../shared/finetune/lora.html">LoRA</a></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
 <li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
 <li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../../shared/demos/fastapi.html">FastAPI 全模态流式</a></li>
-<li><a class="" href="../../shared/demos/gradio.html">Gradio</a></li>
-<li><a class="" href="../../shared/demos/ios.html">iOS</a></li></ul></li>
 </ul>
 </aside>
 
@@ -283,9 +279,9 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <p>（Thinking 版本发布后将是 <code>openbmb/MiniCPM-V-4.6-Thinking-AWQ</code>。）</p>
 <h3 id="2-用-vllm-运行">2. 用 vLLM 运行</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span>
-<span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoProcessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vllm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
 
 <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6-AWQ&quot;</span>
 <span class="n">IMAGES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;image.png&quot;</span><span class="p">]</span>
@@ -341,10 +337,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </code></pre></div>
 
 <h3 id="3-推理脚本">3. 推理脚本</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span>
-<span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
+<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoProcessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">awq</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6-AWQ&quot;</span>
 <span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;./assets/airplane.jpeg&quot;</span>
@@ -393,12 +389,12 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </code></pre></div>
 
 <h3 id="3-量化脚本">3. 量化脚本</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
-<span class="kn">from</span> <span class="nn">awq</span> <span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
+<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">awq</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoAWQForCausalLM</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/openbmb/MiniCPM-V-4.6&quot;</span>
 <span class="n">quant_path</span> <span class="o">=</span> <span class="s2">&quot;/model_quantized/minicpmv4_6_awq&quot;</span>
@@ -417,7 +413,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">copy_files_not_in_B</span><span class="p">(</span><span class="n">A_path</span><span class="p">,</span> <span class="n">B_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">copy_files_not_in_B</span><span class="p">(</span><span class="n">A_path</span><span class="p">,</span> <span class="n">B_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;如果文件在 A 中存在但 B 中不存在，则从 A 拷贝到 B（跳过权重文件）。&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">A_path</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The directory </span><span class="si">{</span><span class="n">A_path</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
@@ -437,10 +433,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
             <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">load_alpaca</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_alpaca</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;tatsu-lab/alpaca&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">concatenate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">concatenate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;instruction&quot;</span><span class="p">]:</span>
             <span class="n">msgs</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;instruction&quot;</span><span class="p">]},</span>

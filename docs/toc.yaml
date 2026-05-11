@@ -59,15 +59,18 @@ versions:
           - title: { en: "Video QA",          zh: "视频理解"    }
             src:   inference/minicpm-v4_6_video_understanding.md
             url:   inference/video-understanding
-          - title: { en: "OCR",               zh: "OCR"         }
-            src:   inference/minicpm-v4_6_ocr.md
-            url:   inference/ocr
-          - title: { en: "PDF parsing",       zh: "PDF 解析"   }
-            src:   inference/minicpm-v4_6_pdf_parse.md
-            url:   inference/pdf-parse
-          - title: { en: "Visual grounding",  zh: "视觉定位"    }
-            src:   inference/minicpm-v4_6_grounding.md
-            url:   inference/grounding
+          - group: { en: "Other visual tasks", zh: "其他视觉任务" }
+            collapsed: true
+            items:
+              - title: { en: "OCR",               zh: "OCR"         }
+                src:   inference/minicpm-v4_6_ocr.md
+                url:   inference/ocr
+              - title: { en: "PDF parsing",       zh: "PDF 解析"   }
+                src:   inference/minicpm-v4_6_pdf_parse.md
+                url:   inference/pdf-parse
+              - title: { en: "Visual grounding",  zh: "视觉定位"    }
+                src:   inference/minicpm-v4_6_grounding.md
+                url:   inference/grounding
 
       - group: { en: "Deployment", zh: "部署" }
         items:
@@ -96,6 +99,15 @@ versions:
             src:   quantization/awq/minicpm-v4_6_awq_quantize.md
             url:   quantization/awq
 
+      - group: { en: "Demos", zh: "演示" }
+        items:
+          - title: { en: "Gradio",  zh: "Gradio"  }
+            src:   demo/web_demo/minicpmv46/v46/README.md
+            url:   demos/gradio
+          - title: { en: "iOS",     zh: "iOS"     }
+            src:   demo/ios_demo/ios.md
+            url:   demos/ios
+
   - id: v4.5
     label: { en: "MiniCPM-V 4.5",  zh: "MiniCPM-V 4.5" }
     nav:
@@ -114,21 +126,24 @@ versions:
           - title: { en: "Video QA",        zh: "视频理解" }
             src:   inference/minicpm-v4_5_video_understanding.md
             url:   inference/video-understanding
-          - title: { en: "OCR",             zh: "OCR" }
-            src:   inference/minicpm-v4_5_ocr.md
-            url:   inference/ocr
-          - title: { en: "PDF parsing",     zh: "PDF 解析" }
-            src:   inference/minicpm-v4_5_pdf_parse.md
-            url:   inference/pdf-parse
-          - title: { en: "Visual grounding", zh: "视觉定位" }
-            src:   inference/minicpm-v4_5_grounding.md
-            url:   inference/grounding
-          - title: { en: "Multi-image (think)", zh: "多图（思考模式）" }
-            src:   inference/minicpm-v4_5_multi_images_think.md
-            url:   inference/multi-images-think
           - title: { en: "Single-image (think)", zh: "单图（思考模式）" }
             src:   inference/minicpm-v4_5_single_image_think.md
             url:   inference/single-image-think
+          - title: { en: "Multi-image (think)", zh: "多图（思考模式）" }
+            src:   inference/minicpm-v4_5_multi_images_think.md
+            url:   inference/multi-images-think
+          - group: { en: "Other visual tasks", zh: "其他视觉任务" }
+            collapsed: true
+            items:
+              - title: { en: "OCR",             zh: "OCR" }
+                src:   inference/minicpm-v4_5_ocr.md
+                url:   inference/ocr
+              - title: { en: "PDF parsing",     zh: "PDF 解析" }
+                src:   inference/minicpm-v4_5_pdf_parse.md
+                url:   inference/pdf-parse
+              - title: { en: "Visual grounding", zh: "视觉定位" }
+                src:   inference/minicpm-v4_5_grounding.md
+                url:   inference/grounding
 
       - group: { en: "Deployment", zh: "部署" }
         items:
@@ -159,6 +174,15 @@ versions:
           - title: { en: "GPTQ", zh: "GPTQ" }
             src:   quantization/gptq/minicpm-v4_5_gptq_quantize.md
             url:   quantization/gptq
+
+      - group: { en: "Demos", zh: "演示" }
+        items:
+          - title: { en: "Gradio",  zh: "Gradio"  }
+            src:   demo/web_demo/gradio/README.md
+            url:   demos/gradio
+          - title: { en: "iOS",     zh: "iOS"     }
+            src:   demo/ios_demo/ios.md
+            url:   demos/ios
 
   - id: o4.5
     label: { en: "MiniCPM-o 4.5", zh: "MiniCPM-o 4.5" }
@@ -203,20 +227,23 @@ versions:
             src:   quantization/gguf/minicpm-o4_5_gguf_quantize.md
             url:   quantization/gguf
 
+      - group: { en: "Demos", zh: "演示" }
+        items:
+          - title: { en: "FastAPI Omni Streaming", zh: "FastAPI 全模态流式" }
+            src:   demo/README.md
+            url:   demos/fastapi
+          - title: { en: "Gradio",  zh: "Gradio"  }
+            src:   demo/web_demo/gradio/README_o45.md
+            url:   demos/gradio
+
 # Cross-version pages (under /shared/...)
 shared:
   - group: { en: "Fine-tuning", zh: "微调" }
     items:
-      - title: { en: "Dataset guidance",   zh: "数据集准备" }
-        src:   finetune/dataset_guidance.md
-        src_zh: finetune/dataset_guidance_cn.md
-        url:   finetune/dataset
-      - title: { en: "Full-parameter",     zh: "全参数微调" }
-        src:   finetune/finetune_full.md
-        url:   finetune/full
-      - title: { en: "LoRA",               zh: "LoRA" }
-        src:   finetune/finetune_lora.md
-        url:   finetune/lora
+      - title: { en: "Official scripts",   zh: "官方脚本微调" }
+        src:   finetune/official_scripts.md
+        src_zh: finetune/official_scripts_zh.md
+        url:   finetune/official
       - title: { en: "LLaMA-Factory",      zh: "LLaMA-Factory" }
         src:   finetune/finetune_llamafactory.md
         url:   finetune/llamafactory
@@ -227,14 +254,4 @@ shared:
         src:   finetune/align_anything.md
         url:   finetune/align-anything
 
-  - group: { en: "Demos", zh: "演示" }
-    items:
-      - title: { en: "FastAPI Omni Streaming", zh: "FastAPI 全模态流式" }
-        src:   demo/README.md
-        url:   demos/fastapi
-      - title: { en: "Gradio",   zh: "Gradio"   }
-        src:   demo/web_demo/gradio/README.md
-        url:   demos/gradio
-      - title: { en: "iOS",      zh: "iOS"      }
-        src:   demo/ios_demo/ios.md
-        url:   demos/ios
+

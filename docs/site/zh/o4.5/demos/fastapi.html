@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="数据集准备 — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
-<title>数据集准备 — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="FastAPI 全模态流式 — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
+<title>FastAPI 全模态流式 — MiniCPM-V & o Cookbook</title>
 <link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
 <style>
@@ -202,7 +202,7 @@ footer.page-footer a:hover { color: var(--primary); }
 }
 </style>
 </head>
-<body data-version="shared" data-lang="zh" data-slug="shared/finetune/dataset">
+<body data-version="o4.5" data-lang="zh" data-slug="o4.5/demos/fastapi">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
@@ -224,7 +224,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../../en/shared/finetune/dataset.html" rel="alternate" hreflang="en">English</a>
+    <a class="sidebar-lang-switch" href="../../../en/o4.5/demos/fastapi.html" rel="alternate" hreflang="en">English</a>
   </div>
   <ul class="nav-list">
   <li><a class="" href="../../index.html">首页</a></li>
@@ -232,128 +232,71 @@ footer.page-footer a:hover { color: var(--primary); }
 <div class="sidebar-section-title">版本</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/overview.html" selected>MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/overview.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/overview.html">MiniCPM-o 4.5</option>
+    <option value="../../v4.6/demos/fastapi.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/demos/fastapi.html">MiniCPM-V 4.5</option>
+    <option value="fastapi.html" selected>MiniCPM-o 4.5</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="" href="../../v4.6/overview.html">概览</a></li>
-<li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/inference/single-image.html">单图问答</a></li>
-<li><a class="" href="../../v4.6/inference/multi-images.html">多图问答</a></li>
-<li><a class="" href="../../v4.6/inference/video-understanding.html">视频理解</a></li>
-<li><a class="" href="../../v4.6/inference/ocr.html">OCR</a></li>
-<li><a class="" href="../../v4.6/inference/pdf-parse.html">PDF 解析</a></li>
-<li><a class="" href="../../v4.6/inference/grounding.html">视觉定位</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/deployment/vllm.html">vLLM</a></li>
-<li><a class="" href="../../v4.6/deployment/sglang.html">SGLang</a></li>
-<li><a class="" href="../../v4.6/deployment/llamacpp.html">llama.cpp</a></li>
-<li><a class="" href="../../v4.6/deployment/ollama.html">Ollama</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/quantization/gguf.html">GGUF</a></li>
-<li><a class="" href="../../v4.6/quantization/bnb.html">BNB</a></li>
-<li><a class="" href="../../v4.6/quantization/awq.html">AWQ</a></li></ul></li>
+<li><a class="" href="../overview.html">概览</a></li>
+<li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../inference/speech2text.html">语音转文本</a></li>
+<li><a class="" href="../inference/text2speech.html">文本转语音</a></li>
+<li><a class="" href="../inference/voice-clone.html">语音克隆</a></li>
+<li><a class="" href="../inference/omni-recognition.html">全模态识别</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
+<li><a class="" href="../deployment/sglang.html">SGLang</a></li>
+<li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
+<li><a class="" href="../deployment/ollama.html">Ollama</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="../quantization/gguf.html">GGUF</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="active" href="fastapi.html">FastAPI 全模态流式</a></li>
+<li><a class="" href="gradio.html">Gradio</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="active" href="dataset.html">数据集准备</a></li>
-<li><a class="" href="full.html">全参数微调</a></li>
-<li><a class="" href="lora.html">LoRA</a></li>
-<li><a class="" href="llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="swift.html">SWIFT</a></li>
-<li><a class="" href="align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../demos/fastapi.html">FastAPI 全模态流式</a></li>
-<li><a class="" href="../demos/gradio.html">Gradio</a></li>
-<li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
+<li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
+<li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="数据集准备指南">数据集准备指南</h1>
-<p>本教程将指导你如何为 MiniCPM-o 进行有监督微调准备数据集。请严格按照以下格式和要求组织你的数据。</p>
-<h2 id="1-数据格式说明">1. 数据格式说明</h2>
-<p>每条数据应为一个字典，包含图片路径和多轮对话内容。例如：</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image.jpg&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;请描述这张图片&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;这是一只猫。&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
-
+  <article><h1 id="演示应用指南">演示应用指南</h1>
+<p>提供完整的 Web 演示应用，帮助您快速体验和展示 MiniCPM-o 的强大功能。</p>
+<p>📖 <a href="fastapi.html">English Version</a> | <a href="../">返回主页</a></p>
+<h2 id="web-demo">Web Demo</h2>
+<p>我们提供两种类型的 Web 演示应用，适用于不同的使用场景：</p>
+<h3 id="图文演示">📖 图文演示</h3>
+<p><strong>最适合</strong>: 标准多模态交互、文档处理、图像分析</p>
+<p><strong>特点</strong>:</p>
 <ul>
-<li><code>image</code>：图片路径，支持单图和多图（见下文）。</li>
-<li><code>conversations</code>：多轮对话，必须以 user 开头，role 仅支持 "user" 和 "assistant"。</li>
+<li>基于文本和图像的交互</li>
+<li>支持文件上传的多轮对话</li>
+<li>适合研究、教育和基础多模态任务</li>
+<li>支持多种图像格式和文档解析</li>
 </ul>
-<h3 id="多图输入格式">多图输入格式</h3>
-<p>如需支持多图输入，<code>image</code> 字段应为字典，键为 <code>&lt;image_00&gt;</code>, <code>&lt;image_01&gt;</code> 等，值为图片路径：</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_00&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image1.jpg&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_01&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image2.jpg&quot;</span>
-<span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;请比较 &lt;image_00&gt; 和 &lt;image_01&gt; 的不同&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;图片一是猫，图片二是狗。&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<h2 id="2-数据集加载与预处理">2. 数据集加载与预处理</h2>
-<p>数据加载和预处理主要依赖 <code>SupervisedDataset</code> 类。其核心流程如下：</p>
+<p><strong>可用版本</strong>:</p>
 <ul>
-<li>读取原始数据（json 或 list 格式）。</li>
-<li>对图片进行加载和 transform 处理。</li>
-<li>对对话内容进行分词、编码，生成 input_ids、labels、position_ids 等。</li>
-<li>支持图片切片、分块等高级处理（slice_config）。</li>
+<li><strong>Gradio</strong>: 简洁易用的 Web 界面，支持快速部署</li>
+<li><strong>OpenWebUI</strong>: 高级 Web 界面，具有增强功能</li>
 </ul>
-<h3 id="主要参数说明">主要参数说明</h3>
+<h3 id="全模态流式演示">🎤 全模态流式演示</h3>
+<p><strong>最适合</strong>: 实时语音对话、多模态流式处理、语音交互</p>
+<p><strong>特点</strong>:</p>
 <ul>
-<li><code>raw_data</code>：原始数据列表。</li>
-<li><code>transform</code>：图片预处理方法（如归一化、缩放等）。</li>
-<li><code>tokenizer</code>：分词器，需与模型对应。</li>
-<li><code>slice_config</code>：图片切片配置（可选）。</li>
-<li><code>llm_type</code>：大模型类型（如 "minicpm", "llama3", "qwen"）。</li>
-<li><code>patch_size</code>：图片分块大小，默认 14。</li>
-<li><code>query_nums</code>：图片 token 数，默认 64。</li>
-<li><code>batch_vision</code>：是否批量处理图片，默认 False。</li>
-<li><code>max_length</code>：最大文本长度，默认 2048。</li>
+<li>实时语音对话能力</li>
+<li>音视频流处理支持</li>
+<li>语音克隆和情感控制</li>
+<li>多模态同时处理</li>
+<li>流式交互 API 端点</li>
 </ul>
-<h2 id="3-数据集示例">3. 数据集示例</h2>
-<p>单图多轮对话示例：</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;images/cat.jpg&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;image&gt; 这是什么动物？&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;这是一只猫。&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;它在做什么？&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;它正在睡觉。&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>多图对话示例：</p>
-<div class="code"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_00&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;images/cat.jpg&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;&lt;image_01&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;images/dog.jpg&quot;</span>
-<span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;请比较 &lt;image_00&gt; 和 &lt;image_01&gt; 的不同&quot;</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;图片一是猫，图片二是狗。&quot;</span><span class="p">}</span>
-<span class="w">  </span><span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<h2 id="4-常见问题与注意事项">4. 常见问题与注意事项</h2>
+<h2 id="使用场景">使用场景</h2>
+<h3 id="全模态流式演示_1">全模态流式演示</h3>
 <ul>
-<li>对话必须以 user 开头，且 role 仅支持 "user" 和 "assistant"。</li>
-<li>图片路径需真实有效，支持本地路径。</li>
-<li>多图时，conversations 中需用 <code>&lt;image_xx&gt;</code> 占位符与 image 字典对应。</li>
-<li>若图片较大，建议配置 <code>slice_config</code> 进行切片处理。</li>
-<li>若数据加载报错，日志会自动重采样一条数据。</li>
-</ul>
-<hr></article>
+<li><strong>语音助手</strong>: 支持语音交互的对话 AI</li>
+<li><strong>流媒体应用</strong>: 多模态流式交互界面</li>
+<li><strong>客户服务</strong>: 语音客服系统</li>
+<li><strong>娱乐应用</strong>: 语音克隆和互动媒体</li>
+</ul></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="iOS — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
-<title>iOS — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="官方脚本微调 — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
+<title>官方脚本微调 — MiniCPM-V & o Cookbook</title>
 <link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
 <style>
@@ -202,7 +202,7 @@ footer.page-footer a:hover { color: var(--primary); }
 }
 </style>
 </head>
-<body data-version="shared" data-lang="zh" data-slug="shared/demos/ios">
+<body data-version="shared" data-lang="zh" data-slug="shared/finetune/official">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
@@ -224,7 +224,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../../en/shared/demos/ios.html" rel="alternate" hreflang="en">English</a>
+    <a class="sidebar-lang-switch" href="../../../en/shared/finetune/official.html" rel="alternate" hreflang="en">English</a>
   </div>
   <ul class="nav-list">
   <li><a class="" href="../../index.html">首页</a></li>
@@ -242,9 +242,9 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/inference/single-image.html">单图问答</a></li>
 <li><a class="" href="../../v4.6/inference/multi-images.html">多图问答</a></li>
 <li><a class="" href="../../v4.6/inference/video-understanding.html">视频理解</a></li>
-<li><a class="" href="../../v4.6/inference/ocr.html">OCR</a></li>
+<li class="nav-group collapsed"><div class="nav-group-header">其他视觉任务</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/inference/ocr.html">OCR</a></li>
 <li><a class="" href="../../v4.6/inference/pdf-parse.html">PDF 解析</a></li>
-<li><a class="" href="../../v4.6/inference/grounding.html">视觉定位</a></li></ul></li>
+<li><a class="" href="../../v4.6/inference/grounding.html">视觉定位</a></li></ul></li></ul></li>
 <li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/deployment/vllm.html">vLLM</a></li>
 <li><a class="" href="../../v4.6/deployment/sglang.html">SGLang</a></li>
 <li><a class="" href="../../v4.6/deployment/llamacpp.html">llama.cpp</a></li>
@@ -252,78 +252,156 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/quantization/gguf.html">GGUF</a></li>
 <li><a class="" href="../../v4.6/quantization/bnb.html">BNB</a></li>
 <li><a class="" href="../../v4.6/quantization/awq.html">AWQ</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/demos/gradio.html">Gradio</a></li>
+<li><a class="" href="../../v4.6/demos/ios.html">iOS</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../finetune/dataset.html">数据集准备</a></li>
-<li><a class="" href="../finetune/full.html">全参数微调</a></li>
-<li><a class="" href="../finetune/lora.html">LoRA</a></li>
-<li><a class="" href="../finetune/llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="../finetune/swift.html">SWIFT</a></li>
-<li><a class="" href="../finetune/align-anything.html">Align-anything</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="fastapi.html">FastAPI 全模态流式</a></li>
-<li><a class="" href="gradio.html">Gradio</a></li>
-<li><a class="active" href="ios.html">iOS</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="active" href="official.html">官方脚本微调</a></li>
+<li><a class="" href="llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="swift.html">SWIFT</a></li>
+<li><a class="" href="align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-v-4-0-ios-设备部署">MiniCPM-V 4.0 - iOS 设备部署</h1>
-<h2 id="1-部署-ios-app">1. 部署 iOS App</h2>
-<p><strong>NOTE: 为了获取在 iOS 设备上部署、测试 App 的权限，您可能需要拥有一个 Apple 开发者账号</strong></p>
-<p>克隆 iOS demo（基于<code>llama.cpp</code>）代码仓库: </p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/MiniCPM-o-demo-iOS.git
-<span class="nb">cd</span><span class="w"> </span>MiniCPM-o-demo-iOS
+  <article><h1 id="官方脚本微调">官方脚本微调</h1>
+<p>我们提供了基于 <strong>transformers Trainer</strong> 和 <strong>DeepSpeed</strong> 的官方微调脚本，方便在下游任务上微调预训练的 MiniCPM-V / MiniCPM-o 模型。</p>
+<p>支持模型：<strong>MiniCPM-V-4</strong>、<strong>MiniCPM-o-2_6</strong>、<strong>MiniCPM-V-2_6</strong>、<strong>MiniCPM-Llama3-V-2_5</strong>、<strong>MiniCPM-V-2</strong>。</p>
+<h2 id="1-数据集准备">1. 数据集准备</h2>
+<p>每条数据应为一个字典，包含图片路径和多轮对话内容。例如：</p>
+<div class="code"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image.jpg&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;请描述这张图片&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;这是一只猫。&quot;</span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
 </code></pre></div>
 
-<p>安装 Xcode:</p>
 <ul>
-<li>从 App Store 下载 Xcode</li>
-<li>安装命令行工具
-    ```bash
-    xcode-select --install</li>
-<li>同意软件许可协议
-    <code>bash
-    sudo xcodebuild -license</code></li>
+<li><code>image</code>：图片路径，支持单图和多图（见下文）。</li>
+<li><code>conversations</code>：多轮对话，必须以 user 开头，role 仅支持 "user" 和 "assistant"。</li>
 </ul>
-<p>使用 Xcode 打开 <code>MiniCPM-V-demo.xcodeproj</code>，可能需要等待 Xcode 自动下载所需的库。</p>
-<p>在 Xcode 页面顶部选择想要运行 iOS demo 的设备，点击三角形的 Run 按钮即可运行。</p>
-<p><strong>NOTE: 若上述流程出现 <code>thirdparty/llama.xcframework</code>路径相关报错，请按照如下教程自行编译 <code>llama.xcframework</code> 库</strong></p>
-<h2 id="2-自行编译构建-openbmb-提供的-llama-cpp">2. 自行编译构建 OpenBMB 提供的 llama.cpp</h2>
-<p>克隆 llama.cpp 代码仓库: </p>
-<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>Support-iOS-Demo<span class="w"> </span>https://github.com/tc-mb/llama.cpp.git
-<span class="nb">cd</span><span class="w"> </span>llama.cpp
+<h3 id="多图输入格式">多图输入格式</h3>
+<p>如需支持多图输入，<code>image</code> 字段应为字典，键为 <code>&lt;image_00&gt;</code>, <code>&lt;image_01&gt;</code> 等，值为图片路径：</p>
+<div class="code"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;&lt;image_00&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image1.jpg&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;&lt;image_01&gt;&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/image2.jpg&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;conversations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;请比较 &lt;image_00&gt; 和 &lt;image_01&gt; 的不同&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;assistant&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;图片一是猫，图片二是狗。&quot;</span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
 </code></pre></div>
 
-<p>使用脚本为 iOS 设备构建所需的 llama.cpp 库: </p>
-<div class="code"><pre><span></span><code>./build-xcframework.sh
-</code></pre></div>
-
-<p>将构建完成的库复制到 iOS demo 对应目录:</p>
-<div class="code"><pre><span></span><code>cp<span class="w"> </span>-r<span class="w"> </span>./build-apple/llama.xcframework<span class="w"> </span>../MiniCPM-o-demo-iOS/MiniCPM-V-demo/thirdparty
-</code></pre></div>
-
-<h2 id="3-获取模型-gguf-权重">3. 获取模型 GGUF 权重</h2>
-<h3 id="方法一-下载官方-gguf-文件">方法一: 下载官方 GGUF 文件</h3>
+<h3 id="数据集加载与预处理">数据集加载与预处理</h3>
+<p>数据加载和预处理主要依赖 <code>SupervisedDataset</code> 类。其核心流程如下：</p>
 <ul>
-<li>HuggingFace: https://huggingface.co/openbmb/MiniCPM-V-4-gguf</li>
-<li>魔搭社区: https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf</li>
+<li>读取原始数据（json 或 list 格式）。</li>
+<li>对图片进行加载和 transform 处理。</li>
+<li>对对话内容进行分词、编码，生成 input_ids、labels、position_ids 等。</li>
+<li>支持图片切片、分块等高级处理（slice_config）。</li>
 </ul>
-<p>从仓库中下载语言模型文件（如: <code>ggml-model-Q4_0.gguf</code>）与视觉模型文件（<code>mmproj-model-f16-iOS.gguf</code>）</p>
-<h3 id="方法二-从-pytorch-模型转换">方法二: 从 Pytorch 模型转换</h3>
-<p>下载 MiniCPM-V-4 PyTorch 模型到 "MiniCPM-V-4" 文件夹:
-*   HuggingFace: https://huggingface.co/openbmb/MiniCPM-V-4
-*   魔搭社区: https://modelscope.cn/models/OpenBMB/MiniCPM-V-4</p>
-<p>将 PyTorch 模型转换为 GGUF 格式:</p>
-<div class="code"><pre><span></span><code>python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-surgery.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4
+<h4 id="主要参数说明">主要参数说明</h4>
+<ul>
+<li><code>raw_data</code>：原始数据列表。</li>
+<li><code>transform</code>：图片预处理方法（如归一化、缩放等）。</li>
+<li><code>tokenizer</code>：分词器，需与模型对应。</li>
+<li><code>slice_config</code>：图片切片配置（可选）。</li>
+<li><code>llm_type</code>：大模型类型（如 "minicpm", "llama3", "qwen"）。</li>
+<li><code>patch_size</code>：图片分块大小，默认 14。</li>
+<li><code>query_nums</code>：图片 token 数，默认 64。</li>
+<li><code>batch_vision</code>：是否批量处理图片，默认 False。</li>
+<li><code>max_length</code>：最大文本长度，默认 2048。</li>
+</ul>
+<h3 id="常见问题与注意事项">常见问题与注意事项</h3>
+<ul>
+<li>对话必须以 user 开头，且 role 仅支持 "user" 和 "assistant"。</li>
+<li>图片路径需真实有效，支持本地路径。</li>
+<li>多图时，conversations 中需用 <code>&lt;image_xx&gt;</code> 占位符与 image 字典对应。</li>
+<li>若图片较大，建议配置 <code>slice_config</code> 进行切片处理。</li>
+<li>若数据加载报错，日志会自动重采样一条数据。</li>
+</ul>
+<h2 id="2-全参数微调">2. 全参数微调</h2>
+<p>全参数微调会在整个训练过程中更新 LLM 的全部参数。请在 shell 脚本中正确设置 <code>MODEL</code>、<code>DATA</code> 与 <code>LLM_TYPE</code>。</p>
+<p>训练脚本可在此查看：<a href="./finetune_ds.sh">finetune_ds.sh</a></p>
+<div class="code"><pre><span></span><code><span class="nv">MODEL</span><span class="o">=</span><span class="s2">&quot;MiniCPM-o-2_6&quot;</span><span class="w"> </span><span class="c1"># 或 &quot;openbmb/MiniCPM-V-4&quot;、&quot;openbmb/MiniCPM-V-2_6&quot;、&quot;openbmb/MiniCPM-Llama3-V-2_5&quot;、&quot;openbmb/MiniCPM-V-2&quot;</span>
+<span class="nv">DATA</span><span class="o">=</span><span class="s2">&quot;path/to/trainging_data&quot;</span><span class="w"> </span><span class="c1"># json 文件</span>
+<span class="nv">EVAL_DATA</span><span class="o">=</span><span class="s2">&quot;path/to/test_data&quot;</span><span class="w"> </span><span class="c1"># json 文件</span>
+<span class="nv">LLM_TYPE</span><span class="o">=</span><span class="s2">&quot;qwen&quot;</span><span class="w"> </span><span class="c1"># 使用 openbmb/MiniCPM-V-2 时设为 minicpm；使用 openbmb/MiniCPM-Llama3-V-2_5 时设为 &quot;llama3&quot;；</span>
+<span class="c1"># 使用 openbmb/MiniCPM-o-2_6 或 openbmb/MiniCPM-V-2_6 时设为 qwen；</span>
+<span class="c1"># 使用 openbmb/MiniCPM-V-4 时设为 llama</span>
+</code></pre></div>
 
-python<span class="w"> </span>./tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py<span class="w"> </span>-m<span class="w"> </span>../MiniCPM-V-4<span class="w"> </span>--minicpmv-projector<span class="w"> </span>../MiniCPM-V-4/minicpmv.projector<span class="w"> </span>--output-dir<span class="w"> </span>../MiniCPM-V-4/<span class="w"> </span>--minicpmv_version<span class="w"> </span><span class="m">5</span>
+<p>启动训练：</p>
+<div class="code"><pre><span></span><code>sh finetune_ds.sh
+</code></pre></div>
 
-python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>../MiniCPM-V-4/model
+<h2 id="3-lora-微调">3. LoRA 微调</h2>
+<p>LoRA 是轻量级的微调方法，只更新少量参数。我们基于 <code>peft</code> 提供了 LoRA 实现。</p>
+<p>训练脚本可在此查看：<a href="./finetune_lora.sh">finetune_lora.sh</a></p>
+<div class="code"><pre><span></span><code><span class="nv">MODEL</span><span class="o">=</span><span class="s2">&quot;MiniCPM-o-2_6&quot;</span><span class="w"> </span><span class="c1"># 或 &quot;openbmb/MiniCPM-V-4&quot;、&quot;openbmb/MiniCPM-V-2_6&quot;、&quot;openbmb/MiniCPM-Llama3-V-2_5&quot;、&quot;openbmb/MiniCPM-V-2&quot;</span>
+<span class="nv">DATA</span><span class="o">=</span><span class="s2">&quot;path/to/trainging_data&quot;</span><span class="w"> </span><span class="c1"># json 文件</span>
+<span class="nv">EVAL_DATA</span><span class="o">=</span><span class="s2">&quot;path/to/test_data&quot;</span><span class="w"> </span><span class="c1"># json 文件</span>
+<span class="nv">LLM_TYPE</span><span class="o">=</span><span class="s2">&quot;qwen&quot;</span><span class="w"> </span><span class="c1"># 使用 openbmb/MiniCPM-V-2 时设为 minicpm；使用 openbmb/MiniCPM-Llama3-V-2_5 时设为 &quot;llama3&quot;；</span>
+<span class="c1"># 使用 openbmb/MiniCPM-o-2_6 或 openbmb/MiniCPM-V-2_6 时设为 qwen；</span>
+<span class="c1"># 使用 openbmb/MiniCPM-V-4 时设为 llama</span>
+</code></pre></div>
 
-<span class="c1"># int4 量化版本</span>
-./llama-quantize<span class="w"> </span>../MiniCPM-V-4/model/Model-3.6B-f16.gguf<span class="w"> </span>../MiniCPM-V-4/model/ggml-model-Q4_0.gguf<span class="w"> </span>Q4_0
-</code></pre></div></article>
+<p>启动训练：</p>
+<div class="code"><pre><span></span><code>sh finetune_lora.sh
+</code></pre></div>
+
+<h2 id="4-加载微调模型">4. 加载微调模型</h2>
+<p>训练完成后（无论是全参数还是 LoRA），可通过 adapter 路径加载模型。建议为预训练模型使用绝对路径，因为 LoRA 仅保存 adapter，adapter config json 中的绝对路径用于定位预训练模型。</p>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">peft</span><span class="w"> </span><span class="kn">import</span> <span class="n">PeftModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModel</span>
+
+<span class="n">model_type</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-o-2_6&quot;</span>  <span class="c1"># 或 &quot;openbmb/MiniCPM-V-4&quot;、&quot;openbmb/MiniCPM-V-2_6&quot;、&quot;openbmb/MiniCPM-Llama3-V-2_5&quot;、&quot;openbmb/MiniCPM-V-2&quot;</span>
+<span class="n">path_to_adapter</span> <span class="o">=</span> <span class="s2">&quot;path_to_your_fine_tuned_checkpoint&quot;</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">model_type</span><span class="p">,</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">lora_model</span> <span class="o">=</span> <span class="n">PeftModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">path_to_adapter</span><span class="p">,</span>
+    <span class="n">device_map</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="5-显存占用统计">5. 显存占用统计</h2>
+<p>下表为使用 NVIDIA A100 (80 GiB) GPU、DeepSpeed Zero-3、梯度检查点、CPU offload 条件下的显存占用（最大长度 2048，batch size 1）。</p>
+<table>
+<thead>
+<tr>
+<th>微调方式</th>
+<th>2 卡</th>
+<th>4 卡</th>
+<th>8 卡</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LoRA</td>
+<td>14.4 GiB</td>
+<td>13.6 GiB</td>
+<td>13.1 GiB</td>
+</tr>
+<tr>
+<td>全参数</td>
+<td>16.0 GiB</td>
+<td>15.8 GiB</td>
+<td>15.6 GiB</td>
+</tr>
+</tbody>
+</table>
+<p>参考 <a href="https://huggingface.co/docs/transformers/deepspeed">DeepSpeed Zero stages</a> 进一步降低显存占用。</p></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>

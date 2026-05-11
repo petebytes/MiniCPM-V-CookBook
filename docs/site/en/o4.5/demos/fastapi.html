@@ -202,7 +202,7 @@ footer.page-footer a:hover { color: var(--primary); }
 }
 </style>
 </head>
-<body data-version="shared" data-lang="en" data-slug="shared/demos/fastapi">
+<body data-version="o4.5" data-lang="en" data-slug="o4.5/demos/fastapi">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
@@ -224,7 +224,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../../zh/shared/demos/fastapi.html" rel="alternate" hreflang="zh">中文</a>
+    <a class="sidebar-lang-switch" href="../../../zh/o4.5/demos/fastapi.html" rel="alternate" hreflang="zh">中文</a>
   </div>
   <ul class="nav-list">
   <li><a class="" href="../../index.html">Home</a></li>
@@ -232,38 +232,30 @@ footer.page-footer a:hover { color: var(--primary); }
 <div class="sidebar-section-title">Version</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/overview.html" selected>MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/overview.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/overview.html">MiniCPM-o 4.5</option>
+    <option value="../../v4.6/demos/fastapi.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/demos/fastapi.html">MiniCPM-V 4.5</option>
+    <option value="fastapi.html" selected>MiniCPM-o 4.5</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="" href="../../v4.6/overview.html">Overview</a></li>
-<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/inference/single-image.html">Single-image QA</a></li>
-<li><a class="" href="../../v4.6/inference/multi-images.html">Multi-image QA</a></li>
-<li><a class="" href="../../v4.6/inference/video-understanding.html">Video QA</a></li>
-<li><a class="" href="../../v4.6/inference/ocr.html">OCR</a></li>
-<li><a class="" href="../../v4.6/inference/pdf-parse.html">PDF parsing</a></li>
-<li><a class="" href="../../v4.6/inference/grounding.html">Visual grounding</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/deployment/vllm.html">vLLM</a></li>
-<li><a class="" href="../../v4.6/deployment/sglang.html">SGLang</a></li>
-<li><a class="" href="../../v4.6/deployment/llamacpp.html">llama.cpp</a></li>
-<li><a class="" href="../../v4.6/deployment/ollama.html">Ollama</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Quantization</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/quantization/gguf.html">GGUF</a></li>
-<li><a class="" href="../../v4.6/quantization/bnb.html">BNB</a></li>
-<li><a class="" href="../../v4.6/quantization/awq.html">AWQ</a></li></ul></li>
-</ul>
-<div class="sidebar-section-title">Cross-version</div>
-<ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../finetune/dataset.html">Dataset guidance</a></li>
-<li><a class="" href="../finetune/full.html">Full-parameter</a></li>
-<li><a class="" href="../finetune/lora.html">LoRA</a></li>
-<li><a class="" href="../finetune/llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="../finetune/swift.html">SWIFT</a></li>
-<li><a class="" href="../finetune/align-anything.html">Align-anything</a></li></ul></li>
+<li><a class="" href="../overview.html">Overview</a></li>
+<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../inference/speech2text.html">Speech-to-Text</a></li>
+<li><a class="" href="../inference/text2speech.html">Text-to-Speech</a></li>
+<li><a class="" href="../inference/voice-clone.html">Voice cloning</a></li>
+<li><a class="" href="../inference/omni-recognition.html">Omni recognition</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
+<li><a class="" href="../deployment/sglang.html">SGLang</a></li>
+<li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
+<li><a class="" href="../deployment/ollama.html">Ollama</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Quantization</div><ul class="nav-group-children"><li><a class="" href="../quantization/gguf.html">GGUF</a></li></ul></li>
 <li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="active" href="fastapi.html">FastAPI Omni Streaming</a></li>
-<li><a class="" href="gradio.html">Gradio</a></li>
-<li><a class="" href="ios.html">iOS</a></li></ul></li>
+<li><a class="" href="gradio.html">Gradio</a></li></ul></li>
+</ul>
+<ul class="nav-list">
+<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
+<li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
+<li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 

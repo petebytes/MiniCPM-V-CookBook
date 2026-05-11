@@ -39,8 +39,8 @@ gradio/v46/
 
 | Variant   | Path                                                                    |
 | --------- | ----------------------------------------------------------------------- |
-| instruct  | `/cache/caitianchi/code/v50/ckpt/minicpm-v-4_6-0420-rlaif-instruct`     |
-| thinking  | `/cache/caitianchi/code/v50/ckpt/minicpm-v-4_6-0420-rlaif-thinking`     |
+| instruct  | `./minicpm-v-4_6-0420-rlaif-instruct`     |
+| thinking  | `./minicpm-v-4_6-0420-rlaif-thinking`     |
 
 Note: `config.json` for both was patched to include `image_token_id: 248056`
 (the id of the `<|image_pad|>` special token) — without this the model raises
@@ -55,16 +55,15 @@ A dedicated `v46` conda env was cloned from `omni` and then:
 conda create --clone omni -n v46 --offline
 conda activate v46
 
-PYTHONNOUSERSITE=1 pip install -e /cache/caitianchi/code/v50/code/new-model-addition-MiniCPM-V-4.6 --no-deps
+PYTHONNOUSERSITE=1 pip install -e ./new-model-addition-MiniCPM-V-4.6 --no-deps
 PYTHONNOUSERSITE=1 pip install -U "huggingface_hub>=1.0" "tokenizers>=0.22.0,<=0.23.0" "regex>=2025.10.22" "mistral_common>=1.11.0"
 ```
 
-`PYTHONNOUSERSITE=1` is required on this host because
-`/cache/caitianchi/.local/lib/python3.10/site-packages/` otherwise shadows the
-conda-env `transformers` and `huggingface_hub` with incompatible versions.
+`PYTHONNOUSERSITE=1` is required when the host has site-packages that
+shadow the conda-env `transformers` and `huggingface_hub` with incompatible versions.
 
 A small patch was also applied to
-`src/transformers/models/minicpmv4_6/configuration_minicpmv4_6.py`:
+`src/transformers/models/minicpmv4_6/configuration_minicpmv4_6.py` in your environment:
 
 ```python
 # BEFORE:
@@ -107,7 +106,7 @@ needs ≈32 GB. Recommended on 80 GB A100/H100. On smaller cards, launch with
 ### A. Quick start — one dual-model instance on a single GPU
 
 ```bash
-cd /cache/caitianchi/code/MiniCPM-o-demo-web/gradio/v46
+cd ./MiniCPM-o-demo-web/gradio/v46
 
 # dual-model on GPU 7, port 8890, no load balancer
 bash start.sh -n 1 --gpu-start 7 --port-base 8890 --no-lb
@@ -182,13 +181,13 @@ conda activate v46
 
 # Dual-model (checkbox switches models)
 PYTHONNOUSERSITE=1 CUDA_VISIBLE_DEVICES=7 python app.py \
-    --instruct_path=/cache/caitianchi/code/v50/ckpt/minicpm-v-4_6-0420-rlaif-instruct \
-    --thinking_path=/cache/caitianchi/code/v50/ckpt/minicpm-v-4_6-0420-rlaif-thinking \
+    --instruct_path=minicpm-v-4_6-0420-rlaif-instruct \
+    --thinking_path=minicpm-v-4_6-0420-rlaif-thinking \
     --port=8890
 
-# Single-model (legacy)
+# Single-model
 PYTHONNOUSERSITE=1 CUDA_VISIBLE_DEVICES=7 python app.py \
-    --instruct_path=/cache/caitianchi/code/v50/ckpt/minicpm-v-4_6-0420-rlaif-instruct \
+    --instruct_path=minicpm-v-4_6-0420-rlaif-instruct \
     --port=8890
 ```
 
