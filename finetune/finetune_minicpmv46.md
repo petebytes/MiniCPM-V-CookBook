@@ -7,7 +7,6 @@ This section uses the counting task [allenai/pixmo-count](https://huggingface.co
 Training task:
 
 - Input an image and a counting question
-- Output the number of target objects in the image
 - The target `assistant` response first lists the coordinates of each target object in `x y` format, for example, `<point>573 489</point>`, and then outputs the final count, such as `0`, `3`, or `10`.
 - The evaluation metric is shown below:
 
@@ -159,6 +158,8 @@ Key parameter notes
 
 [https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng)
 
+<img src="./assets/finetune_minicpmv46/minicpmv46_swift_ft_dynamics.png" alt="ms-swift training curves" />
+
 ### 2.5 Evaluation Results
 
 The table below shows the evaluation results under two visual token compression ratios. Training and evaluation use the same settings, and both the best score among all checkpoints and the average score of the top three checkpoints are reported.
@@ -172,20 +173,19 @@ The table below shows the evaluation results under two visual token compression 
 | Fine-tuned model | 4                              | 84.3           | 83.9               |
 
 
-  [1]: The highest Acc@0 score among all checkpoints saved during training.
+[1]: The highest Acc@0 score among all checkpoints saved during training.  
+[2]: The average Acc@0 score of the top three checkpoints saved during training.  
+[3]: MiniCPM-V 4.6 is the original model without fine-tuning, so only one Acc@0 result (Acc@0 Top1) is available.
 
-  [2]: The average Acc@0 score of the top three checkpoints saved during training.  
-  [3]: MiniCPM-V 4.6 is the original model without fine-tuning, so only one Acc@0 result (Acc@0 Top1) is available.
+Output example:
 
-- Output example:
+  ```text
+  Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
 
-```text
-Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
+  A: The respective coordinates of airplanes: <point>310 370</point>, <point>365 277</point>, <point>388 486</point>, <point>405 185</point>, <point>437 368</point>, <point>474 611</point>, <point>503 250</point>, <point>527 451</point>, <point>535 818</point>, <point>597 331</point>. So the total count is 10.
+  ```
 
-A: The respective coordinates of airplanes: <point>310 370</point>, <point>365 277</point>, <point>388 486</point>, <point>405 185</point>, <point>437 368</point>, <point>474 611</point>, <point>503 250</point>, <point>527 451</point>, <point>535 818</point>, <point>597 331</point>. So the total count is 10.
-```
-
-<img src="./assets/finetune_minicpmv46/sample_1.png" alt="ms-swift sample" />
+  <img src="./assets/finetune_minicpmv46/sample_1.png" alt="ms-swift sample" />
 
 
 
@@ -334,17 +334,16 @@ The table below shows the evaluation results under two visual token compression 
 | Fine-tuned model | 4                              | 83.1           | 82.5               |
 
 
-  [1]: The highest Acc@0 score among all checkpoints saved during training.
+[1]: The highest Acc@0 score among all checkpoints saved during training.  
+[2]: The average Acc@0 score of the top three checkpoints saved during training.  
+[3]: MiniCPM-V 4.6 is the original model without fine-tuning, so only one Acc@0 result (Acc@0 Top1) is available and Acc@0 Avg.Top3 cannot be computed.
 
-  [2]: The average Acc@0 score of the top three checkpoints saved during training.  
-  [3]: MiniCPM-V 4.6 is the original model without fine-tuning, so only one Acc@0 result (Acc@0 Top1) is available and Acc@0 Avg.Top3 cannot be computed.
+Output example:
 
-- Output example:
+  ```text
+  Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
 
-```text
-Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
+  A: The respective coordinates of airplanes: <point>310 370</point>, <point>360 275</point>, <point>385 486</point>, <point>402 180</point>, <point>439 368</point>, <point>474 611</point>, <point>505 250</point>, <point>532 448</point>, <point>536 818</point>, <point>597 328</point>. So the total count is 10.
+  ```
 
-A: The respective coordinates of airplanes: <point>310 370</point>, <point>360 275</point>, <point>385 486</point>, <point>402 180</point>, <point>439 368</point>, <point>474 611</point>, <point>505 250</point>, <point>532 448</point>, <point>536 818</point>, <point>597 328</point>. So the total count is 10.
-```
-
-<img src="./assets/finetune_minicpmv46/sample_2.png" alt="Llama-Factory sample" />
+  <img src="./assets/finetune_minicpmv46/sample_2.png" alt="Llama-Factory sample" />
