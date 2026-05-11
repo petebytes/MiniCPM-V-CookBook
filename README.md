@@ -35,13 +35,7 @@ Our ecosystem delivers optimal solution for a variety of hardware environments a
 
 Explore real-world examples of MiniCPM-V deployed on edge devices using our curated recipes. These demos highlight the model’s high efficiency and robust performance in practical scenarios.
 
-- Run locally on phone or tablet with [MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps) — see [README](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md) / [README_zh](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md); iOS flow also in [iOS demo](./demo/ios_demo/ios.md).
-
-    
-
-
-
-- Run locally on iPad with [iOS demo](./demo/ios_demo/ios.md) (same repo family as MiniCPM-V-Apps above), e.g. watching the rabbit-drawing playground.
+- **[MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)** — on-device iOS / Android / HarmonyOS NEXT with `llama.cpp` (upstream [README](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md) · [README_zh](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md) · [downloads](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/DOWNLOAD_zh.md)). Cookbook focuses on the Xcode path: **[iOS demo](./demo/ios_demo/ios.md)**.
 
 
 
@@ -102,7 +96,7 @@ We provide training methods serving different needs as following:
 | [OpenWebUI](./demo/web_demo/openwebui)                       | Interactive Web demo with Open WebUI         |
 | [Gradio](./demo/web_demo/gradio/README.md)                   | Interactive Web demo with Gradio             |
 | [FastAPI](./demo/README.md)                                  | Interactive Omni Streaming demo with FastAPI |
-| [iOS](./demo/ios_demo/ios.md)                                | Interactive iOS demo with llama.cpp          |
+| [iOS](./demo/ios_demo/ios.md)                                | **[MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)** — iOS quickstart (`llama.cpp`; Android/HarmonyOS in upstream README) |
 
 
 ## 🥄 Quantization Recipes

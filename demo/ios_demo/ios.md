@@ -1,6 +1,7 @@
 # MiniCPM-V — iOS deployment (MiniCPM-V-Apps)
 
-> **Upstream project:** [OpenBMB/MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)\
+> **Upstream project:** [OpenBMB/MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)
+>
 > README: [English](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md) · [简体中文](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md)
 
 That repository bundles **iOS**, **Android**, and **HarmonyOS NEXT** demos sharing one root **`llama.cpp` git submodule** (branch `Support-iOS-Demo`). This page summarizes the **iOS** flow; Android / HarmonyOS build steps stay in the upstream README.
@@ -82,7 +83,7 @@ Upstream currently targets **MiniCPM-V 2.6**, **4.0**, and **4.6**. Download mat
 For server-side conversion recipes in this Cookbook, see:
 
 * [MiniCPM-V 4.6 GGUF](../../quantization/gguf/minicpm-v4_6_gguf_quantize.md)
-* [MiniCPM-V 4.0 GGUF](../../quantization/gguf/minicpm-v4_gguf_quantize.md)
-* Further versions: sibling files under [`quantization/gguf/`](../../quantization/gguf/)
+* [MiniCPM-V 4.0 GGUF](https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/gguf/minicpm-v4_gguf_quantize.md)
+* Additional versions: [Cookbook `quantization/gguf/`](https://github.com/OpenSQZ/MiniCPM-V-CookBook/tree/main/quantization/gguf)
 
 Run conversion commands inside the **`llama.cpp`** subtree at the MiniCPM-V-Apps repo root.

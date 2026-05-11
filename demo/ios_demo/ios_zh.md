@@ -1,6 +1,7 @@
 # MiniCPM-V — iOS 部署（MiniCPM-V-Apps）
 
-> **官方仓库：** [OpenBMB/MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)\
+> **官方仓库：** [OpenBMB/MiniCPM-V-Apps](https://github.com/OpenBMB/MiniCPM-V-Apps)
+>
 > README：[English](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README.md) · [**简体中文 README_zh**](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md)
 
 同一仓库内含 **iOS**、**Android**、**HarmonyOS NEXT** 三端 demo，共享仓库根目录的 **`llama.cpp` git submodule**（分支 `Support-iOS-Demo`）。本文侧重 **iOS**；安卓与鸿蒙的编译说明请直接看 upstream README。
@@ -82,7 +83,7 @@ cp -r ./build-apple/llama.xcframework ../MiniCPM-V-demo/thirdparty
 Cookbook 中的转换流程见：
 
 * [MiniCPM-V 4.6 GGUF](../../quantization/gguf/minicpm-v4_6_gguf_quantize_zh.md)
-* [MiniCPM-V 4.0 GGUF](../../quantization/gguf/minicpm-v4_gguf_quantize_zh.md)
-* 其他版本：[`quantization/gguf/`](../../quantization/gguf/) 目录下对应文档
+* [MiniCPM-V 4.0 GGUF](https://github.com/OpenSQZ/MiniCPM-V-CookBook/blob/main/quantization/gguf/minicpm-v4_gguf_quantize_zh.md)
+* 其他版本：[Cookbook 仓库 `quantization/gguf/` 目录](https://github.com/OpenSQZ/MiniCPM-V-CookBook/tree/main/quantization/gguf)
 
 请在 MiniCPM-V-Apps 仓库根目录下的 **`llama.cpp`** 子模块内执行各文档中的命令。
