@@ -37,7 +37,7 @@ git submodule update --init --recursive
   sudo xcodebuild -license
   ```
 
-使用 Xcode 打开 **`MiniCPM-V-demo/MiniCPM-V-demo.xcodeproj`**，在顶部选好运行目标设备，点击 **Run**（三角形）。
+使用 Xcode 打开 **`MiniCPM-V-demo/MiniCPM-V-demo.xcodeproj`**，等待 Xcode 自动下载所需依赖；在顶部选好运行目标设备，点击 **Run**（三角形）。
 
 **说明：**若出现 **`thirdparty/llama.xcframework`** 相关报错，按第 3 节手动构建框架。
 
@@ -57,24 +57,38 @@ cp -r ./build-apple/llama.xcframework ../MiniCPM-V-demo/thirdparty
 
 ## 4. App 所用 GGUF 模型
 
-当前 Demo 对齐 **MiniCPM-V 2.6 / 4.0 / 4.6**。请分别从官方 GGUF 仓下载匹配的 **语言模型** GGUF（如 Q4\_K\_M）以及 **`mmproj-model-f16.gguf`**。**推荐机型内存与总下载体量**请参考 upstream [README_zh 硬件说明](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md#硬件要求)。
+当前 Demo 对齐 **MiniCPM-V 2.6 / 4.0 / 4.6**。每个版本都需要分别从官方 GGUF 仓下载 **语言模型 GGUF** + 视觉投影器 **`mmproj-model-f16.gguf`**（视觉塔保留 f16 精度，避免感知质量损失）。
+
+**推荐设备内存与总下载体量**（详见 upstream [README_zh 硬件说明](https://github.com/OpenBMB/MiniCPM-V-Apps/blob/main/README_zh.md#硬件要求)）：
+
+| 模型 | LLM 参数量 | 推荐量化 | 总下载量 | 推荐设备内存 |
+| --- | --- | --- | --- | --- |
+| MiniCPM-V 2.6 | 8B | Q4\_K\_M | ~5.4 GB | **≥ 8 GB** |
+| MiniCPM-V 4.0 | 4.1B | Q4\_K\_M | ~2.9 GB | **≥ 6 GB** |
+| MiniCPM-V 4.6 | 1.3B | Q4\_K\_M | ~1.6 GB | **≥ 6 GB** |
+
+三端 demo 默认上下文为 4K token，KV cache 占用近似随上下文线性增长，临界设备上可适当下调。
 
 ### MiniCPM-V 2.6 — 官方 GGUF
 
 * Hugging Face：[openbmb/MiniCPM-V-2_6-gguf](https://huggingface.co/openbmb/MiniCPM-V-2_6-gguf)
 * 魔搭：[OpenBMB/MiniCPM-V-2_6-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-2_6-gguf)
 
+下载语言模型文件（如 `ggml-model-Q4_0.gguf`）与视觉模型文件 `mmproj-model-f16.gguf`。
+
 ### MiniCPM-V 4.0 — 官方 GGUF
 
 * Hugging Face：[openbmb/MiniCPM-V-4-gguf](https://huggingface.co/openbmb/MiniCPM-V-4-gguf)
 * 魔搭：[OpenBMB/MiniCPM-V-4-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4-gguf)
+
+下载语言模型文件（如 `ggml-model-Q4_K_M.gguf`）与视觉模型文件 `mmproj-model-f16.gguf`。
 
 ### MiniCPM-V 4.6 — 官方 GGUF
 
 * Hugging Face：[openbmb/MiniCPM-V-4.6-gguf](https://huggingface.co/openbmb/MiniCPM-V-4.6-gguf)
 * 魔搭：[OpenBMB/MiniCPM-V-4.6-gguf](https://modelscope.cn/models/OpenBMB/MiniCPM-V-4.6-gguf)
 
-*（示例：4.6 语言模型文件可能名为 `MiniCPM-V-4_6-Q4_K_M.gguf`；具体以各仓库实际文件名为准。）*
+下载语言模型文件（如 `MiniCPM-V-4_6-Q4_K_M.gguf`）与视觉模型文件 `mmproj-model-f16.gguf`。
 
 ---
 
