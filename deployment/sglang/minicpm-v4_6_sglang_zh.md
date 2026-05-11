@@ -67,19 +67,19 @@ pip install flashinfer-python -i <上表选的 index URL>
 默认情况下，会从 Hugging Face Hub 下载模型文件：
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6 --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6 --port 30000 --trust-remote-code --dtype bfloat16
 ```
 
 也可以在 `--model-path` 后指定本地路径：
 
 ```bash
-python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4.6 --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path /your/local/MiniCPM-V-4.6 --port 30000 --trust-remote-code --dtype bfloat16
 ```
 
 部署 Thinking 模型只需替换 model id：
 
 ```bash
-python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --port 30000 --trust-remote-code
+python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --port 30000 --trust-remote-code --dtype bfloat16
 ```
 
 ## 3. 调用服务接口
@@ -105,7 +105,8 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --por
             ]
           }
         ],
-        "max_tokens": 300
+        "max_tokens": 300,
+        "top_k": -1
       }'
     ```
 
@@ -133,7 +134,7 @@ python -m sglang.launch_server --model-path openbmb/MiniCPM-V-4.6-Thinking --por
             }
         ],
         max_tokens=300,
-        extra_body={"stop_token_ids": [248044, 248046]},
+        extra_body={"top_k": -1, "stop_token_ids": [248044, 248046]},
     )
 
     print(response.choices[0].message.content)
