@@ -8,18 +8,20 @@ Training task:
 
 - Input an image and a counting question
 - Output the number of target objects in the image
-- The target `assistant` output first lists the coordinates of each target object in `x y` format, for example, `<point>573 489</point>`, and then outputs the final count, such as `0`, `3`, or `10`.
+- The target `assistant` response first lists the coordinates of each target object in `x y` format, for example, `<point>573 489</point>`, and then outputs the final count, such as `0`, `3`, or `10`.
 - The evaluation metric is shown below:
 
-| Metric | Meaning |
-| --- | --- |
-| Acc@0 | Exact match accuracy (predicted value = ground truth) |
+
+| Metric | Meaning                                               |
+| ------ | ----------------------------------------------------- |
+| Acc@0  | Exact match accuracy (predicted value = ground truth) |
+
 
 ## 2 Fine-Tuning with ms-swift
 
 ### 2.1 Environment Setup
 
-- __Minimum runnable installation steps__
+- **Minimum runnable installation steps**
 
 ```bash
 conda create -n "MiniCPM-V-4.6-Counting" python=3.10 -y
@@ -38,7 +40,7 @@ cd ms-swift
 pip install -e .
 ```
 
-- __Reference dependency versions__
+- **Reference dependency versions**
 
 ```text
 python                        3.10.0
@@ -53,44 +55,40 @@ transformers                  5.7.0
 
 ### 2.2 Data Preparation
 
-- __Download the dataset__: the data source is [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count). After downloading the dataset and image files, convert the dataset into the ms-swift format.
+Download the dataset from [allenai/pixmo-count](https://huggingface.co/datasets/allenai/pixmo-count) and convert it into the ms-swift format.
 
-  - __Notes__:
-    - To support training with points, you need to concatenate the coordinates from the `points` column in the parquet file into the assistant message.
-    - Since MiniCPM-V 4.6 normalizes image coordinates to `0~1000`, the point coordinates also need to be transformed as follows:
-
-      ```python
-      def expected_norm(x_px: float, y_px: float, width: int, height: int) -> Tuple[int, int]:
-          return int((x_px / width) * 1000.0), int((y_px / height) * 1000.0)
-      ```
-
-    - To further improve training stability, you can use prompt isolation by adding `<think>\n\n</think>\n\n` to the assistant prefix, and use the `--loss_scale ignore_empty_think` argument during training so that the empty think block is masked out in loss computation.
-  - **Data format reference:**
-
-    ```json
-    {
-        "messages": [
-            {
-                "content": "<image>\nCarefully observe the image. Are there any people in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.",
-                "role": "user"
-            },
-            {
-                "content": "<think>\n\n</think>\n\nThe respective coordinates of people: <point>236 469</point>, <point>307 232</point>, <point>362 434</point>, <point>485 521</point>, <point>487 340</point>, <point>615 386</point>, <point>735 441</point>, <point>870 615</point>. So the total count is 8.",
-                "role": "assistant"
-            }
-        ],
-        "images": [
-            "/path/to/images/*.jpg"
-        ],
-        "source_file": "pixmo-count",
-        "orig_index": 1,
-        "channel": "pixmo-count"
-    }
-    ```
+- **Data format reference:**
+  ```json
+  {
+      "messages": [
+          {
+              "content": "<image>\nCarefully observe the image. Are there any people in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.",
+              "role": "user"
+          },
+          {
+              "content": "<think>\n\n</think>\n\nThe respective coordinates of people: <point>236 469</point>, <point>307 232</point>, <point>362 434</point>, <point>485 521</point>, <point>487 340</point>, <point>615 386</point>, <point>735 441</point>, <point>870 615</point>. So the total count is 8.",
+              "role": "assistant"
+          }
+      ],
+      "images": [
+          "/path/to/images/*.jpg"
+      ],
+      "source_file": "pixmo-count",
+      "orig_index": 1,
+      "channel": "pixmo-count"
+  }
+  ```
+- For the Counting task, adding supervision on point prediction can improve fine-tuning performance. Therefore, we recommend concatenating the `points` coordinates from the dataset into the assistant response.
+- Since MiniCPM-V 4.6 normalizes image coordinates to `0~1000`, the point coordinates also need to be transformed as follows:
+  ```python
+  def expected_norm(x_px: float, y_px: float, width: int, height: int) -> Tuple[int, int]:
+      return int((x_px / width) * 1000.0), int((y_px / height) * 1000.0)
+  ```
+- For fine-tuning, we recommend adding `<think>\n\n</think>\n\n` to the assistant prefix, and using `--loss_scale ignore_empty_think` during training so that the empty think block is masked out in loss computation. For thinking tasks, use `<think>\n` instead.
 
 ### 2.3 Launch Training
 
-- __Minimum runnable workflow__: after configuring the model path, training set path, validation set path, and output directory, run the following script.
+After configuring the model path, training set path, validation set path, and output directory, run the following script to start training.
 
 ```bash
 run_swift.sh
@@ -151,33 +149,33 @@ ${SWIFT_BIN} sft \
   --report_to wandb
 ```
 
-- __Key parameter notes__
-  - Training supports two visual token downsampling ratios, `16x` and `4x`, which are controlled by `export DOWNSAMPLE_MODE="${DOWNSAMPLE_MODE:-4x}"`.
-  - The current version of `transformers` does not support packing well for the Qwen3.5 series. To avoid overfitting, use `--packing false`.
-  - If prompt isolation was added during dataset construction, i.e. the assistant response starts with `<think>\n\n</think>\n\n`, this change should be paired with `--loss_scale ignore_empty_think` so that the prefix is masked out during loss computation.
+Key parameter notes
+
+- Training supports two visual token compression ratios, `16x` and `4x`, which are controlled by `export DOWNSAMPLE_MODE="${DOWNSAMPLE_MODE:-4x}"`.
+- The current version of `transformers` still has issues with packed training for the Qwen3.5 series. For now, please use `--packing false`. This document will be updated once an official fix is available.
+- If prompt isolation was added during dataset construction, i.e. the assistant response starts with `<think>\n\n</think>\n\n`, this change should be paired with `--loss_scale ignore_empty_think` so that the prefix is masked out during loss computation.
 
 ### 2.4 Training Curves
 
 [https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng)
 
-<img src="./assets/finetune_minicpmv46/minicpmv46_swift_ft_dynamics.png" alt="ms-swift training curves" />
-
 ### 2.5 Evaluation Results
 
-- The table below shows the evaluation results under two visual token compression ratios. Training and evaluation use the same settings, and both the best score among all checkpoints and the average score of the top three checkpoints are reported.
+The table below shows the evaluation results under two visual token compression ratios. Training and evaluation use the same settings, and both the best score among all checkpoints and the average score of the top three checkpoints are reported.
 
-  | Model | Visual Token Compression Ratio | Acc@0 Top1 <sup>[1]</sup> | Acc@0 Avg.Top3 <sup>[2]</sup> |
-  | --- | --- | --- | --- |
-  | MiniCPM-V 4.6 | 16 | 46.5 | N/A <sup>[3]</sup> |
-  | MiniCPM-V 4.6 | 4 | 51.8 | N/A <sup>[3]</sup> |
-  | Fine-tuned model | 16 | 79.7 | 79.3 |
-  | Fine-tuned model | 4 | 84.3 | 83.9 |
 
-  <small>[1]: The highest Acc@0 score among all checkpoints saved during training.
-  <br>
-  [2]: The average Acc@0 score of the top three checkpoints saved during training.
-  <br>
-  [3]: MiniCPM-V 4.6 is the original model without fine-tuning, so only one Acc@0 result (Acc@0 Top1) is available and Acc@0 Avg.Top3 cannot be computed.</small>
+| Model            | Visual Token Compression Ratio | Acc@0 Top1 [1] | Acc@0 Avg.Top3 [2] |
+| ---------------- | ------------------------------ | -------------- | ------------------ |
+| MiniCPM-V 4.6    | 16                             | 46.5           | N/A [3]            |
+| MiniCPM-V 4.6    | 4                              | 51.8           | N/A [3]            |
+| Fine-tuned model | 16                             | 79.7           | 79.3               |
+| Fine-tuned model | 4                              | 84.3           | 83.9               |
+
+
+  [1]: The highest Acc@0 score among all checkpoints saved during training.
+
+  [2]: The average Acc@0 score of the top three checkpoints saved during training.  
+  [3]: MiniCPM-V 4.6 is the original model without fine-tuning, so only one Acc@0 result (Acc@0 Top1) is available.
 
 - Output example:
 
@@ -189,11 +187,13 @@ A: The respective coordinates of airplanes: <point>310 370</point>, <point>365 2
 
 <img src="./assets/finetune_minicpmv46/sample_1.png" alt="ms-swift sample" />
 
+
+
 ## 3 Fine-Tuning with Llama-Factory
 
 ### 3.1 Environment Setup
 
-- __Minimum runnable installation steps__
+- **Minimum runnable installation steps**
 
 ```bash
 conda create -n "MiniCPM-V-4.6-Counting" python=3.11 -y
@@ -213,7 +213,7 @@ pip install -e .
 pip install -r requirements/metrics.txt -r requirements/deepspeed.txt
 ```
 
-- __Reference dependency versions__
+- **Reference dependency versions**
 
 ```text
 python                        3.11.0
@@ -233,9 +233,7 @@ transformers                  5.7.0
 
 ### 3.3 Launch Training
 
-- __Minimum runnable workflow__: after preparing `train.yaml`, run the script below to start training.
-
-- 1. Configure `train.yaml`
+- Configure `train.yaml`
 
 ```yaml
 ### model
@@ -286,7 +284,7 @@ weight_decay: 0.1
 adam_beta2: 0.95
 ```
 
-- 2. Run `run.sh`
+- Run `run.sh`
 
 ```bash
 #!/bin/bash
@@ -323,24 +321,23 @@ llamafactory-cli train "$CONFIG_FILE"
 
 [https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting-LF/reports/Llama-Factory---VmlldzoxNjgyNzk4NQ)
 
-<img src="./assets/finetune_minicpmv46/minicpmv46_lf_ft_dynamics.png" alt="Llama-Factory training curves" />
-
 ### 3.5 Evaluation Results
 
-- The table below shows the evaluation results under two visual token compression ratios. Training and evaluation use the same settings, and both the best score among all checkpoints and the average score of the top three checkpoints are reported.
+The table below shows the evaluation results under two visual token compression ratios. Training and evaluation use the same settings, and both the best score among all checkpoints and the average score of the top three checkpoints are reported.
 
-  | Model | Visual Token Compression Ratio | Acc@0 Top1 <sup>[1]</sup> | Acc@0 Avg.Top3 <sup>[2]</sup> |
-  | --- | --- | --- | --- |
-  | MiniCPM-V 4.6 | 16 | 46.5 | N/A <sup>[3]</sup> |
-  | MiniCPM-V 4.6 | 4 | 51.8 | N/A <sup>[3]</sup> |
-  | Fine-tuned model | 16 | 78.4 | 78.1 |
-  | Fine-tuned model | 4 | 83.1 | 82.5 |
 
-  <small>[1]: The highest Acc@0 score among all checkpoints saved during training.
-  <br>
-  [2]: The average Acc@0 score of the top three checkpoints saved during training.
-  <br>
-  [3]: MiniCPM-V 4.6 is the original model without fine-tuning, so only one Acc@0 result (Acc@0 Top1) is available and Acc@0 Avg.Top3 cannot be computed.</small>
+| Model            | Visual Token Compression Ratio | Acc@0 Top1 [1] | Acc@0 Avg.Top3 [2] |
+| ---------------- | ------------------------------ | -------------- | ------------------ |
+| MiniCPM-V 4.6    | 16                             | 46.5           | N/A [3]            |
+| MiniCPM-V 4.6    | 4                              | 51.8           | N/A [3]            |
+| Fine-tuned model | 16                             | 78.4           | 78.1               |
+| Fine-tuned model | 4                              | 83.1           | 82.5               |
+
+
+  [1]: The highest Acc@0 score among all checkpoints saved during training.
+
+  [2]: The average Acc@0 score of the top three checkpoints saved during training.  
+  [3]: MiniCPM-V 4.6 is the original model without fine-tuning, so only one Acc@0 result (Acc@0 Top1) is available and Acc@0 Avg.Top3 cannot be computed.
 
 - Output example:
 
@@ -350,4 +347,4 @@ Q: Carefully observe the image. Are there any airplanes in the image? If yes, pl
 A: The respective coordinates of airplanes: <point>310 370</point>, <point>360 275</point>, <point>385 486</point>, <point>402 180</point>, <point>439 368</point>, <point>474 611</point>, <point>505 250</point>, <point>532 448</point>, <point>536 818</point>, <point>597 328</point>. So the total count is 10.
 ```
 
-<img src="./assets/finetune_minicpmv46/sample_2.png" alt="LlamaFactory sample" />
+<img src="./assets/finetune_minicpmv46/sample_2.png" alt="Llama-Factory sample" />
