@@ -46,6 +46,31 @@ Multiple deployment solutions for efficient MiniCPM-o model deployment across di
 - **Personal Development**: Ollama - Simple to use, quick setup
 - **Edge Deployment**: Llama.cpp - Lightweight, low power consumption
 
+## Hardware Requirements (cheat sheet)
+
+Numbers below are **minimums for single-stream inference**. Add headroom
+for higher batch sizes, longer contexts, multi-image inputs, or KV cache
+on the activation side. Vision tower + KV cache typically add ~2 GB on top
+of pure weight memory.
+
+| Model              | Params | Precision         | Backend       | GPU VRAM     | CPU RAM    |
+| :----------------- | :----- | :---------------- | :------------ | :---------:  | :--------: |
+| **MiniCPM-V 4.6**  | 9B     | BF16 / FP16       | vLLM / SGLang | **≥ 20 GB**  |    —       |
+|                    |        | AWQ / GPTQ (int4) | vLLM / SGLang | **≥ 9 GB**   |    —       |
+|                    |        | BNB nf4 (int4)    | transformers  | **≥ 9 GB**   |    —       |
+|                    |        | GGUF Q4_K_M       | llama.cpp / Ollama | ≥ 7 GB  | ≥ 8 GB     |
+|                    |        | GGUF Q8_0         | llama.cpp / Ollama | ≥ 11 GB | ≥ 12 GB    |
+| **MiniCPM-V 4.5**  | 8B     | BF16 / FP16       | vLLM / SGLang | **≥ 18 GB**  |    —       |
+|                    |        | AWQ (int4)        | vLLM          | **≥ 8 GB**   |    —       |
+|                    |        | GGUF Q4_K_M       | llama.cpp / Ollama | ≥ 6 GB  | ≥ 7 GB     |
+| **MiniCPM-o 4.5**  | 9B     | BF16 / FP16       | vLLM          | **≥ 20 GB**  |    —       |
+|                    |        | GGUF Q4_K_M       | llama.cpp     | ≥ 7 GB       | ≥ 8 GB     |
+| **MiniCPM-V 4.0**  | 4B     | BF16 / FP16       | vLLM / SGLang | ≥ 10 GB      |    —       |
+|                    |        | GGUF Q4_K_M       | llama.cpp / Ollama | ≥ 3 GB  | ≥ 4 GB     |
+
+For exact numbers measured on specific hardware (A100, RTX 4090, M-series
+Mac, …), see each model's HuggingFace card.
+
 ## Framework Support Matrix
 
 For the up-to-date upstream merge status across all MiniCPM-V & o versions

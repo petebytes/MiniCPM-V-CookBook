@@ -23,27 +23,44 @@ pip install --upgrade pip
 pip install -e "python[all]"
 ```
 
-执行上述命令时会自动安装 `transformers>=5.7.0`。
-
-### flashinfer 依赖（可选，建议安装）
-
-方法 1：pip 安装（网速可能不行）
+上述命令会自动安装 `transformers>=5.7.0`，而它会牵入一个较新版本的
+PyTorch（截至撰写时 ≥ 2.6）。**安装 FlashInfer 之前**先确认实际 torch /
+CUDA 版本，避免下一步装错 wheel 把 torch 又降回去：
 
 ```bash
-pip install flashinfer -i https://flashinfer.ai/whl/cu121/torch2.4/
+python -c "import torch, transformers; print('torch', torch.__version__, '| cuda', torch.version.cuda, '| transformers', transformers.__version__)"
 ```
 
-方法 2：whl 文件安装
+### FlashInfer 依赖（可选，建议安装）
 
-- 访问：[https://flashinfer.ai/whl/cu121/torch2.4/flashinfer/](https://flashinfer.ai/whl/cu121/torch2.4/flashinfer/)
-- 找到适合自己服务器的版本下载，例如：`flashinfer-0.1.6+cu121torch2.4-cp310-cp310-linux_x86_64.whl`
-- 用 pip 安装：
+> [!IMPORTANT]
+> FlashInfer 的 wheel 是按 `(torch 版本, CUDA 版本)` 组合发布的，**必须**
+> 选与刚才验证出来的 torch + CUDA 完全匹配的 index。**不要直接复制
+> `cu121/torch2.4` 这种老链接**——那会偷偷把 torch 降级并破坏前面装好
+> 的 SGLang / transformers 环境。
 
-  ```bash
-  pip install flashinfer-0.1.6+cu121torch2.4-cp310-cp310-linux_x86_64.whl
-  ```
+FlashInfer 总索引：<https://flashinfer.ai/whl/>。挑跟你环境匹配的目录，例如：
 
-如有问题请参考 [SGLang 官方安装文档](https://docs.sglang.ai/start/install.html)。
+| 你的 torch / CUDA           | Index URL                                            |
+| :--------------------------- | :--------------------------------------------------- |
+| torch 2.6 + CUDA 12.4        | <https://flashinfer.ai/whl/cu124/torch2.6/>          |
+| torch 2.6 + CUDA 12.6        | <https://flashinfer.ai/whl/cu126/torch2.6/>          |
+| torch 2.7 + CUDA 12.8        | <https://flashinfer.ai/whl/cu128/torch2.7/>          |
+
+然后任选一种安装：
+
+```bash
+# 方法 1：从对应索引 pip 安装（国内访问可能慢）
+pip install flashinfer-python -i <上表选的 index URL>
+
+# 方法 2：手动下载匹配的 whl 安装
+#   1) 浏览器打开索引 URL，选一份匹配你 Python 版本（cp310/cp311/…）
+#      与平台（linux_x86_64 / win_amd64）的 whl
+#   2) pip install <下载的 whl 文件>
+```
+
+其它（Docker 镜像、纯 CPU 退路等）参见
+[SGLang 官方安装文档](https://docs.sglang.ai/start/install.html)。
 
 ## 2. 启动推理服务
 

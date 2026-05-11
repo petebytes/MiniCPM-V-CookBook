@@ -255,6 +255,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="active" href="gradio.html">Gradio</a></li>
 <li><a class="" href="ios.html">iOS</a></li></ul></li>
 </ul>
+<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
 <li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
@@ -267,7 +268,7 @@ footer.page-footer a:hover { color: var(--primary); }
   <article><h1 id="minicpm-v-4-6-gradio-演示">MiniCPM-V 4.6 Gradio 演示</h1>
 <p><strong>MiniCPM-V 4.6</strong> 的单进程 Gradio 演示。一个进程可以同时加载 <code>instruct</code> 和 <code>thinking</code> 两个检查点；通过界面上的"思考模式"开关即可实时切换当前使用的模型（并在 chat template 中切换 <code>enable_thinking</code>）。</p>
 <p>与 v4.5 演示（使用 FastAPI <code>server</code> + Gradio <code>client</code> 分离架构以及 <code>model.chat(...)</code> 自定义 API）不同，v4.6 使用标准的 HuggingFace transformers API：</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">MiniCPMV4_6ForConditionalGeneration</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">MiniCPMV4_6ForConditionalGeneration</span>
 
 <span class="n">processor</span> <span class="o">=</span> <span class="n">AutoProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 <span class="n">model</span>     <span class="o">=</span> <span class="n">MiniCPMV4_6ForConditionalGeneration</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
@@ -322,7 +323,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>v46
 <div class="code"><pre><span></span><code><span class="c1"># 修改前：</span>
 <span class="n">merge_kernel_size</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 <span class="c1"># 修改后：</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">field</span>
 <span class="n">merge_kernel_size</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 </code></pre></div>
 

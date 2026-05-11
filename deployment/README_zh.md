@@ -44,4 +44,27 @@
 - **生产环境 (高并发)**: vLLM - 最高性能、最佳扩展性
 - **复杂推理任务**: SGLang - 结构化生成、函数调用优化
 - **个人开发**: Ollama - 简单易用、快速上手
-- **边缘部署**: Llama.cpp - 轻量级、低功耗 
+- **边缘部署**: Llama.cpp - 轻量级、低功耗
+
+## 硬件需求快查
+
+下表为**单路推理的最小值**。如果需要更大 batch、更长上下文、多图输入，
+请额外预留显存；视觉塔与 KV cache 通常会在权重之外额外占用 ~2 GB。
+
+| 模型               | 参数量 | 精度              | 后端          | GPU 显存     | CPU 内存   |
+| :----------------- | :----- | :---------------- | :------------ | :----------: | :--------: |
+| **MiniCPM-V 4.6**  | 9B     | BF16 / FP16       | vLLM / SGLang | **≥ 20 GB**  |    —       |
+|                    |        | AWQ / GPTQ (int4) | vLLM / SGLang | **≥ 9 GB**   |    —       |
+|                    |        | BNB nf4 (int4)    | transformers  | **≥ 9 GB**   |    —       |
+|                    |        | GGUF Q4_K_M       | llama.cpp / Ollama | ≥ 7 GB  | ≥ 8 GB     |
+|                    |        | GGUF Q8_0         | llama.cpp / Ollama | ≥ 11 GB | ≥ 12 GB    |
+| **MiniCPM-V 4.5**  | 8B     | BF16 / FP16       | vLLM / SGLang | **≥ 18 GB**  |    —       |
+|                    |        | AWQ (int4)        | vLLM          | **≥ 8 GB**   |    —       |
+|                    |        | GGUF Q4_K_M       | llama.cpp / Ollama | ≥ 6 GB  | ≥ 7 GB     |
+| **MiniCPM-o 4.5**  | 9B     | BF16 / FP16       | vLLM          | **≥ 20 GB**  |    —       |
+|                    |        | GGUF Q4_K_M       | llama.cpp     | ≥ 7 GB       | ≥ 8 GB     |
+| **MiniCPM-V 4.0**  | 4B     | BF16 / FP16       | vLLM / SGLang | ≥ 10 GB      |    —       |
+|                    |        | GGUF Q4_K_M       | llama.cpp / Ollama | ≥ 3 GB  | ≥ 4 GB     |
+
+精确数字（在 A100 / RTX 4090 / Apple Silicon 等具体硬件上的实测）请参考
+对应模型的 HuggingFace 模型卡。

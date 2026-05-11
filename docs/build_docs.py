@@ -73,10 +73,14 @@ class PageEntry:
 
 @dataclass
 class NavGroup:
-    """A logical grouping of pages within a sidebar."""
+    """A logical grouping of pages within a sidebar. Can be nested — `items`
+    may contain other ``NavGroup`` objects in addition to ``PageEntry``.
+    ``collapsed=True`` makes the group render collapsed by default.
+    """
 
     label: dict[str, str]
-    items: list[PageEntry] = field(default_factory=list)
+    items: list = field(default_factory=list)
+    collapsed: bool = False
 
 
 @dataclass
@@ -147,13 +151,7 @@ def load_toc(path: Path) -> tuple[dict, list[VersionDef], list[PageEntry], list[
     for ver_raw in cfg.get("versions", []):
         nav: list[Any] = []
         for entry in ver_raw.get("nav", []):
-            if "group" in entry:
-                grp = NavGroup(label=entry["group"])
-                for item in entry["items"]:
-                    grp.items.append(_make_page(item, ver_raw["id"], section_en=entry["group"].get("en")))
-                nav.append(grp)
-            else:
-                nav.append(_make_page(entry, ver_raw["id"], section_en=None))
+            nav.append(_load_nav_entry(entry, ver_raw["id"], shared=False, section_en=None))
         versions.append(VersionDef(
             id=ver_raw["id"],
             label=ver_raw["label"],
@@ -166,12 +164,23 @@ def load_toc(path: Path) -> tuple[dict, list[VersionDef], list[PageEntry], list[
     for entry in cfg.get("shared", []) or []:
         if "group" not in entry:
             raise ValueError("entries under `shared:` must be groups")
-        grp = NavGroup(label=entry["group"])
-        for item in entry["items"]:
-            grp.items.append(_make_page(item, "shared", section_en=entry["group"].get("en"), shared=True))
-        shared.append(grp)
+        shared.append(_load_nav_entry(entry, "shared", shared=True, section_en=None))
 
     return site_cfg, versions, top_level, shared
+
+
+def _load_nav_entry(entry: dict, version_id: str, *, shared: bool, section_en: str | None):
+    """Recursively turn a YAML nav entry into either a PageEntry or NavGroup.
+
+    Groups may nest groups (e.g. ``Inference > Other visual tasks``).
+    """
+    if "group" in entry:
+        label = entry["group"]
+        grp = NavGroup(label=label, collapsed=bool(entry.get("collapsed", False)))
+        for child in entry.get("items", []):
+            grp.items.append(_load_nav_entry(child, version_id, shared=shared, section_en=label.get("en")))
+        return grp
+    return _make_page(entry, version_id, section_en=section_en, shared=shared)
 
 
 def _make_page(raw: dict, version_id: str, *, section_en: str | None, shared: bool = False) -> PageEntry:
@@ -738,16 +747,39 @@ def _render_leaf(p: PageEntry, current: PageEntry, lang: str) -> str:
     return f'<li><a class="{active.strip()}" href="{url}">{title}</a></li>'
 
 
+def _collect_pages(item, out: list) -> None:
+    """Recursively walk a NavGroup / PageEntry tree and append every leaf PageEntry to ``out``."""
+    if isinstance(item, NavGroup):
+        for child in item.items:
+            _collect_pages(child, out)
+    else:
+        out.append(item)
+
+
+def _has_active_descendant(item, current: PageEntry) -> bool:
+    """True if ``item`` (PageEntry or NavGroup) contains the active page anywhere."""
+    if isinstance(item, NavGroup):
+        return any(_has_active_descendant(child, current) for child in item.items)
+    return item.slug == current.slug
+
+
 def _render_group(grp: NavGroup, current: PageEntry, lang: str) -> str:
     label = grp.label.get(lang, grp.label.get("en", ""))
-    children_html = "\n".join(_render_leaf(p, current, lang) for p in grp.items)
-    # All groups start expanded so visitors immediately see every recipe under
-    # Inference / Deployment / Quantization / etc. The arrow caret still
-    # indicates click-to-collapse, but no nav item is hidden by default.
+    children_html = []
+    for child in grp.items:
+        if isinstance(child, NavGroup):
+            children_html.append(_render_group(child, current, lang))
+        else:
+            children_html.append(_render_leaf(child, current, lang))
+    children_joined = "\n".join(children_html)
+    # Honor `collapsed: true` from toc.yaml, but always expand the branch that
+    # contains the currently-active page so visitors can see where they are.
+    is_collapsed = grp.collapsed and not _has_active_descendant(grp, current)
+    classes = "nav-group collapsed" if is_collapsed else "nav-group"
     return (
-        f'<li class="nav-group">'
+        f'<li class="{classes}">'
         f'<div class="nav-group-header">{label}</div>'
-        f'<ul class="nav-group-children">{children_html}</ul>'
+        f'<ul class="nav-group-children">{children_joined}</ul>'
         f'</li>'
     )
 
@@ -789,12 +821,9 @@ class BuildContext:
         out = list(self.top_level)
         for v in self.versions:
             for entry in v.nav:
-                if isinstance(entry, NavGroup):
-                    out.extend(entry.items)
-                else:
-                    out.append(entry)
+                _collect_pages(entry, out)
         for grp in self.shared:
-            out.extend(grp.items)
+            _collect_pages(grp, out)
         return out
 
 
@@ -1034,12 +1063,9 @@ def main() -> None:
     all_pages: list[PageEntry] = list(top_level)
     for v in versions:
         for entry in v.nav:
-            if isinstance(entry, NavGroup):
-                all_pages.extend(entry.items)
-            else:
-                all_pages.append(entry)
+            _collect_pages(entry, all_pages)
     for grp in shared:
-        all_pages.extend(grp.items)
+        _collect_pages(grp, all_pages)
 
     # Sanity check: every English source must exist
     missing = [str(p.src.get("en")) for p in all_pages if "en" in p.src and not p.src["en"].exists()]

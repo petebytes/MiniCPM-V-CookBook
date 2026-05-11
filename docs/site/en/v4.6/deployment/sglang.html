@@ -255,6 +255,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
 <li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
+<div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
 <li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
@@ -286,21 +287,57 @@ pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;python[all]&quot;</span>
 </code></pre></div>
 
-<p><code>transformers&gt;=5.7.0</code> will be installed automatically.</p>
-<h3 id="installing-flashinfer-optional-but-recommended">Installing flashinfer (optional but recommended)</h3>
-<p>Method 1 — pip install:</p>
-<div class="code"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>flashinfer<span class="w"> </span>-i<span class="w"> </span>https://flashinfer.ai/whl/cu121/torch2.4/
+<p><code>transformers&gt;=5.7.0</code> is installed automatically — this in turn requires a
+recent PyTorch (≥ 2.6 at the time of writing). Verify the resolved versions
+match what FlashInfer needs <em>before</em> installing FlashInfer below:</p>
+<div class="code"><pre><span></span><code>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import torch, transformers; print(&#39;torch&#39;, torch.__version__, &#39;| cuda&#39;, torch.version.cuda, &#39;| transformers&#39;, transformers.__version__)&quot;</span>
 </code></pre></div>
 
-<p>Method 2 — whl file:</p>
-<ul>
-<li>Visit <a href="https://flashinfer.ai/whl/cu121/torch2.4/flashinfer/">https://flashinfer.ai/whl/cu121/torch2.4/flashinfer/</a></li>
-<li>Download a wheel matching your environment (e.g., <code>flashinfer-0.1.6+cu121torch2.4-cp310-cp310-linux_x86_64.whl</code>)</li>
-<li>Install it with pip:</li>
-</ul>
-<p><code>bash
-  pip install flashinfer-0.1.6+cu121torch2.4-cp310-cp310-linux_x86_64.whl</code></p>
-<p>For more details, see the <a href="https://docs.sglang.ai/start/install.html">official SGLang installation docs</a>.</p>
+<h3 id="installing-flashinfer-optional-but-recommended">Installing FlashInfer (optional but recommended)</h3>
+<div class="admonition admonition-important" markdown="0">
+<p class="admonition-title">Important</p>
+<p>FlashInfer wheels are pinned to a specific <code>(torch, cuda)</code> combo. Pick the
+wheel index that matches the <strong>torch + CUDA you just verified above</strong> —
+don't blindly copy a <code>cu121/torch2.4</code> URL, that will silently downgrade
+torch and break the SGLang / transformers install.</p>
+</div>
+
+<p>The general index lives at <a href="https://flashinfer.ai/whl/">https://flashinfer.ai/whl/</a>. Pick the directory
+matching your environment, for example:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Your torch / CUDA</th>
+<th style="text-align: left;">Index URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">torch 2.6 + CUDA 12.4</td>
+<td style="text-align: left;"><a href="https://flashinfer.ai/whl/cu124/torch2.6/">https://flashinfer.ai/whl/cu124/torch2.6/</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">torch 2.6 + CUDA 12.6</td>
+<td style="text-align: left;"><a href="https://flashinfer.ai/whl/cu126/torch2.6/">https://flashinfer.ai/whl/cu126/torch2.6/</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">torch 2.7 + CUDA 12.8</td>
+<td style="text-align: left;"><a href="https://flashinfer.ai/whl/cu128/torch2.7/">https://flashinfer.ai/whl/cu128/torch2.7/</a></td>
+</tr>
+</tbody>
+</table>
+<p>Then install via either:</p>
+<div class="code"><pre><span></span><code><span class="c1"># Method 1 — pip from the right index (slow / blocked in CN)</span>
+pip<span class="w"> </span>install<span class="w"> </span>flashinfer-python<span class="w"> </span>-i<span class="w"> </span>&lt;index<span class="w"> </span>URL<span class="w"> </span>from<span class="w"> </span>table<span class="w"> </span>above&gt;
+
+<span class="c1"># Method 2 — download the matching wheel manually</span>
+<span class="c1">#   1) Open the index URL in a browser, find a wheel that matches your</span>
+<span class="c1">#      python version (cp310 / cp311 / ...) and platform (linux_x86_64 / win_amd64)</span>
+<span class="c1">#   2) pip install &lt;downloaded-wheel.whl&gt;</span>
+</code></pre></div>
+
+<p>For everything else (Docker images, CPU-only fallback, etc.) see the
+<a href="https://docs.sglang.ai/start/install.html">official SGLang installation docs</a>.</p>
 <h2 id="2-launching-the-inference-server">2. Launching the Inference Server</h2>
 <p>By default the server downloads weights from the HuggingFace Hub:</p>
 <div class="code"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model-path<span class="w"> </span>openbmb/MiniCPM-V-4.6<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code

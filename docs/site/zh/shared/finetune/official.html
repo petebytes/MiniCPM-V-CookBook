@@ -255,6 +255,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../../v4.6/demos/gradio.html">Gradio</a></li>
 <li><a class="" href="../../v4.6/demos/ios.html">iOS</a></li></ul></li>
 </ul>
+<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
 <li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="active" href="official.html">官方脚本微调</a></li>
 <li><a class="" href="llamafactory.html">LLaMA-Factory</a></li>
@@ -356,8 +357,8 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <h2 id="4-加载微调模型">4. 加载微调模型</h2>
 <p>训练完成后（无论是全参数还是 LoRA），可通过 adapter 路径加载模型。建议为预训练模型使用绝对路径，因为 LoRA 仅保存 adapter，adapter config json 中的绝对路径用于定位预训练模型。</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">peft</span><span class="w"> </span><span class="kn">import</span> <span class="n">PeftModel</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModel</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">peft</span> <span class="kn">import</span> <span class="n">PeftModel</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span>
 
 <span class="n">model_type</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-o-2_6&quot;</span>  <span class="c1"># 或 &quot;openbmb/MiniCPM-V-4&quot;、&quot;openbmb/MiniCPM-V-2_6&quot;、&quot;openbmb/MiniCPM-Llama3-V-2_5&quot;、&quot;openbmb/MiniCPM-V-2&quot;</span>
 <span class="n">path_to_adapter</span> <span class="o">=</span> <span class="s2">&quot;path_to_your_fine_tuned_checkpoint&quot;</span>

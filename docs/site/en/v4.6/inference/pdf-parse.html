@@ -242,7 +242,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="single-image.html">Single-image QA</a></li>
 <li><a class="" href="multi-images.html">Multi-image QA</a></li>
 <li><a class="" href="video-understanding.html">Video QA</a></li>
-<li class="nav-group collapsed"><div class="nav-group-header">Other visual tasks</div><ul class="nav-group-children"><li><a class="" href="ocr.html">OCR</a></li>
+<li class="nav-group"><div class="nav-group-header">Other visual tasks</div><ul class="nav-group-children"><li><a class="" href="ocr.html">OCR</a></li>
 <li><a class="active" href="pdf-parse.html">PDF parsing</a></li>
 <li><a class="" href="grounding.html">Visual grounding</a></li></ul></li></ul></li>
 <li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
@@ -255,6 +255,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
 <li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
+<div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
 <li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
@@ -266,8 +267,8 @@ footer.page-footer a:hover { color: var(--primary); }
 <main class="content" id="content">
   <article><h1 id="pdf-parse-minicpm-v-4-6">PDF Parse (MiniCPM-V 4.6)</h1>
 <h2 id="initialize-model">Initialize model</h2>
-<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
+<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-V-4.6&quot;</span>
 
@@ -282,10 +283,10 @@ footer.page-footer a:hover { color: var(--primary); }
 <h2 id="pdf-images">PDF → images</h2>
 <div class="code"><pre><span></span><code><span class="c1"># requires poppler-utils:</span>
 <span class="c1">#   sudo apt-get update &amp;&amp; sudo apt-get install poppler-utils</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pdf2image</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert_from_path</span>
+<span class="kn">from</span> <span class="nn">pdf2image</span> <span class="kn">import</span> <span class="n">convert_from_path</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">pdf_to_images</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">pdf_to_images</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">):</span>
     <span class="n">images</span> <span class="o">=</span> <span class="n">convert_from_path</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>
 </code></pre></div>

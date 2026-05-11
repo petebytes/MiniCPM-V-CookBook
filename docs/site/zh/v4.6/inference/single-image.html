@@ -255,6 +255,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">演示</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
 <li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
+<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
 <li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
@@ -269,9 +270,9 @@ footer.page-footer a:hover { color: var(--primary); }
 <p>MiniCPM-V 4.6 已经在 <code>transformers&gt;=5.7.0</code> 中以独立架构 <code>MiniCPMV4_6ForConditionalGeneration</code> 注册，标准的 HuggingFace <code>Processor</code> + <code>model.generate</code> 流程开箱即用。</p>
 </blockquote>
 <h2 id="加载模型">加载模型</h2>
-<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
+<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span><span class="p">,</span> <span class="n">AutoModelForImageTextToText</span>
 
 <span class="c1"># 选择需要的 checkpoint：</span>
 <span class="c1">#   &quot;openbmb/MiniCPM-V-4.6&quot;        — Instruct</span>

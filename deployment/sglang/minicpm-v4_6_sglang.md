@@ -23,27 +23,45 @@ pip install --upgrade pip
 pip install -e "python[all]"
 ```
 
-`transformers>=5.7.0` will be installed automatically.
-
-### Installing flashinfer (optional but recommended)
-
-Method 1 — pip install:
+`transformers>=5.7.0` is installed automatically — this in turn requires a
+recent PyTorch (≥ 2.6 at the time of writing). Verify the resolved versions
+match what FlashInfer needs *before* installing FlashInfer below:
 
 ```bash
-pip install flashinfer -i https://flashinfer.ai/whl/cu121/torch2.4/
+python -c "import torch, transformers; print('torch', torch.__version__, '| cuda', torch.version.cuda, '| transformers', transformers.__version__)"
 ```
 
-Method 2 — whl file:
+### Installing FlashInfer (optional but recommended)
 
-- Visit [https://flashinfer.ai/whl/cu121/torch2.4/flashinfer/](https://flashinfer.ai/whl/cu121/torch2.4/flashinfer/)
-- Download a wheel matching your environment (e.g., `flashinfer-0.1.6+cu121torch2.4-cp310-cp310-linux_x86_64.whl`)
-- Install it with pip:
+> [!IMPORTANT]
+> FlashInfer wheels are pinned to a specific `(torch, cuda)` combo. Pick the
+> wheel index that matches the **torch + CUDA you just verified above** —
+> don't blindly copy a `cu121/torch2.4` URL, that will silently downgrade
+> torch and break the SGLang / transformers install.
 
-  ```bash
-  pip install flashinfer-0.1.6+cu121torch2.4-cp310-cp310-linux_x86_64.whl
-  ```
+The general index lives at <https://flashinfer.ai/whl/>. Pick the directory
+matching your environment, for example:
 
-For more details, see the [official SGLang installation docs](https://docs.sglang.ai/start/install.html).
+| Your torch / CUDA            | Index URL                                            |
+| :--------------------------- | :--------------------------------------------------- |
+| torch 2.6 + CUDA 12.4        | <https://flashinfer.ai/whl/cu124/torch2.6/>          |
+| torch 2.6 + CUDA 12.6        | <https://flashinfer.ai/whl/cu126/torch2.6/>          |
+| torch 2.7 + CUDA 12.8        | <https://flashinfer.ai/whl/cu128/torch2.7/>          |
+
+Then install via either:
+
+```bash
+# Method 1 — pip from the right index (slow / blocked in CN)
+pip install flashinfer-python -i <index URL from table above>
+
+# Method 2 — download the matching wheel manually
+#   1) Open the index URL in a browser, find a wheel that matches your
+#      python version (cp310 / cp311 / ...) and platform (linux_x86_64 / win_amd64)
+#   2) pip install <downloaded-wheel.whl>
+```
+
+For everything else (Docker images, CPU-only fallback, etc.) see the
+[official SGLang installation docs](https://docs.sglang.ai/start/install.html).
 
 ## 2. Launching the Inference Server
 

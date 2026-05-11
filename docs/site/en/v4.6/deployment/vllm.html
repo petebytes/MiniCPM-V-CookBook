@@ -255,6 +255,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
 <li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
+<div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
 <li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
@@ -337,8 +338,8 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 - <code>--max-model-len</code>: Maximum context length. v4.6 supports up to 256K, but start small to fit GPU memory
 - <code>--gpu_memory_utilization</code>: GPU memory utilization rate</p>
 <h3 id="2-2-image-inference">2.2 Image Inference</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span> <span class="nn">base64</span>
 
 <span class="n">openai_api_key</span> <span class="o">=</span> <span class="s2">&quot;token-abc123&quot;</span>  <span class="c1"># must match the value passed to `vllm serve`</span>
 <span class="n">openai_api_base</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8000/v1&quot;</span>
@@ -368,8 +369,8 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 </code></pre></div>
 
 <h3 id="2-3-video-inference">2.3 Video Inference</h3>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span> <span class="nn">base64</span>
 
 <span class="n">openai_api_key</span> <span class="o">=</span> <span class="s2">&quot;token-abc123&quot;</span>
 <span class="n">openai_api_base</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8000/v1&quot;</span>
@@ -433,10 +434,10 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;model_path&gt;<span
 </code></pre></div>
 
 <h4 id="multi-turn-conversation-example">Multi-turn Conversation Example</h4>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">mimetypes</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">mimetypes</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
 <span class="n">openai_api_key</span> <span class="o">=</span> <span class="s2">&quot;token-abc123&quot;</span>
 <span class="n">openai_api_base</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8000/v1&quot;</span>
@@ -445,15 +446,15 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;model_path&gt;<span
 
 <span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;You are a helpful assistant.&quot;</span><span class="p">}]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">file_to_base64</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">file_to_base64</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_mime_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_mime_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
     <span class="n">mime</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">mime</span> <span class="ow">or</span> <span class="s1">&#39;application/octet-stream&#39;</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">build_file_content</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">build_file_content</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
     <span class="n">mime_type</span> <span class="o">=</span> <span class="n">get_mime_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
     <span class="n">base64_data</span> <span class="o">=</span> <span class="n">file_to_base64</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
     <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;data:</span><span class="si">{</span><span class="n">mime_type</span><span class="si">}</span><span class="s2">;base64,</span><span class="si">{</span><span class="n">base64_data</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -497,9 +498,9 @@ vllm<span class="w"> </span>serve<span class="w"> </span>&lt;model_path&gt;<span
 </code></pre></div>
 
 <h2 id="3-offline-inference">3. Offline Inference</h2>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoProcessor</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">vllm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoProcessor</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
 
 <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;&lt;model_path&gt;&quot;</span>
 <span class="c1"># Or directly:</span>

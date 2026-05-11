@@ -258,6 +258,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <li class="nav-group"><div class="nav-group-header">Demos</div><ul class="nav-group-children"><li><a class="" href="../demos/gradio.html">Gradio</a></li>
 <li><a class="" href="../demos/ios.html">iOS</a></li></ul></li>
 </ul>
+<div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
 <li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
@@ -282,10 +283,10 @@ footer.page-footer a:hover { color: var(--primary); }
 </code></pre></div>
 
 <h3 id="2-run-with-vllm">2.Run with vllm</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">vllm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
+<span class="kn">from</span> <span class="nn">vllm</span> <span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
 
 
 <span class="c1"># Quantized model name or path</span>
@@ -388,10 +389,10 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5
 </tbody>
 </table>
 <h4 id="2-1-add-auto_gptq-modeling-qwen3-py">2.1 Add <code>auto_gptq/modeling/qwen3.py</code></h4>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">._base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseGPTQForCausalLM</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">._base</span> <span class="kn">import</span> <span class="n">BaseGPTQForCausalLM</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Qwen3GPTQForCausalLM</span><span class="p">(</span><span class="n">BaseGPTQForCausalLM</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Qwen3GPTQForCausalLM</span><span class="p">(</span><span class="n">BaseGPTQForCausalLM</span><span class="p">):</span>
     <span class="n">layer_type</span> <span class="o">=</span> <span class="s2">&quot;Qwen3DecoderLayer&quot;</span>
     <span class="n">layers_block_name</span> <span class="o">=</span> <span class="s2">&quot;model.layers&quot;</span>
     <span class="n">outside_layer_modules</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;model.embed_tokens&quot;</span><span class="p">,</span> <span class="s2">&quot;model.norm&quot;</span><span class="p">]</span>
@@ -408,7 +409,7 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5
 
 <h4 id="2-2-edit-auto_gptq-modeling-auto-py">2.2 Edit <code>auto_gptq/modeling/auto.py</code></h4>
 <p>With the other <code>from .xxx import ...</code> lines at the top of the file, add:</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">.qwen3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">.qwen3</span> <span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
 </code></pre></div>
 
 <p>In <code>GPTQ_CAUSAL_LM_MODEL_MAP</code>, add:</p>
@@ -417,7 +418,7 @@ https://huggingface.co/openbmb/MiniCPM-V-4_5
 
 <h4 id="2-3-edit-auto_gptq-modeling-__init__-py">2.3 Edit <code>auto_gptq/modeling/__init__.py</code></h4>
 <p>Add the export next to the other modeling imports:</p>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">.qwen3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
+<div class="code"><pre><span></span><code><span class="kn">from</span> <span class="nn">.qwen3</span> <span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
 </code></pre></div>
 
 <h4 id="2-4-edit-auto_gptq-modeling-_const-py">2.4 Edit <code>auto_gptq/modeling/_const.py</code></h4>
@@ -443,21 +444,21 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <h3 id="3-quantization-script">3.Quantization Script</h3>
 <p>The following script extracts the LLM backbone (Qwen3) from MiniCPM-V-4_5, quantizes it to 4-bit using GPTQ, and reassembles the full model with the original multimodal components.</p>
 <p>Run the following quantization script (replace <code>MODEL_PATH</code> and <code>OUTPUT_PATH</code> with the paths to the original model and the quantized model, respectively).</p>
-<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<div class="code"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoConfig</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoConfig</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_ensure_hf_dynamic_module_cache</span><span class="p">(</span><span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_ensure_hf_dynamic_module_cache</span><span class="p">(</span><span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pre-copy all .py files so transitive relative imports are available.&quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">transformers.dynamic_module_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="kn">from</span> <span class="nn">transformers.dynamic_module_utils</span> <span class="kn">import</span> <span class="p">(</span>
         <span class="n">HF_MODULES_CACHE</span><span class="p">,</span>
         <span class="n">TRANSFORMERS_DYNAMIC_MODULE_NAME</span><span class="p">,</span>
         <span class="n">_sanitize_module_name</span><span class="p">,</span>
@@ -489,7 +490,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="n">MAX_SEQ_LEN</span> <span class="o">=</span> <span class="mi">512</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">prepare_calibration_data</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">max_length</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">prepare_calibration_data</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">max_length</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepare calibration data from Alpaca dataset.&quot;&quot;&quot;</span>
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;tatsu-lab/alpaca&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">))))</span>
@@ -514,7 +515,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
     <span class="k">return</span> <span class="n">examples</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading tokenizer from </span><span class="si">{</span><span class="n">MODEL_PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">MODEL_PATH</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -536,8 +537,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
     <span class="n">original_model_type</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span>
     <span class="n">llm</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span> <span class="o">=</span> <span class="s2">&quot;qwen3&quot;</span>
 
-    <span class="kn">from</span><span class="w"> </span><span class="nn">auto_gptq</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseQuantizeConfig</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">auto_gptq.modeling.qwen3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
+    <span class="kn">from</span> <span class="nn">auto_gptq</span> <span class="kn">import</span> <span class="n">BaseQuantizeConfig</span>
+    <span class="kn">from</span> <span class="nn">auto_gptq.modeling.qwen3</span> <span class="kn">import</span> <span class="n">Qwen3GPTQForCausalLM</span>
 
     <span class="n">quantize_config</span> <span class="o">=</span> <span class="n">BaseQuantizeConfig</span><span class="p">(</span>
         <span class="n">bits</span><span class="o">=</span><span class="n">BITS</span><span class="p">,</span>
@@ -574,7 +575,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
             <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
 
     <span class="c1"># Combine quantized LLM weights with original multimodal weights</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">safetensors.torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_file</span> <span class="k">as</span> <span class="n">safe_load</span><span class="p">,</span> <span class="n">save_file</span> <span class="k">as</span> <span class="n">safe_save</span>
+    <span class="kn">from</span> <span class="nn">safetensors.torch</span> <span class="kn">import</span> <span class="n">load_file</span> <span class="k">as</span> <span class="n">safe_load</span><span class="p">,</span> <span class="n">save_file</span> <span class="k">as</span> <span class="n">safe_save</span>
 
     <span class="n">quantized_llm_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">llm_temp_dir</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.safetensors&quot;</span><span class="p">)]</span>
     <span class="n">llm_state_dict</span> <span class="o">=</span> <span class="p">{}</span>
