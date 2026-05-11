@@ -7,7 +7,6 @@
 训练任务：
 
 - 输入一张图片和一个计数问题
-- 输出图片中目标物体的数量
 - `assistant` 目标输出需要先给出每个目标物体点的位置，用 `x y` 坐标表示，如 `<point>573 489</point>`，再输出最终数量，例如 `0`、`3`、`10`。
 - 评测指标如下：
 
@@ -157,6 +156,8 @@ ${SWIFT_BIN} sft \
 
 [https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng](https://wandb.ai/majy24-tsinghua-university/MiniCPMV46-Counting/reports/ms-swift---VmlldzoxNjgxMDk0Ng)
 
+<img src="./assets/finetune_minicpmv46/minicpmv46_swift_ft_dynamics.png" alt="ms-swift 训练过程" />
+
 
 
 ### 2.5 评测结果
@@ -170,12 +171,11 @@ ${SWIFT_BIN} sft \
   | Fine-tuned model | 16           | 79.7           | 79.3               |
   | Fine-tuned model | 4            | 84.3           | 83.9               |
 
-  <small>[1]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 的最高分数。
-    
-  [2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。   
-  [3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)
+[1]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 的最高分数。  
+[2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。  
+[3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)。
 
-  - 输出样例：
+输出样例：
 
   ```text
   Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
@@ -332,12 +332,11 @@ llamafactory-cli train "$CONFIG_FILE"
   | Fine-tuned model | 16           | 78.4           | 78.1               |
   | Fine-tuned model | 4            | 83.1           | 82.5               |
 
-  <small>[1]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 的最高分数。
-    
-  [2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。   
-  [3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)，无法计算 Acc@0 Avg.Top3
-  
-  - 输出样例：
+[1]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 的最高分数。  
+[2]: 训练过程保存的所有 checkpoint 中，评测结果 Acc@0 前三名的平均分数。  
+[3]: MiniCPM-V 4.6 为原始模型，未经微调，仅有一个 Acc@0 结果 (Acc@0 Top1)，无法计算 Acc@0 Avg.Top3。
+
+输出样例：
 
   ```text
   Q: Carefully observe the image. Are there any airplanes in the image? If yes, please list their respective coordinates and provide the total count. If no, answer 0.
