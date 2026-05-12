@@ -23,7 +23,7 @@ Clone OpenBMB Ollama Fork:
 ```sh
 git clone https://github.com/tc-mb/ollama.git
 cd ollama
-git checkout MIniCPM-V
+git checkout MiniCPM-V
 ```
 
 Then build and run Ollama from the root directory of the repository:

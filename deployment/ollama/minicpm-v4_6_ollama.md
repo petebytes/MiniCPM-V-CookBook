@@ -25,7 +25,7 @@ Clone the OpenBMB fork (branch supporting MiniCPM-V 4.6):
 ```bash
 git clone https://github.com/tc-mb/ollama.git
 cd ollama
-git checkout MIniCPM-V
+git checkout MiniCPM-V
 ```
 
 Build and run from the repo root:

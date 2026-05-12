@@ -25,7 +25,7 @@
 ```bash
 git clone https://github.com/tc-mb/ollama.git
 cd ollama
-git checkout MIniCPM-V
+git checkout MiniCPM-V
 ```
 
 在仓库根目录下编译并运行：

@@ -12,7 +12,7 @@
 
 ### Build Ollama locally
 
-As updates to the official Ollama version may occasionally introduce minor uncertainties, we provide an additional maintained [branch](https://github.com/tc-mb/ollama/tree/MIniCPM-V) to support stable execution of the MiniCPM-V series models.
+As updates to the official Ollama version may occasionally introduce minor uncertainties, we provide an additional maintained [branch](https://github.com/tc-mb/ollama/tree/MiniCPM-V) to support stable execution of the MiniCPM-V series models.
 
 Environment requirements:
 
@@ -25,7 +25,7 @@ Clone OpenBMB Ollama Fork:
 ```sh
 git clone https://github.com/tc-mb/ollama.git
 cd ollama
-git checkout MIniCPM-V
+git checkout MiniCPM-V
 ```
 
 Then build and run Ollama from the root directory of the repository:
