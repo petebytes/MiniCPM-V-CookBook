@@ -292,31 +292,28 @@ footer.page-footer a:hover { color: var(--primary); }
 <p>与 v4.5 通过 <code>enable_thinking</code> 切换模式不同，v4.6 将 instruct 与 thinking 拆分为 <strong>两个独立 checkpoint</strong>，按需选择即可。</p>
 </blockquote>
 <h2 id="1-环境准备">1. 环境准备</h2>
-<h3 id="1-1-安装-vllm-推荐-从-pr-分支安装">1.1 安装 vLLM（推荐：从 PR 分支安装）</h3>
-<div class="admonition admonition-note" markdown="0">
-<p class="admonition-title">说明</p>
-<p>vLLM 上游 PR（<a href="https://github.com/vllm-project/vllm/pull/41254">#41254</a>）目前还在 review 中，正式发版前请使用 PR 分支。</p>
-</div>
+<h3 id="1-1-安装-vllm">1.1 安装 vLLM</h3>
+<p>MiniCPM-V 4.6 已合并至官方 vLLM <code>main</code> 分支（<a href="https://github.com/vllm-project/vllm/pull/41254">PR #41254</a>，2026-05-12 merged）。<strong>无需使用 fork</strong>，直接从官方仓库安装即可：</p>
 
 <pre class="code"><code class="language-bash"># 新建干净的 conda 环境
 conda create -n vllm-v46 python=3.10 -y
 conda activate vllm-v46
 
-# 克隆 PR 分支并安装
-git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/vllm.git vllm-v46
-cd vllm-v46
-
-MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v --progress-bar=on
+# 从官方 main 源码安装（需要 CUDA 工具链）
+git clone https://github.com/vllm-project/vllm.git
+cd vllm
+MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v
 </code></pre>
 
 <p>进行视频推理时，需要安装相应的视频模块：</p>
 <pre class="code"><code class="language-bash">pip install vllm[video]
 </code></pre>
 
-<p>该分支已强制要求 <code>transformers&gt;=5.7.0</code>，MiniCPM-V 4.6 在 transformers 中以独立架构 <code>MiniCPMV4_6ForConditionalGeneration</code> 形式合并。</p>
-<blockquote>
-<p>PR 合并后即可直接 <code>pip install vllm</code> 使用，本文档届时会同步更新支持版本。</p>
-</blockquote>
+<p>vLLM 要求 <code>transformers&gt;=5.7.0</code>，MiniCPM-V 4.6 在 transformers 中以独立架构 <code>MiniCPMV4_6ForConditionalGeneration</code> 形式合并。</p>
+<div class="admonition admonition-tip" markdown="0">
+<p class="admonition-title">提示</p>
+<p>等待包含此合并的 vLLM 正式 release 后，可直接 <code>pip install -U vllm</code> 升级，无需源码安装。请关注 <a href="https://github.com/vllm-project/vllm/releases">vLLM Releases</a>。</p>
+</div>
 <p>校验安装：</p>
 <pre class="code"><code class="language-bash">python -c &quot;import vllm, transformers; print('vllm', vllm.__version__, '| transformers', transformers.__version__)&quot;
 </code></pre>

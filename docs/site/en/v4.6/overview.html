@@ -305,8 +305,8 @@ print(processor.decode(out[0][inputs[&quot;input_ids&quot;].shape[-1]:], skip_sp
 </code></pre>
 
 <h3 id="serve-with-vllm">Serve with vLLM</h3>
-<pre class="code"><code class="language-bash"># v4.6 lives on the PR branch until vllm-project/vllm#41254 is merged
-git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/vllm.git
+<pre class="code"><code class="language-bash"># v4.6 is merged into upstream vLLM main (PR #41254, merged on 2026-05-12); install from upstream directly.
+git clone https://github.com/vllm-project/vllm.git
 cd vllm
 MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v
 

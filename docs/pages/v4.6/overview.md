@@ -43,8 +43,8 @@ print(processor.decode(out[0][inputs["input_ids"].shape[-1]:], skip_special_toke
 ### Serve with vLLM
 
 ```bash
-# v4.6 lives on the PR branch until vllm-project/vllm#41254 is merged
-git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/vllm.git
+# v4.6 is merged into upstream vLLM main (PR #41254, merged on 2026-05-12); install from upstream directly.
+git clone https://github.com/vllm-project/vllm.git
 cd vllm
 MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v
 

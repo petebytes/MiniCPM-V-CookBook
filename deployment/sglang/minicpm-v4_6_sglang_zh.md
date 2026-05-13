@@ -1,7 +1,7 @@
 # MiniCPM-V 4.6 - SGLang
 
 > [!NOTE]
-> SGLang 上游对 MiniCPM-V 4.6 的支持目前还在合并中。在官方版本发布前，请使用下方的 **OpenBMB SGLang 分支**。
+> MiniCPM-V 4.6 已合并至官方 SGLang `main` 分支（[PR #24855](https://github.com/sgl-project/sglang/pull/24855)，2026-05-10 merged；配套文档 / fixes 也已合入 main）。**无需使用 fork**，直接从官方仓库安装即可。
 >
 > MiniCPM-V 4.6 在 `transformers>=5.7.0` 中以独立架构 `MiniCPMV4_6ForConditionalGeneration` 注册，SGLang 的适配也基于这一布局。
 
@@ -12,11 +12,12 @@ MiniCPM-V 4.6 提供两个 checkpoint：
 
 ## 1. SGLang 安装
 
-### 从 PR 分支源码安装
+### 从官方 main 源码安装
+
+包含此合并的正式 release 出来前，推荐从官方 `main` 安装（请关注 [SGLang Releases](https://github.com/sgl-project/sglang/releases)；正式版发布后可直接 `pip install -U "sglang[all]"`）：
 
 ```bash
-# 克隆 OpenBMB 维护的 SGLang v4.6 分支
-git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/sglang.git
+git clone https://github.com/sgl-project/sglang.git
 cd sglang
 
 pip install --upgrade pip

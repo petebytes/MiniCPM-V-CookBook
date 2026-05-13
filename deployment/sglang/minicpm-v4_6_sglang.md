@@ -1,7 +1,7 @@
 # MiniCPM-V 4.6 - SGLang Documentation
 
 > [!NOTE]
-> SGLang upstream support for MiniCPM-V 4.6 is currently being merged. Until the PR lands in an official release, please install SGLang from the **OpenBMB SGLang fork** below.
+> MiniCPM-V 4.6 has been merged into the official SGLang `main` branch ([PR #24855](https://github.com/sgl-project/sglang/pull/24855), merged on 2026-05-10; the accompanying docs / fix PRs are merged too). **No fork is required** — install directly from upstream.
 >
 > MiniCPM-V 4.6 is registered in `transformers>=5.7.0` as a standalone architecture (`MiniCPMV4_6ForConditionalGeneration`); the SGLang adapter follows that layout.
 
@@ -12,11 +12,12 @@ MiniCPM-V 4.6 ships as two checkpoints:
 
 ## 1. Installing SGLang
 
-### Install SGLang from the PR / fork branch
+### Install SGLang from upstream main
+
+Until the next SGLang release ships with this merge, install from upstream `main` (watch [SGLang Releases](https://github.com/sgl-project/sglang/releases); once a tagged release includes the merge, `pip install -U "sglang[all]"` is enough):
 
 ```bash
-# clone the OpenBMB-maintained SGLang branch with v4.6 support
-git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/sglang.git
+git clone https://github.com/sgl-project/sglang.git
 cd sglang
 
 pip install --upgrade pip

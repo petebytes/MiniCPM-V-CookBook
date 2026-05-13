@@ -13,21 +13,21 @@ MiniCPM-V 4.6 ships as **two separate checkpoints**:
 
 ### 1.1 Install vLLM
 
-MiniCPM-V 4.6 has been merged into upstream vLLM ([#41254](https://github.com/vllm-project/vllm/pull/41254)). You can build from source:
+MiniCPM-V 4.6 has been merged into the official vLLM `main` branch ([PR #41254](https://github.com/vllm-project/vllm/pull/41254), merged on 2026-05-12). **No fork is required** — install directly from the upstream repo:
 
 ```bash
 # Create a clean conda environment
 conda create -n vllm-v46 python=3.10 -y
 conda activate vllm-v46
 
-# Build from source (requires CUDA toolkit, compilation may take a while)
+# Install from upstream main (requires CUDA toolkit)
 git clone https://github.com/vllm-project/vllm.git
 cd vllm
-pip install -e .
+MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v
 ```
 
 > [!TIP]
-> Once a stable vLLM release ships with this merge, you can simply `pip install vllm`.
+> Once the next vLLM release ships with this merge, you can simply `pip install -U vllm` and skip the source build. Watch the [vLLM Releases page](https://github.com/vllm-project/vllm/releases) for updates.
 
 For video inference, install the video module:
 

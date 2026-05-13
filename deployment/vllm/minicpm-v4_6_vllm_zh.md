@@ -13,21 +13,21 @@ MiniCPM-V 4.6 提供 **两个独立的 checkpoint**：
 
 ### 1.1 安装 vLLM
 
-MiniCPM-V 4.6 已合并至 vLLM 上游（[#41254](https://github.com/vllm-project/vllm/pull/41254)），可从源码编译安装：
+MiniCPM-V 4.6 已合并至官方 vLLM `main` 分支（[PR #41254](https://github.com/vllm-project/vllm/pull/41254)，2026-05-12 merged）。**无需使用 fork**，直接从官方仓库安装即可：
 
 ```bash
 # 新建干净的 conda 环境
 conda create -n vllm-v46 python=3.10 -y
 conda activate vllm-v46
 
-# 从源码编译安装（需要 CUDA 工具链，编译时间较长）
+# 从官方 main 源码安装（需要 CUDA 工具链）
 git clone https://github.com/vllm-project/vllm.git
 cd vllm
-pip install -e .
+MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v
 ```
 
 > [!TIP]
-> 待包含此合并的 vLLM 正式版发布后，可直接 `pip install vllm` 安装。
+> 等待包含此合并的 vLLM 正式 release 后，可直接 `pip install -U vllm` 升级，无需源码安装。请关注 [vLLM Releases](https://github.com/vllm-project/vllm/releases)。
 
 进行视频推理时，需要安装相应的视频模块：
 

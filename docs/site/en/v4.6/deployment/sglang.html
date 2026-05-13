@@ -268,7 +268,7 @@ footer.page-footer a:hover { color: var(--primary); }
   <article><h1 id="minicpm-v-4-6-sglang-documentation">MiniCPM-V 4.6 - SGLang Documentation</h1>
 <div class="admonition admonition-note" markdown="0">
 <p class="admonition-title">Note</p>
-<p>SGLang upstream support for MiniCPM-V 4.6 is currently being merged. Until the PR lands in an official release, please install SGLang from the <strong>OpenBMB SGLang fork</strong> below.</p>
+<p>MiniCPM-V 4.6 has been merged into the official SGLang <code>main</code> branch (<a href="https://github.com/sgl-project/sglang/pull/24855">PR #24855</a>, merged on 2026-05-10; the accompanying docs / fix PRs are merged too). <strong>No fork is required</strong> — install directly from upstream.</p>
 <p>MiniCPM-V 4.6 is registered in <code>transformers&gt;=5.7.0</code> as a standalone architecture (<code>MiniCPMV4_6ForConditionalGeneration</code>); the SGLang adapter follows that layout.</p>
 </div>
 
@@ -278,9 +278,9 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><strong>Thinking</strong> — <a href="https://huggingface.co/openbmb/MiniCPM-V-4.6-Thinking"><code>openbmb/MiniCPM-V-4.6-Thinking</code></a></li>
 </ul>
 <h2 id="1-installing-sglang">1. Installing SGLang</h2>
-<h3 id="install-sglang-from-the-pr-fork-branch">Install SGLang from the PR / fork branch</h3>
-<pre class="code"><code class="language-bash"># clone the OpenBMB-maintained SGLang branch with v4.6 support
-git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/sglang.git
+<h3 id="install-sglang-from-upstream-main">Install SGLang from upstream main</h3>
+<p>Until the next SGLang release ships with this merge, install from upstream <code>main</code> (watch <a href="https://github.com/sgl-project/sglang/releases">SGLang Releases</a>; once a tagged release includes the merge, <code>pip install -U "sglang[all]"</code> is enough):</p>
+<pre class="code"><code class="language-bash">git clone https://github.com/sgl-project/sglang.git
 cd sglang
 
 pip install --upgrade pip

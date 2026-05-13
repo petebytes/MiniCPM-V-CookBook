@@ -43,8 +43,8 @@ print(processor.decode(out[0][inputs["input_ids"].shape[-1]:], skip_special_toke
 ### 用 vLLM 部署
 
 ```bash
-# v4.6 在 vllm-project/vllm#41254 合并前请使用 PR 分支
-git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/vllm.git
+# v4.6 已合并至官方 vLLM main（PR #41254，2026-05-12 merged），直接装官方仓库即可
+git clone https://github.com/vllm-project/vllm.git
 cd vllm
 MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v
 
