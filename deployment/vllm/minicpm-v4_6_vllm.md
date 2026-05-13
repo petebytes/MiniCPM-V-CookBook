@@ -11,22 +11,23 @@ MiniCPM-V 4.6 ships as **two separate checkpoints**:
 
 ## 1. Environment Setup
 
-### 1.1 Install vLLM (from PR branch, recommended for now)
+### 1.1 Install vLLM
 
-> [!NOTE]
-> The vLLM upstream PR ([#41254](https://github.com/vllm-project/vllm/pull/41254)) is currently under review. Until it lands in an official release, please install from the PR branch.
+MiniCPM-V 4.6 has been merged into upstream vLLM ([#41254](https://github.com/vllm-project/vllm/pull/41254)). You can build from source:
 
 ```bash
 # Create a clean conda environment
 conda create -n vllm-v46 python=3.10 -y
 conda activate vllm-v46
 
-# Clone the PR branch and install
-git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/vllm.git vllm-v46
-cd vllm-v46
-
-MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v --progress-bar=on
+# Build from source (requires CUDA toolkit, compilation may take a while)
+git clone https://github.com/vllm-project/vllm.git
+cd vllm
+pip install -e .
 ```
+
+> [!TIP]
+> Once a stable vLLM release ships with this merge, you can simply `pip install vllm`.
 
 For video inference, install the video module:
 
@@ -34,9 +35,7 @@ For video inference, install the video module:
 pip install vllm[video]
 ```
 
-This branch already requires `transformers>=5.7.0`, in which MiniCPM-V 4.6 has been merged as a standalone architecture (`MiniCPMV4_6ForConditionalGeneration`).
-
-> Once the PR is merged, you'll be able to install directly from PyPI (`pip install vllm`). The cookbook will be updated with the supported version.
+vLLM requires `transformers>=5.7.0`, in which MiniCPM-V 4.6 has been merged as a standalone architecture (`MiniCPMV4_6ForConditionalGeneration`).
 
 You can verify the installation with:
 

@@ -11,22 +11,23 @@ MiniCPM-V 4.6 提供 **两个独立的 checkpoint**：
 
 ## 1. 环境准备
 
-### 1.1 安装 vLLM（推荐：从 PR 分支安装）
+### 1.1 安装 vLLM
 
-> [!NOTE]
-> vLLM 上游 PR（[#41254](https://github.com/vllm-project/vllm/pull/41254)）目前还在 review 中，正式发版前请使用 PR 分支。
+MiniCPM-V 4.6 已合并至 vLLM 上游（[#41254](https://github.com/vllm-project/vllm/pull/41254)），可从源码编译安装：
 
 ```bash
 # 新建干净的 conda 环境
 conda create -n vllm-v46 python=3.10 -y
 conda activate vllm-v46
 
-# 克隆 PR 分支并安装
-git clone -b Support-MiniCPM-V-4.6 https://github.com/tc-mb/vllm.git vllm-v46
-cd vllm-v46
-
-MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v --progress-bar=on
+# 从源码编译安装（需要 CUDA 工具链，编译时间较长）
+git clone https://github.com/vllm-project/vllm.git
+cd vllm
+pip install -e .
 ```
+
+> [!TIP]
+> 待包含此合并的 vLLM 正式版发布后，可直接 `pip install vllm` 安装。
 
 进行视频推理时，需要安装相应的视频模块：
 
@@ -34,9 +35,7 @@ MAX_JOBS=6 VLLM_USE_PRECOMPILED=1 pip install --editable . -v --progress-bar=on
 pip install vllm[video]
 ```
 
-该分支已强制要求 `transformers>=5.7.0`，MiniCPM-V 4.6 在 transformers 中以独立架构 `MiniCPMV4_6ForConditionalGeneration` 形式合并。
-
-> PR 合并后即可直接 `pip install vllm` 使用，本文档届时会同步更新支持版本。
+vLLM 要求 `transformers>=5.7.0`，MiniCPM-V 4.6 在 transformers 中以独立架构 `MiniCPMV4_6ForConditionalGeneration` 形式合并。
 
 校验安装：
 
