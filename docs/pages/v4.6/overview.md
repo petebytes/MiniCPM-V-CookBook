@@ -69,7 +69,8 @@ python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
 ./build/bin/llama-mtmd-cli \
     -m /path/to/MiniCPM-V-4.6-F16.gguf \
     --mmproj /path/to/mmproj-MiniCPM-V-4.6-F16.gguf \
-    -c 8192 --image example.jpg -p "Describe the image."
+    -c 8192 --reasoning off --image example.jpg -p "Describe the image."
+# Note: pass --reasoning off for the Instruct checkpoint; recent llama.cpp auto-enables thinking from the template.
 ```
 
 See the [llama.cpp guide](deployment/llamacpp.html) for full details.

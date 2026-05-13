@@ -328,7 +328,8 @@ python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
 ./build/bin/llama-mtmd-cli \
     -m /path/to/MiniCPM-V-4.6-F16.gguf \
     --mmproj /path/to/mmproj-MiniCPM-V-4.6-F16.gguf \
-    -c 8192 --image example.jpg -p &quot;请描述这张图片&quot;
+    -c 8192 --reasoning off --image example.jpg -p &quot;请描述这张图片&quot;
+# 注：Instruct 模型务必加 --reasoning off，新版 llama.cpp 默认会从模板自动开启 thinking
 </code></pre>
 
 <p>详见 <a href="deployment/llamacpp.html">llama.cpp 部署指南</a>。</p>

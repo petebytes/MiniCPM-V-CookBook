@@ -70,6 +70,9 @@ python ./convert_hf_to_gguf.py /path/to/MiniCPM-V-4.6 \
 
 ## 3. Model Inference
 
+> [!IMPORTANT]
+> Recent `llama.cpp` builds (after [PR #20606](https://github.com/ggml-org/llama.cpp/pull/20606)) default `--reasoning` to `auto`, which enables thinking from the chat template. **The v4.6 Instruct checkpoint does not emit `<think>` blocks**, but its template enables thinking by default, producing broken Instruct output. **Always pass `--reasoning off` explicitly on Instruct inference commands.** For the Thinking checkpoint, leave it as default or pass `--reasoning on`.
+
 ```bash
 cd build/bin/
 
@@ -78,6 +81,7 @@ cd build/bin/
     -m  /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-F16.gguf \
     --mmproj /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
+    --reasoning off \
     --image xx.jpg -p "What is in the image?"
 
 # Quantized INT4 weights
@@ -85,6 +89,7 @@ cd build/bin/
     -m  /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf \
     --mmproj /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
+    --reasoning off \
     --image xx.jpg -p "What is in the image?"
 
 # Interactive mode
@@ -92,10 +97,11 @@ cd build/bin/
     -m  /path/to/MiniCPM-V-4.6/MiniCPM-V-4.6-Q4_K_M.gguf \
     --mmproj /path/to/MiniCPM-V-4.6/mmproj-MiniCPM-V-4.6-F16.gguf \
     -c 8192 --temp 0.7 --top-p 0.8 --top-k 100 --repeat-penalty 1.05 \
+    --reasoning off \
     --image xx.jpg -i
 ```
 
-If you're running the **Thinking** checkpoint, you can control the reasoning budget through `--jinja` + `--reasoning-budget`:
+If you're running the **Thinking** checkpoint, you can control the reasoning budget through `--jinja` + `--reasoning-budget` (`--reasoning` defaults to `auto`, which enables thinking for that checkpoint automatically):
 
 ```bash
 # Allow unlimited thinking (Thinking model)
@@ -117,6 +123,13 @@ The Instruct checkpoint has no `<think>` block, so `--reasoning-budget` is a no-
 
 **Argument Reference:**
 
-| Argument | `-m, --model` | `--mmproj` | `--image` | `-p, --prompt` | `-c, --ctx-size` | `--reasoning-budget` | `--jinja` |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| Description | Path to the language model | Path to the vision projector | Path to the input image | The prompt | Maximum context size | Maximum tokens used for reasoning (`-1` unlimited, `0` disabled) | Use the model's Jinja chat template |
+| Argument | Description |
+| :--- | :--- |
+| `-m, --model` | Path to the language model |
+| `--mmproj` | Path to the vision projector |
+| `--image` | Path to the input image |
+| `-p, --prompt` | The prompt |
+| `-c, --ctx-size` | Maximum context size |
+| `-rea, --reasoning [on\|off\|auto]` | Enable / disable thinking. Default `auto` (read from chat template). **Must be `off` for Instruct**; can stay default or be `on` for Thinking |
+| `--reasoning-budget` | Maximum tokens used for reasoning (`-1` unlimited, `0` immediate end); only meaningful for the Thinking checkpoint |
+| `--jinja` | Use the model's Jinja chat template (enabled by default in recent llama.cpp) |
