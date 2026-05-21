@@ -244,6 +244,12 @@ versions:
         src:   docs/pages/minicpm4_1/overview.md
         url:   overview
 
+      - group: { en: "Inference", zh: "推理" }
+        items:
+          - title: { en: "Chat (Hybrid Reasoning)", zh: "Chat（混合思考）" }
+            src:   inference/minicpm4_1_chat.md
+            url:   inference/chat
+
   - id: minicpm4
     label: { en: "MiniCPM 4", zh: "MiniCPM 4" }
     nav:
