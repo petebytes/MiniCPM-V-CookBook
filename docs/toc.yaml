@@ -286,6 +286,15 @@ versions:
             src:   finetune/llamafactory_minicpm4.md
             url:   finetune/llamafactory
 
+      - group: { en: "Apps", zh: "应用" }
+        items:
+          - title: { en: "MiniCPM4-MCP (tool agent)", zh: "MiniCPM4-MCP（工具 agent）" }
+            src:   demo/minicpm_demo/mcp/README.md
+            url:   apps/mcp
+          - title: { en: "MiniCPM4-Survey (survey generation)", zh: "MiniCPM4-Survey（综述生成）" }
+            src:   demo/minicpm_demo/survey/README.md
+            url:   apps/survey
+
   - id: minicpm4
     label: { en: "MiniCPM 4", zh: "MiniCPM 4" }
     nav:
@@ -325,6 +334,15 @@ versions:
           - title: { en: "LLaMA-Factory", zh: "LLaMA-Factory" }
             src:   finetune/llamafactory_minicpm4.md
             url:   finetune/llamafactory
+
+      - group: { en: "Apps", zh: "应用" }
+        items:
+          - title: { en: "MiniCPM4-MCP (tool agent)", zh: "MiniCPM4-MCP（工具 agent）" }
+            src:   demo/minicpm_demo/mcp/README.md
+            url:   apps/mcp
+          - title: { en: "MiniCPM4-Survey (survey generation)", zh: "MiniCPM4-Survey（综述生成）" }
+            src:   demo/minicpm_demo/survey/README.md
+            url:   apps/survey
 
   - id: minicpm-sala
     label: { en: "MiniCPM-SALA", zh: "MiniCPM-SALA" }
