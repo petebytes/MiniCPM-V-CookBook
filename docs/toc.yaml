@@ -255,6 +255,9 @@ versions:
           - title: { en: "vLLM", zh: "vLLM" }
             src:   deployment/vllm/minicpm4_1_vllm.md
             url:   deployment/vllm
+          - title: { en: "SGLang", zh: "SGLang" }
+            src:   deployment/sglang/minicpm4_1_sglang.md
+            url:   deployment/sglang
 
   - id: minicpm4
     label: { en: "MiniCPM 4", zh: "MiniCPM 4" }
@@ -274,6 +277,9 @@ versions:
           - title: { en: "vLLM", zh: "vLLM" }
             src:   deployment/vllm/minicpm4_vllm.md
             url:   deployment/vllm
+          - title: { en: "SGLang", zh: "SGLang" }
+            src:   deployment/sglang/minicpm4_sglang.md
+            url:   deployment/sglang
 
   - id: minicpm-sala
     label: { en: "MiniCPM-SALA", zh: "MiniCPM-SALA" }
@@ -288,6 +294,12 @@ versions:
           - title: { en: "Chat (long-context)", zh: "Chat（长上下文）" }
             src:   inference/minicpm-sala_chat.md
             url:   inference/chat
+
+      - group: { en: "Deployment", zh: "部署" }
+        items:
+          - title: { en: "SGLang", zh: "SGLang" }
+            src:   deployment/sglang/minicpm-sala_sglang.md
+            url:   deployment/sglang
 
 # Cross-version pages (under /shared/...)
 shared:

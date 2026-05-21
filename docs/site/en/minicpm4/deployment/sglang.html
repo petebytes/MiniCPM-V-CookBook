@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Chat (Hybrid Reasoning) — Recipes for vision, speech, and live-streaming multimodal AI.">
-<title>Chat (Hybrid Reasoning) — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="SGLang — Recipes for vision, speech, and live-streaming multimodal AI.">
+<title>SGLang — MiniCPM-V & o Cookbook</title>
 <meta name="color-scheme" content="light dark">
 <link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" id="hljs-light-css" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
@@ -306,7 +306,7 @@ footer.page-footer a:hover { color: var(--primary); }
   })();
 </script>
 </head>
-<body data-version="minicpm4_1" data-lang="en" data-slug="minicpm4_1/inference/chat">
+<body data-version="minicpm4" data-lang="en" data-slug="minicpm4/deployment/sglang">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
@@ -332,7 +332,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../../zh/minicpm4_1/inference/chat.html" rel="alternate" hreflang="zh">中文</a>
+    <a class="sidebar-lang-switch" href="../../../zh/minicpm4/deployment/sglang.html" rel="alternate" hreflang="zh">中文</a>
   </div>
   <ul class="nav-list">
   <li><a class="" href="../../index.html">Home</a></li>
@@ -340,19 +340,19 @@ footer.page-footer a:hover { color: var(--primary); }
 <div class="sidebar-section-title">Version</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/inference/chat.html">MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/inference/chat.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/inference/chat.html">MiniCPM-o 4.5</option>
-    <option value="chat.html" selected>MiniCPM 4.1 [latest-llm]</option>
-    <option value="../../minicpm4/inference/chat.html">MiniCPM 4</option>
-    <option value="../../minicpm-sala/inference/chat.html">MiniCPM-SALA [research]</option>
+    <option value="../../v4.6/deployment/sglang.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/deployment/sglang.html">MiniCPM-V 4.5</option>
+    <option value="../../o4.5/deployment/sglang.html">MiniCPM-o 4.5</option>
+    <option value="../../minicpm4_1/deployment/sglang.html">MiniCPM 4.1 [latest-llm]</option>
+    <option value="sglang.html" selected>MiniCPM 4</option>
+    <option value="../../minicpm-sala/deployment/sglang.html">MiniCPM-SALA [research]</option>
   </select>
 </div>
 <ul class="nav-list">
 <li><a class="" href="../overview.html">Overview</a></li>
-<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="active" href="chat.html">Chat (Hybrid Reasoning)</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
-<li><a class="" href="../deployment/sglang.html">SGLang</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../inference/chat.html">Chat</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="vllm.html">vLLM</a></li>
+<li><a class="active" href="sglang.html">SGLang</a></li></ul></li>
 </ul>
 <div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
@@ -364,120 +364,52 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="chat-minicpm-4-1">Chat (MiniCPM 4.1)</h1>
-<blockquote>
-<p>MiniCPM 4.1 is a text-only LLM available on HuggingFace as <a href="https://huggingface.co/openbmb/MiniCPM4.1-8B"><code>openbmb/MiniCPM4.1-8B</code></a>. It ships with <strong>hybrid reasoning</strong> — a single checkpoint that can produce direct answers or step-by-step <code>&lt;think&gt;</code> chains depending on a per-request flag.</p>
-</blockquote>
-<h2 id="initialize-model">Initialize model</h2>
-<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
-
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM4.1-8B&quot;</span>
-
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span>
-    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
-    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-</code></pre></div>
-
-<h2 id="direct-chat-reasoning-off">Direct chat (reasoning OFF)</h2>
-<p>The default behaviour returns a final answer without any <code>&lt;think&gt;</code> block — best for straightforward instructions, summarisation, retrieval-augmented chat, etc.</p>
-<div class="code"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Write a short article about Artificial Intelligence.&quot;</span><span class="p">}]</span>
-
-<span class="n">input_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span>
-    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-    <span class="n">enable_thinking</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-
-<span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-    <span class="n">input_ids</span><span class="p">,</span>
-    <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
-    <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-    <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">answer</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">input_ids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
-</code></pre></div>
-
-<h2 id="hybrid-reasoning-reasoning-on">Hybrid reasoning (reasoning ON)</h2>
-<p>Toggle <code>enable_thinking=True</code> to make MiniCPM 4.1 first emit a <code>&lt;think&gt;...&lt;/think&gt;</code> chain-of-thought block, then the final answer. Recommended for math, code, multi-step planning and other tasks that benefit from explicit deliberation.</p>
-<div class="code"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;If a train leaves city A at 9:00 and travels at 80 km/h to city B 200 km away, when does it arrive?&quot;</span><span class="p">}]</span>
-
-<span class="n">input_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span>
-    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-    <span class="n">enable_thinking</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-
-<span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-    <span class="n">input_ids</span><span class="p">,</span>
-    <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
-    <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
-    <span class="n">top_p</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">input_ids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-</code></pre></div>
-
-<p>A typical reply has the shape:</p>
-<div class="code"><pre><span></span><code>&lt;think&gt;
-Distance is 200 km, speed is 80 km/h, so the trip takes 200 / 80 = 2.5 hours.
-9:00 + 2 hours 30 minutes = 11:30.
-&lt;/think&gt;
-The train arrives at 11:30.
-</code></pre></div>
-
-<div class="admonition admonition-tip" markdown="0">
-<p class="admonition-title">Tip</p>
-<p>Sampling hyper-parameters affect reasoning quality. The OpenBMB team recommends <code>temperature=0.6, top_p=0.95</code> for reasoning-on, and <code>temperature=0.7, top_p=0.8</code> for reasoning-off.</p>
+  <article><h1 id="minicpm-4-sglang">MiniCPM 4 - SGLang</h1>
+<div class="admonition admonition-note" markdown="0">
+<p class="admonition-title">Note</p>
+<p>SGLang upstream does not yet ship MiniCPM 4 support, so we maintain it on the <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork under the <code>minicpm</code> branch. Same branch as 4.1 / SALA — pull once and you can swap models freely.</p>
 </div>
 
-<h2 id="multi-turn-conversation">Multi-turn conversation</h2>
-<p><code>apply_chat_template</code> is stateless — keep the running <code>messages</code> list yourself and pass it back in on every turn. The reasoning toggle is <strong>per request</strong>, so different turns can use different modes.</p>
-<div class="code"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Plan a 3-day Beijing trip for a first-time visitor.&quot;</span><span class="p">},</span>
-<span class="p">]</span>
+<h2 id="1-environment">1. Environment</h2>
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/sglang.git
+<span class="nb">cd</span><span class="w"> </span>sglang
+git<span class="w"> </span>checkout<span class="w"> </span>minicpm
 
-<span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">enable_thinking</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">input_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-        <span class="n">messages</span><span class="p">,</span>
-        <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-        <span class="n">enable_thinking</span><span class="o">=</span><span class="n">enable_thinking</span><span class="p">,</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-    <span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                             <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">input_ids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">reply</span> <span class="o">=</span> <span class="n">chat</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">reply</span><span class="p">)</span>
-
-<span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">reply</span><span class="p">})</span>
-<span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Estimate the budget per person.&quot;</span><span class="p">})</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">chat</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">enable_thinking</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;python[all]&quot;</span>
 </code></pre></div>
 
-<h2 id="long-context-inference">Long-context inference</h2>
-<p>MiniCPM 4.1 supports up to <strong>128K</strong> context via <a href="https://arxiv.org/abs/2509.24663">InfLLM-V2</a> sparse attention. For inputs longer than ~32K, switch on <code>flash_attention_2</code> and consider the optimised CPM.cu runtime for serving (see the deployment guides under this version).</p>
-<div class="code"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span>
-    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
-    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">attn_implementation</span><span class="o">=</span><span class="s2">&quot;flash_attention_2&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<h2 id="2-launch-the-server">2. Launch the server</h2>
+<div class="code"><pre><span></span><code><span class="c1"># 8B</span>
+python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model-path<span class="w"> </span>openbmb/MiniCPM4-8B<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code<span class="w"> </span>--dtype<span class="w"> </span>bfloat16<span class="w"> </span>--context-length<span class="w"> </span><span class="m">32768</span>
+
+<span class="c1"># 0.5B (edge-friendly)</span>
+python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model-path<span class="w"> </span>openbmb/MiniCPM4-0.5B<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code<span class="w"> </span>--dtype<span class="w"> </span>bfloat16<span class="w"> </span>--context-length<span class="w"> </span><span class="m">32768</span>
 </code></pre></div>
 
-<h2 id="notes">Notes</h2>
+<p>OpenAI-compatible API on <code>http://localhost:30000/v1</code>.</p>
+<h2 id="3-call-the-service">3. Call the service</h2>
+<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;EMPTY&quot;</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:30000/v1&quot;</span><span class="p">)</span>
+
+<span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;openbmb/MiniCPM4-8B&quot;</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Write an article about Artificial Intelligence.&quot;</span><span class="p">}],</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="4-notes">4. Notes</h2>
 <ul>
-<li><code>trust_remote_code=True</code> is required — MiniCPM 4.1 ships its modelling code on the Hub and is <strong>not yet merged into upstream <code>transformers</code></strong> at the time of writing.</li>
-<li><code>enable_thinking</code> is a chat-template variable; if you build your own prompt manually, prepend <code>&lt;think&gt;\n</code> to the assistant turn for reasoning-on and leave the assistant prefix empty otherwise.</li>
-<li>The 0.5B variant (<a href="https://huggingface.co/openbmb/MiniCPM4-0.5B"><code>openbmb/MiniCPM4-0.5B</code></a>) shares the same chat template — drop-in for tightly constrained edge deployments.</li>
+<li>Branch in use: <a href="https://github.com/tc-mb/sglang/tree/minicpm"><code>tc-mb/sglang @ minicpm</code></a>.</li>
+<li>MiniCPM 4 does not support the <code>enable_thinking</code> toggle. For hybrid reasoning use <a href="../minicpm4_1/deployment/sglang.html">MiniCPM 4.1</a>.</li>
+<li>For very long inputs see <a href="../minicpm-sala/deployment/sglang.html">MiniCPM-SALA</a>.</li>
 </ul></article>
 
   <footer class="page-footer">
