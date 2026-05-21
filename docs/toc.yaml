@@ -280,6 +280,12 @@ versions:
             src:   quantization/gptq/minicpm4_1_gptq.md
             url:   quantization/gptq
 
+      - group: { en: "Fine-tuning", zh: "微调" }
+        items:
+          - title: { en: "LLaMA-Factory", zh: "LLaMA-Factory" }
+            src:   finetune/llamafactory_minicpm4.md
+            url:   finetune/llamafactory
+
   - id: minicpm4
     label: { en: "MiniCPM 4", zh: "MiniCPM 4" }
     nav:
@@ -314,6 +320,12 @@ versions:
             src:   quantization/bitcpm/minicpm4_bitcpm.md
             url:   quantization/bitcpm
 
+      - group: { en: "Fine-tuning", zh: "微调" }
+        items:
+          - title: { en: "LLaMA-Factory", zh: "LLaMA-Factory" }
+            src:   finetune/llamafactory_minicpm4.md
+            url:   finetune/llamafactory
+
   - id: minicpm-sala
     label: { en: "MiniCPM-SALA", zh: "MiniCPM-SALA" }
     badge: "research"
@@ -333,6 +345,12 @@ versions:
           - title: { en: "SGLang", zh: "SGLang" }
             src:   deployment/sglang/minicpm-sala_sglang.md
             url:   deployment/sglang
+
+      - group: { en: "Fine-tuning", zh: "微调" }
+        items:
+          - title: { en: "LLaMA-Factory", zh: "LLaMA-Factory" }
+            src:   finetune/llamafactory_minicpm-sala.md
+            url:   finetune/llamafactory
 
 # Cross-version pages (under /shared/...)
 shared:
