@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="no-transitions">
+<html lang="zh-CN" class="no-transitions">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Overview — Recipes for vision, speech, and live-streaming multimodal AI.">
-<title>Overview — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="Chat（长上下文） — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
+<title>Chat（长上下文） — MiniCPM-V & o Cookbook</title>
 <meta name="color-scheme" content="light dark">
-<link rel="icon" type="image/png" href="../../assets/logos/openbmb.png">
+<link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" id="hljs-light-css" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
 <link rel="stylesheet" id="hljs-dark-css" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" media="not all">
 <style>
@@ -306,142 +306,135 @@ footer.page-footer a:hover { color: var(--primary); }
   })();
 </script>
 </head>
-<body data-version="minicpm-sala" data-lang="en" data-slug="minicpm-sala/overview">
+<body data-version="minicpm-sala" data-lang="zh" data-slug="minicpm-sala/inference/chat">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
-  <a class="topbar-brand" href="../index.html">
-    <img src="../../assets/logos/minicpmv.png" alt="MiniCPM-V">
+  <a class="topbar-brand" href="../../index.html">
+    <img src="../../../assets/logos/minicpmv.png" alt="MiniCPM-V">
     <span class="brand-text">MiniCPM-V & o Cookbook</span>
   </a>
   <div class="topbar-search">
-    <input type="search" placeholder="Search docs…" id="pagefind-search">
+    <input type="search" placeholder="搜索文档…" id="pagefind-search">
   </div>
   <nav class="topbar-actions">
-    <button class="topbar-action-btn" id="theme-toggle" type="button" aria-label="Toggle theme (auto / light / dark)" title="Toggle theme (auto / light / dark)">
+    <button class="topbar-action-btn" id="theme-toggle" type="button" aria-label="切换主题（自动 / 浅色 / 深色）" title="切换主题（自动 / 浅色 / 深色）">
       <span class="theme-toggle-icon" aria-hidden="true">🌓</span>
-      <span class="theme-toggle-label">Auto</span>
+      <span class="theme-toggle-label">自动</span>
     </button>
     <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook" target="_blank" rel="noopener">GitHub</a>
     <a href="https://huggingface.co/openbmb" target="_blank" rel="noopener">HuggingFace</a>
-    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">ModelScope</a>
+    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">魔搭社区</a>
     <a href="https://discord.gg/rftuRMbqzf" target="_blank" rel="noopener">Discord</a>
-    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">Paper</a>
+    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">技术报告</a>
   </nav>
 </header>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../zh/minicpm-sala/overview.html" rel="alternate" hreflang="zh">中文</a>
+    <a class="sidebar-lang-switch" href="../../../en/minicpm-sala/inference/chat.html" rel="alternate" hreflang="en">English</a>
   </div>
   <ul class="nav-list">
-  <li><a class="" href="../index.html">Home</a></li>
+  <li><a class="" href="../../index.html">首页</a></li>
 </ul>
-<div class="sidebar-section-title">Version</div>
+<div class="sidebar-section-title">版本</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../v4.6/overview.html">MiniCPM-V 4.6 [latest]</option>
-    <option value="../v4.5/overview.html">MiniCPM-V 4.5</option>
-    <option value="../o4.5/overview.html">MiniCPM-o 4.5</option>
-    <option value="../minicpm4_1/overview.html">MiniCPM 4.1 [latest-llm]</option>
-    <option value="../minicpm4/overview.html">MiniCPM 4</option>
-    <option value="overview.html" selected>MiniCPM-SALA [research]</option>
+    <option value="../../v4.6/inference/chat.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/inference/chat.html">MiniCPM-V 4.5</option>
+    <option value="../../o4.5/inference/chat.html">MiniCPM-o 4.5</option>
+    <option value="../../minicpm4_1/inference/chat.html">MiniCPM 4.1 [latest-llm]</option>
+    <option value="../../minicpm4/inference/chat.html">MiniCPM 4</option>
+    <option value="chat.html" selected>MiniCPM-SALA [research]</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="active" href="overview.html">Overview</a></li>
-<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="inference/chat.html">Chat (long-context)</a></li></ul></li>
+<li><a class="" href="../overview.html">概览</a></li>
+<li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="active" href="chat.html">Chat（长上下文）</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">Cross-version</div>
+<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../shared/finetune/official.html">Official scripts</a></li>
-<li><a class="" href="../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="../shared/finetune/swift.html">SWIFT</a></li>
-<li><a class="" href="../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
+<li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
+<li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-sala-overview">MiniCPM-SALA — Overview</h1>
+  <article><h1 id="chat-minicpm-sala">Chat（MiniCPM-SALA）</h1>
 <blockquote>
-<p>A research release exploring hybrid sparse-plus-linear attention for ultra-long-context inference. Distilled from MiniCPM 4 with structured decay and post-training adaptation.</p>
+<p>MiniCPM-SALA 是探索<strong>稀疏 + 线性混合注意力</strong>的研究版本，模型卡为 <a href="https://huggingface.co/openbmb/MiniCPM-SALA"><code>openbmb/MiniCPM-SALA</code></a>。它由 MiniCPM 4 通过结构化衰减与后训练适应蒸馏而来，面向百万级令牌输入，计算量仅为密集 Transformer 的一小部分。</p>
 </blockquote>
-<h2 id="checkpoints">Checkpoints</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Variant</th>
-<th style="text-align: left;">HuggingFace</th>
-<th style="text-align: left;">ModelScope</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">MiniCPM-SALA</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM-SALA"><code>openbmb/MiniCPM-SALA</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM-SALA"><code>OpenBMB/MiniCPM-SALA</code></a></td>
-</tr>
-</tbody>
-</table>
-<h2 id="what-is-sala">What is SALA?</h2>
-<p><strong>SALA (Sparse Attention and Linear Attention)</strong> is the first large-scale hybrid architecture that systematically combines:</p>
-<ul>
-<li><strong>25% sparse attention</strong> (<a href="https://arxiv.org/abs/2509.24663">InfLLM-V2</a>) — high-fidelity local modelling</li>
-<li><strong>75% linear attention</strong> (Lightning Attention) — globally efficient recurrent computation</li>
-</ul>
-<p>Further enhanced with <a href="https://arxiv.org/abs/2601.22156">HyPE</a>, SALA extends to million-token context windows while maintaining strong length generalization.</p>
-<h2 id="highlights">Highlights</h2>
-<ul>
-<li><strong>Up to 3.5× inference speedup</strong> compared with Transformer baselines like Qwen3-8B in long-context settings.</li>
-<li><strong>Greatly reduced KV-cache footprint</strong>, making million-token inputs practical on a single GPU.</li>
-<li><strong>Transformer → Hybrid distillation</strong> — initialized from MiniCPM 4 with structured decay and post-training adaptation, preserving most of the dense model's capability.</li>
-</ul>
-<h2 id="quick-start">Quick start</h2>
-<h3 id="inference-hugging-face-transformers">Inference (Hugging Face Transformers)</h3>
+<h2 id="初始化模型">初始化模型</h2>
 <div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
 <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM-SALA&quot;</span>
+
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">model_path</span><span class="p">,</span>
+    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+</code></pre></div>
 
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Summarise this long document: ...&quot;</span><span class="p">}]</span>
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
+<h2 id="基础对话">基础对话</h2>
+<div class="code"><pre><span></span><code><span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;请总结这篇文章：...&quot;</span><span class="p">}]</span>
+
+<span class="n">input_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+    <span class="n">messages</span><span class="p">,</span>
+    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
-<span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+    <span class="n">input_ids</span><span class="p">,</span>
+    <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">input_ids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </code></pre></div>
 
-<h3 id="serve-with-sglang">Serve with SGLang</h3>
-<div class="code"><pre><span></span><code><span class="c1"># SALA needs the dedicated SGLang branch we maintain in tc-mb/sglang.</span>
-git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/sglang.git
-<span class="nb">cd</span><span class="w"> </span>sglang
-git<span class="w"> </span>checkout<span class="w"> </span>minicpm
-pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;python[all]&quot;</span>
+<h2 id="超长文档推理">超长文档推理</h2>
+<p>SALA 的 25% 稀疏 + 75% 线性混合注意力专为超长输入设计（≥ 128K 令牌，配合 <a href="https://arxiv.org/abs/2601.22156">HyPE</a> 位置编码可扩展到约 1M 令牌）。读取整篇文档后作为单条 user 消息传入即可——线性注意力层让 KV 缓存占用保持有界。</p>
+<div class="code"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;long_document.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">long_text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--model-path<span class="w"> </span>openbmb/MiniCPM-SALA<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span>--trust-remote-code<span class="w"> </span>--dtype<span class="w"> </span>bfloat16
+<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;以下是一篇长文档，请阅读后回答末尾的问题。</span><span class="se">\n\n</span><span class="si">{</span><span class="n">long_text</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">问题：第三节的主要观点是什么？&quot;</span>
+<span class="p">}]</span>
+
+<span class="n">input_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+    <span class="n">messages</span><span class="p">,</span>
+    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">out_ids</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">out_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">input_ids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </code></pre></div>
 
-<h2 id="where-to-next">Where to next</h2>
+<div class="admonition admonition-tip" markdown="0">
+<p class="admonition-title">提示</p>
+<p>SALA 继承自 MiniCPM 4 的 tokenizer，prompt 模板与 4 相同。实际差异是可以容纳长一个数量级的输入而不爆显存。</p>
+</div>
+
+<h2 id="注意事项">注意事项</h2>
 <ul>
-<li>📖 <a href="https://github.com/OpenBMB/MiniCPM/blob/main/docs/MiniCPM_SALA.pdf">Technical report (in repo)</a></li>
-<li>🛠️ <a href="https://github.com/OpenBMB/MiniCPM">Main repository (OpenBMB/MiniCPM)</a></li>
-<li>🔬 <a href="https://github.com/OpenBMB/infllmv2_cuda_impl">InfLLM-V2 training kernels</a></li>
-</ul>
-<blockquote>
-<p>Per-feature guides (Transformers chat, SGLang, LLaMA-Factory fine-tuning) are being added to this cookbook section. Use the version sidebar on the left to navigate as they land.</p>
-</blockquote></article>
+<li>SALA 是<strong>研究版本</strong>，API 与行为后续可能演进。架构细节参见<a href="https://github.com/OpenBMB/MiniCPM/blob/main/docs/MiniCPM_SALA.pdf">技术报告（PDF）</a>。</li>
+<li>稀疏注意力层依赖 <a href="https://github.com/OpenBMB/infllmv2_cuda_impl">InfLLM-V2 CUDA kernel</a>。HF Transformers 推理时会自动回落到较慢的参考实现；高吞吐服务请安装 kernel 并使用本版本下的 SGLang 指南。</li>
+<li>SALA 的 SGLang 推理需要使用 <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork 的 <code>minicpm</code> 分支 —— 详见本节 <code>Deployment &gt; SGLang</code>。</li>
+</ul></article>
 
   <footer class="page-footer">
-    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>
-    <span>Built with <code>build_docs.py</code></span>
+    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>
+    <span>由 <code>build_docs.py</code> 自动生成</span>
   </footer>
 </main>
 

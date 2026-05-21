@@ -257,6 +257,12 @@ versions:
         src:   docs/pages/minicpm4/overview.md
         url:   overview
 
+      - group: { en: "Inference", zh: "推理" }
+        items:
+          - title: { en: "Chat", zh: "Chat" }
+            src:   inference/minicpm4_chat.md
+            url:   inference/chat
+
   - id: minicpm-sala
     label: { en: "MiniCPM-SALA", zh: "MiniCPM-SALA" }
     badge: "research"
@@ -264,6 +270,12 @@ versions:
       - title: { en: "Overview", zh: "概览" }
         src:   docs/pages/minicpm-sala/overview.md
         url:   overview
+
+      - group: { en: "Inference", zh: "推理" }
+        items:
+          - title: { en: "Chat (long-context)", zh: "Chat（长上下文）" }
+            src:   inference/minicpm-sala_chat.md
+            url:   inference/chat
 
 # Cross-version pages (under /shared/...)
 shared:
