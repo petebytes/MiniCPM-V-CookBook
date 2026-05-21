@@ -236,6 +236,29 @@ versions:
             src:   demo/web_demo/gradio/README_o45.md
             url:   demos/gradio
 
+  - id: minicpm4_1
+    label: { en: "MiniCPM 4.1", zh: "MiniCPM 4.1" }
+    badge: "latest-llm"
+    nav:
+      - title: { en: "Overview", zh: "概览" }
+        src:   docs/pages/minicpm4_1/overview.md
+        url:   overview
+
+  - id: minicpm4
+    label: { en: "MiniCPM 4", zh: "MiniCPM 4" }
+    nav:
+      - title: { en: "Overview", zh: "概览" }
+        src:   docs/pages/minicpm4/overview.md
+        url:   overview
+
+  - id: minicpm-sala
+    label: { en: "MiniCPM-SALA", zh: "MiniCPM-SALA" }
+    badge: "research"
+    nav:
+      - title: { en: "Overview", zh: "概览" }
+        src:   docs/pages/minicpm-sala/overview.md
+        url:   overview
+
 # Cross-version pages (under /shared/...)
 shared:
   - group: { en: "Fine-tuning", zh: "微调" }
