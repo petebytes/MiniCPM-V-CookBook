@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="no-transitions">
+<html lang="en" class="no-transitions">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="MLX（Apple Silicon） — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
-<title>MLX（Apple Silicon） — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="GPTQ (+ QAT) — Recipes for vision, speech, and live-streaming multimodal AI.">
+<title>GPTQ (+ QAT) — MiniCPM-V & o Cookbook</title>
 <meta name="color-scheme" content="light dark">
 <link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" id="hljs-light-css" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
@@ -306,7 +306,7 @@ footer.page-footer a:hover { color: var(--primary); }
   })();
 </script>
 </head>
-<body data-version="minicpm4_1" data-lang="zh" data-slug="minicpm4_1/deployment/mlx">
+<body data-version="minicpm4_1" data-lang="en" data-slug="minicpm4_1/quantization/gptq">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
@@ -315,54 +315,54 @@ footer.page-footer a:hover { color: var(--primary); }
     <span class="brand-text">MiniCPM-V & o Cookbook</span>
   </a>
   <div class="topbar-search">
-    <input type="search" placeholder="搜索文档…" id="pagefind-search">
+    <input type="search" placeholder="Search docs…" id="pagefind-search">
   </div>
   <nav class="topbar-actions">
-    <button class="topbar-action-btn" id="theme-toggle" type="button" aria-label="切换主题（自动 / 浅色 / 深色）" title="切换主题（自动 / 浅色 / 深色）">
+    <button class="topbar-action-btn" id="theme-toggle" type="button" aria-label="Toggle theme (auto / light / dark)" title="Toggle theme (auto / light / dark)">
       <span class="theme-toggle-icon" aria-hidden="true">🌓</span>
-      <span class="theme-toggle-label">自动</span>
+      <span class="theme-toggle-label">Auto</span>
     </button>
     <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook" target="_blank" rel="noopener">GitHub</a>
     <a href="https://huggingface.co/openbmb" target="_blank" rel="noopener">HuggingFace</a>
-    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">魔搭社区</a>
+    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">ModelScope</a>
     <a href="https://discord.gg/rftuRMbqzf" target="_blank" rel="noopener">Discord</a>
-    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">技术报告</a>
+    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">Paper</a>
   </nav>
 </header>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../../en/minicpm4_1/deployment/mlx.html" rel="alternate" hreflang="en">English</a>
+    <a class="sidebar-lang-switch" href="../../../zh/minicpm4_1/quantization/gptq.html" rel="alternate" hreflang="zh">中文</a>
   </div>
   <ul class="nav-list">
-  <li><a class="" href="../../index.html">首页</a></li>
+  <li><a class="" href="../../index.html">Home</a></li>
 </ul>
-<div class="sidebar-section-title">版本</div>
+<div class="sidebar-section-title">Version</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/deployment/mlx.html">MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/deployment/mlx.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/deployment/mlx.html">MiniCPM-o 4.5</option>
-    <option value="mlx.html" selected>MiniCPM 4.1 [latest-llm]</option>
-    <option value="../../minicpm4/deployment/mlx.html">MiniCPM 4</option>
-    <option value="../../minicpm-sala/deployment/mlx.html">MiniCPM-SALA [research]</option>
+    <option value="../../v4.6/quantization/gptq.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/quantization/gptq.html">MiniCPM-V 4.5</option>
+    <option value="../../o4.5/quantization/gptq.html">MiniCPM-o 4.5</option>
+    <option value="gptq.html" selected>MiniCPM 4.1 [latest-llm]</option>
+    <option value="../../minicpm4/quantization/gptq.html">MiniCPM 4</option>
+    <option value="../../minicpm-sala/quantization/gptq.html">MiniCPM-SALA [research]</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="" href="../overview.html">概览</a></li>
-<li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../inference/chat.html">Chat（混合思考）</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="vllm.html">vLLM</a></li>
-<li><a class="" href="sglang.html">SGLang</a></li>
-<li><a class="" href="llamacpp.html">llama.cpp</a></li>
-<li><a class="" href="ollama.html">Ollama</a></li>
-<li><a class="active" href="mlx.html">MLX（Apple Silicon）</a></li>
-<li><a class="" href="cpmcu.html">CPM.cu（端侧 CUDA）</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">量化</div><ul class="nav-group-children"><li><a class="" href="../quantization/awq.html">AWQ</a></li>
-<li><a class="" href="../quantization/gptq.html">GPTQ（含 QAT）</a></li></ul></li>
+<li><a class="" href="../overview.html">Overview</a></li>
+<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../inference/chat.html">Chat (Hybrid Reasoning)</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="../deployment/vllm.html">vLLM</a></li>
+<li><a class="" href="../deployment/sglang.html">SGLang</a></li>
+<li><a class="" href="../deployment/llamacpp.html">llama.cpp</a></li>
+<li><a class="" href="../deployment/ollama.html">Ollama</a></li>
+<li><a class="" href="../deployment/mlx.html">MLX (Apple Silicon)</a></li>
+<li><a class="" href="../deployment/cpmcu.html">CPM.cu (on-device CUDA)</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Quantization</div><ul class="nav-group-children"><li><a class="" href="awq.html">AWQ</a></li>
+<li><a class="active" href="gptq.html">GPTQ (+ QAT)</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">跨版本</div>
+<div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
+<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
 <li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
 <li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
 <li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
@@ -370,79 +370,79 @@ footer.page-footer a:hover { color: var(--primary); }
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-4-1-mlx-apple-silicon">MiniCPM 4.1 - MLX（Apple Silicon）</h1>
+  <article><h1 id="minicpm-4-1-gptq-and-qat-variant">MiniCPM 4.1 - GPTQ (and QAT variant)</h1>
 <div class="admonition admonition-note" markdown="0">
-<p class="admonition-title">说明</p>
-<p><a href="https://huggingface.co/openbmb/MiniCPM4.1-8B-MLX"><code>openbmb/MiniCPM4.1-8B-MLX</code></a> 是面向 Apple Silicon 优化的官方版本，使用 <a href="https://github.com/ml-explore/mlx-lm"><code>mlx-lm</code></a> 运行。专为 M 系列芯片（M1 / M2 / M3 / M4）上的原生 Mac 推理设计。</p>
+<p class="admonition-title">Note</p>
+<p>Pre-quantized GPTQ weights are available as <a href="https://huggingface.co/openbmb/MiniCPM4.1-8B-GPTQ"><code>openbmb/MiniCPM4.1-8B-GPTQ</code></a>. The MiniCPM4-0.5B-QAT release is also distributed in <strong>GPTQ-format storage</strong>, so this guide covers both.</p>
 </div>
 
-<h2 id="1-环境准备">1. 环境准备</h2>
-<p>需要 macOS 14+，Python 3.10+：</p>
-<div class="code"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>mlx-lm
+<h2 id="method-1-use-the-pre-quantized-model">Method 1 — Use the pre-quantized model</h2>
+<h3 id="download">Download</h3>
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/openbmb/MiniCPM4.1-8B-GPTQ
 </code></pre></div>
 
-<h2 id="2-命令行生成">2. 命令行生成</h2>
-<div class="code"><pre><span></span><code>mlx_lm.generate<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--model<span class="w"> </span>openbmb/MiniCPM4.1-8B-MLX<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--prompt<span class="w"> </span><span class="s2">&quot;写一篇关于端侧 AI 的短文。&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--max-tokens<span class="w"> </span><span class="m">512</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8
+<p>Or on ModelScope: <a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4.1-8B-GPTQ">https://www.modelscope.cn/models/OpenBMB/MiniCPM4.1-8B-GPTQ</a></p>
+<h3 id="inference-with-vllm">Inference with vLLM</h3>
+<div class="code"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>vllm
+vllm<span class="w"> </span>serve<span class="w"> </span>openbmb/MiniCPM4.1-8B-GPTQ<span class="w"> </span>--trust-remote-code<span class="w"> </span>--max-model-len<span class="w"> </span><span class="m">65536</span>
 </code></pre></div>
 
-<h2 id="3-python-api">3. Python API</h2>
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">mlx_lm</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">generate</span>
+<p>vLLM auto-selects the GPTQ-Marlin kernel on Ampere / Ada / Hopper for maximum throughput.</p>
+<h3 id="inference-with-transformers">Inference with Transformers</h3>
+<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
-<span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">&quot;openbmb/MiniCPM4.1-8B-MLX&quot;</span><span class="p">)</span>
-
-<span class="n">prompt</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;写一篇关于端侧 AI 的短文。&quot;</span><span class="p">}],</span>
-    <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">response</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span>
-    <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
-    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
-    <span class="n">temp</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-    <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;openbmb/MiniCPM4.1-8B-GPTQ&quot;</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;openbmb/MiniCPM4.1-8B-GPTQ&quot;</span><span class="p">,</span>
+    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 </code></pre></div>
 
-<h3 id="混合思考">混合思考</h3>
-<div class="code"><pre><span></span><code><span class="n">prompt</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;求解：列车 9:00 出发，以 80 km/h 行驶到 200 km 外的城市...&quot;</span><span class="p">}],</span>
-    <span class="n">tokenize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">enable_thinking</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">generate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">top_p</span><span class="o">=</span><span class="mf">0.95</span><span class="p">))</span>
+<div class="admonition admonition-important" markdown="0">
+<p class="admonition-title">Important</p>
+<p>Transformers <code>&gt;= 4.36</code> ships GPTQ runtime via <code>optimum</code>. Install with <code>pip install optimum auto-gptq</code>.</p>
+</div>
+
+<h2 id="method-2-quantize-the-model-yourself">Method 2 — Quantize the model yourself</h2>
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/AutoGPTQ.git
+<span class="nb">cd</span><span class="w"> </span>AutoGPTQ
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 
-<h2 id="4-作为服务运行">4. 作为服务运行</h2>
-<p><code>mlx-lm</code> 内置 OpenAI 兼容服务：</p>
-<div class="code"><pre><span></span><code>mlx_lm.server<span class="w"> </span>--model<span class="w"> </span>openbmb/MiniCPM4.1-8B-MLX<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
-</code></pre></div>
-
-<div class="code"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;EMPTY&quot;</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8000/v1&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;openbmb/MiniCPM4.1-8B-MLX&quot;</span><span class="p">,</span>
-    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;你好。&quot;</span><span class="p">}],</span>
-<span class="p">)</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-</code></pre></div>
-
-<h2 id="5-注意事项">5. 注意事项</h2>
+<blockquote>
+<p>The <code>tc-mb/AutoGPTQ</code> fork contains the MiniCPM-specific config patches. We've upstreamed the model_type mapping to AutoGPTQ-NEXT — for new projects you can also try the official <a href="https://github.com/vllm-project/llm-compressor"><code>vllm-project/llm-compressor</code></a> which is now the recommended quantizer toolkit.</p>
+</blockquote>
+<p>A complete quantization script is provided alongside this doc — see the <a href="https://github.com/tc-mb/AutoGPTQ"><code>tc-mb/AutoGPTQ</code> README</a> for the recipe used for the official <code>MiniCPM4.1-8B-GPTQ</code> release.</p>
+<h2 id="qat-variant">QAT variant</h2>
+<p>MiniCPM 4 ships an additional <strong>quantization-aware training</strong> variant: <a href="https://huggingface.co/openbmb/MiniCPM4-0.5B-QAT-Int4-GPTQ-format"><code>openbmb/MiniCPM4-0.5B-QAT-Int4-GPTQ-format</code></a>.</p>
 <ul>
-<li>MLX 权重已为 Apple Silicon 做了量化（默认 4-bit）。M 系列上的内存占用约 5 GB。</li>
-<li>性能受统一内存带宽限制 —— M3 Pro / M4 Pro 及以上获得最佳吞吐。</li>
-<li>非 Mac 部署请使用标准的 vLLM / SGLang / llama.cpp 指南。</li>
+<li>The QAT model is <em>trained</em> with quantization in the loop, so the INT4 weights recover more quality than post-training GPTQ.</li>
+<li>It is <strong>physically stored in GPTQ format</strong>, so the same vLLM / Transformers loading code works:</li>
+</ul>
+<div class="code"><pre><span></span><code>vllm<span class="w"> </span>serve<span class="w"> </span>openbmb/MiniCPM4-0.5B-QAT-Int4-GPTQ-format<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--trust-remote-code<span class="w"> </span>--max-model-len<span class="w"> </span><span class="m">32768</span>
+</code></pre></div>
+
+<div class="code"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;openbmb/MiniCPM4-0.5B-QAT-Int4-GPTQ-format&quot;</span><span class="p">,</span>
+    <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+</code></pre></div>
+
+<p>A matching speculative-decoding draft is available as <a href="https://huggingface.co/openbmb/MiniCPM4-8B-Eagle-FRSpec-QAT"><code>openbmb/MiniCPM4-8B-Eagle-FRSpec-QAT</code></a> for use with <a href="https://github.com/OpenBMB/CPM.cu">CPM.cu</a>.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>GPTQ in vLLM uses the GPTQ-Marlin kernel by default on capable GPUs; no extra flags needed.</li>
+<li>For MiniCPM 4 (non-4.1), the official GPTQ release is <a href="https://huggingface.co/openbmb/MiniCPM4-8B-GPTQ"><code>openbmb/MiniCPM4-8B-GPTQ</code></a> — same flow.</li>
+<li>For very memory-constrained deployments, prefer BitCPM4 (3-bit ternary) over GPTQ INT4.</li>
 </ul></article>
 
   <footer class="page-footer">
-    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>
-    <span>由 <code>build_docs.py</code> 自动生成</span>
+    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>
+    <span>Built with <code>build_docs.py</code></span>
   </footer>
 </main>
 

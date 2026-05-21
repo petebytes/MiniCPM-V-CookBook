@@ -271,6 +271,15 @@ versions:
             src:   deployment/cpm.cu/minicpm4_1_cpmcu.md
             url:   deployment/cpmcu
 
+      - group: { en: "Quantization", zh: "量化" }
+        items:
+          - title: { en: "AWQ", zh: "AWQ" }
+            src:   quantization/awq/minicpm4_1_awq.md
+            url:   quantization/awq
+          - title: { en: "GPTQ (+ QAT)", zh: "GPTQ（含 QAT）" }
+            src:   quantization/gptq/minicpm4_1_gptq.md
+            url:   quantization/gptq
+
   - id: minicpm4
     label: { en: "MiniCPM 4", zh: "MiniCPM 4" }
     nav:
@@ -298,6 +307,12 @@ versions:
           - title: { en: "Ollama", zh: "Ollama" }
             src:   deployment/ollama/minicpm4_ollama.md
             url:   deployment/ollama
+
+      - group: { en: "Quantization", zh: "量化" }
+        items:
+          - title: { en: "BitCPM4 (3-bit)", zh: "BitCPM4（3-bit）" }
+            src:   quantization/bitcpm/minicpm4_bitcpm.md
+            url:   quantization/bitcpm
 
   - id: minicpm-sala
     label: { en: "MiniCPM-SALA", zh: "MiniCPM-SALA" }
