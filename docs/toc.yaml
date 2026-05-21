@@ -258,6 +258,18 @@ versions:
           - title: { en: "SGLang", zh: "SGLang" }
             src:   deployment/sglang/minicpm4_1_sglang.md
             url:   deployment/sglang
+          - title: { en: "llama.cpp", zh: "llama.cpp" }
+            src:   deployment/llama.cpp/minicpm4_1_llamacpp.md
+            url:   deployment/llamacpp
+          - title: { en: "Ollama", zh: "Ollama" }
+            src:   deployment/ollama/minicpm4_1_ollama.md
+            url:   deployment/ollama
+          - title: { en: "MLX (Apple Silicon)", zh: "MLX（Apple Silicon）" }
+            src:   deployment/mlx/minicpm4_1_mlx.md
+            url:   deployment/mlx
+          - title: { en: "CPM.cu (on-device CUDA)", zh: "CPM.cu（端侧 CUDA）" }
+            src:   deployment/cpm.cu/minicpm4_1_cpmcu.md
+            url:   deployment/cpmcu
 
   - id: minicpm4
     label: { en: "MiniCPM 4", zh: "MiniCPM 4" }
@@ -280,6 +292,12 @@ versions:
           - title: { en: "SGLang", zh: "SGLang" }
             src:   deployment/sglang/minicpm4_sglang.md
             url:   deployment/sglang
+          - title: { en: "llama.cpp", zh: "llama.cpp" }
+            src:   deployment/llama.cpp/minicpm4_llamacpp.md
+            url:   deployment/llamacpp
+          - title: { en: "Ollama", zh: "Ollama" }
+            src:   deployment/ollama/minicpm4_ollama.md
+            url:   deployment/ollama
 
   - id: minicpm-sala
     label: { en: "MiniCPM-SALA", zh: "MiniCPM-SALA" }

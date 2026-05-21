@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Overview — Recipes for vision, speech, and live-streaming multimodal AI.">
-<title>Overview — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="Ollama — Recipes for vision, speech, and live-streaming multimodal AI.">
+<title>Ollama — MiniCPM-V & o Cookbook</title>
 <meta name="color-scheme" content="light dark">
-<link rel="icon" type="image/png" href="../../assets/logos/openbmb.png">
+<link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" id="hljs-light-css" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
 <link rel="stylesheet" id="hljs-dark-css" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" media="not all">
 <style>
@@ -306,12 +306,12 @@ footer.page-footer a:hover { color: var(--primary); }
   })();
 </script>
 </head>
-<body data-version="minicpm4" data-lang="en" data-slug="minicpm4/overview">
+<body data-version="minicpm4" data-lang="en" data-slug="minicpm4/deployment/ollama">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
-  <a class="topbar-brand" href="../index.html">
-    <img src="../../assets/logos/minicpmv.png" alt="MiniCPM-V">
+  <a class="topbar-brand" href="../../index.html">
+    <img src="../../../assets/logos/minicpmv.png" alt="MiniCPM-V">
     <span class="brand-text">MiniCPM-V & o Cookbook</span>
   </a>
   <div class="topbar-search">
@@ -332,143 +332,84 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../zh/minicpm4/overview.html" rel="alternate" hreflang="zh">中文</a>
+    <a class="sidebar-lang-switch" href="../../../zh/minicpm4/deployment/ollama.html" rel="alternate" hreflang="zh">中文</a>
   </div>
   <ul class="nav-list">
-  <li><a class="" href="../index.html">Home</a></li>
+  <li><a class="" href="../../index.html">Home</a></li>
 </ul>
 <div class="sidebar-section-title">Version</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../v4.6/overview.html">MiniCPM-V 4.6 [latest]</option>
-    <option value="../v4.5/overview.html">MiniCPM-V 4.5</option>
-    <option value="../o4.5/overview.html">MiniCPM-o 4.5</option>
-    <option value="../minicpm4_1/overview.html">MiniCPM 4.1 [latest-llm]</option>
-    <option value="overview.html" selected>MiniCPM 4</option>
-    <option value="../minicpm-sala/overview.html">MiniCPM-SALA [research]</option>
+    <option value="../../v4.6/deployment/ollama.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/deployment/ollama.html">MiniCPM-V 4.5</option>
+    <option value="../../o4.5/deployment/ollama.html">MiniCPM-o 4.5</option>
+    <option value="../../minicpm4_1/deployment/ollama.html">MiniCPM 4.1 [latest-llm]</option>
+    <option value="ollama.html" selected>MiniCPM 4</option>
+    <option value="../../minicpm-sala/deployment/ollama.html">MiniCPM-SALA [research]</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="active" href="overview.html">Overview</a></li>
-<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="inference/chat.html">Chat</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="deployment/vllm.html">vLLM</a></li>
-<li><a class="" href="deployment/sglang.html">SGLang</a></li>
-<li><a class="" href="deployment/llamacpp.html">llama.cpp</a></li>
-<li><a class="" href="deployment/ollama.html">Ollama</a></li></ul></li>
+<li><a class="" href="../overview.html">Overview</a></li>
+<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="../inference/chat.html">Chat</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="vllm.html">vLLM</a></li>
+<li><a class="" href="sglang.html">SGLang</a></li>
+<li><a class="" href="llamacpp.html">llama.cpp</a></li>
+<li><a class="active" href="ollama.html">Ollama</a></li></ul></li>
 </ul>
 <div class="sidebar-section-title">Cross-version</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../shared/finetune/official.html">Official scripts</a></li>
-<li><a class="" href="../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="../shared/finetune/swift.html">SWIFT</a></li>
-<li><a class="" href="../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">Official scripts</a></li>
+<li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
+<li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-4-overview">MiniCPM 4 — Overview</h1>
-<blockquote>
-<p>The previous-generation MiniCPM LLM release. MiniCPM 4 introduced InfLLM-V2 sparse attention and the BitCPM4 3-bit quantization stack, and remains supported alongside <a href="../minicpm4_1/overview.html">MiniCPM 4.1</a>.</p>
-</blockquote>
-<h2 id="checkpoints">Checkpoints</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Variant</th>
-<th style="text-align: left;">HuggingFace</th>
-<th style="text-align: left;">ModelScope</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">Base / Instruct (8B)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B"><code>openbmb/MiniCPM4-8B</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B"><code>OpenBMB/MiniCPM4-8B</code></a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Base / Instruct (0.5B)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-0.5B"><code>openbmb/MiniCPM4-0.5B</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-0.5B"><code>OpenBMB/MiniCPM4-0.5B</code></a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Eagle (FRSpec, speculative decoding)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B-Eagle-FRSpec"><code>openbmb/MiniCPM4-8B-Eagle-FRSpec</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B-Eagle-FRSpec">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Eagle FRSpec + QAT</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B-Eagle-FRSpec-QAT"><code>openbmb/MiniCPM4-8B-Eagle-FRSpec-QAT</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B-Eagle-FRSpec-QAT">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Eagle for vLLM</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B-Eagle-vLLM"><code>openbmb/MiniCPM4-8B-Eagle-vLLM</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B-Eagle-vLLM">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Marlin INT4 + Eagle for vLLM</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B-marlin-Eagle-vLLM"><code>openbmb/MiniCPM4-8B-marlin-Eagle-vLLM</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B-marlin-Eagle-vLLM">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">BitCPM4 (3-bit, 1B)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/BitCPM4-1B"><code>openbmb/BitCPM4-1B</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/BitCPM4-1B">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">BitCPM4 (3-bit, 0.5B)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/BitCPM4-0.5B"><code>openbmb/BitCPM4-0.5B</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/BitCPM4-0.5B">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">MiniCPM4-0.5B QAT (Int4)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-0.5B-QAT-Int4-GPTQ-format"><code>openbmb/MiniCPM4-0.5B-QAT-Int4-GPTQ-format</code></a></td>
-<td style="text-align: left;"><a href="https://modelscope.cn/models/OpenBMB/MiniCPM4-0.5B-QAT-Int4-GPTQ-format">mirror</a></td>
-</tr>
-</tbody>
-</table>
-<h2 id="highlights">Highlights</h2>
-<ul>
-<li><strong>InfLLM-V2 sparse attention</strong> — long-context inference with under 5% of full-attention compute on a 128K window.</li>
-<li><strong>BitCPM4 ternary quantization</strong> — official 3-bit weights that compress the model to roughly 10% of the original size while preserving most of the quality.</li>
-<li><strong>Eagle / FRSpec speculative decoding</strong> — official draft checkpoints (including a QAT-friendly variant) for accelerated generation on the 8B model.</li>
-<li><strong>0.5B / 8B size points</strong> — choose 0.5B for tightly constrained edge deployments, 8B for full reasoning capability.</li>
-</ul>
-<h2 id="quick-start">Quick start</h2>
-<h3 id="inference-hugging-face-transformers">Inference (Hugging Face Transformers)</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+  <article><h1 id="minicpm-4-ollama">MiniCPM 4 - Ollama</h1>
+<div class="admonition admonition-note" markdown="0">
+<p class="admonition-title">Note</p>
+<p>MiniCPM 4 is published on the <a href="https://ollama.com/openbmb/minicpm4">official OpenBMB Ollama registry</a>. Requires Ollama <code>&gt;= 0.30</code>.</p>
+</div>
 
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM4-8B&quot;</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<h2 id="1-install-ollama">1. Install Ollama</h2>
+<div class="code"><pre><span></span><code><span class="c1"># Linux</span>
+curl<span class="w"> </span>-fsSL<span class="w"> </span>https://ollama.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
 
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Write an article about Artificial Intelligence.&quot;</span><span class="p">}]</span>
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<span class="c1"># macOS — https://ollama.com/download/Ollama.dmg</span>
+<span class="c1"># Windows — https://ollama.com/download/OllamaSetup.exe</span>
 
-<span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+ollama<span class="w"> </span>--version<span class="w">   </span><span class="c1"># &gt;= 0.30</span>
 </code></pre></div>
 
-<h3 id="serve-with-vllm">Serve with vLLM</h3>
-<div class="code"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>vllm
-vllm<span class="w"> </span>serve<span class="w"> </span>openbmb/MiniCPM4-8B<span class="w"> </span>--trust-remote-code<span class="w"> </span>--max-model-len<span class="w"> </span><span class="m">32768</span>
+<h2 id="2-quick-start">2. Quick start</h2>
+<div class="code"><pre><span></span><code><span class="c1"># 8B (default Q4)</span>
+ollama<span class="w"> </span>run<span class="w"> </span>openbmb/minicpm4
+
+<span class="c1"># Specific quant</span>
+ollama<span class="w"> </span>run<span class="w"> </span>openbmb/minicpm4:q5_K_M
+ollama<span class="w"> </span>run<span class="w"> </span>openbmb/minicpm4:q8_0
 </code></pre></div>
 
-<h2 id="where-to-next">Where to next</h2>
+<h2 id="3-call-the-api">3. Call the API</h2>
+<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;http://localhost:11434/api/chat&quot;</span><span class="p">,</span>
+    <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="s2">&quot;openbmb/minicpm4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Write an article about AI.&quot;</span><span class="p">}],</span>
+        <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">])</span>
+</code></pre></div>
+
+<p>OpenAI-compatible endpoint also available at <code>http://localhost:11434/v1</code>.</p>
+<h2 id="4-notes">4. Notes</h2>
 <ul>
-<li>🤗 <a href="https://huggingface.co/collections/openbmb/minicpm-4-6841ab29d180257e940baa9b">Model collection on HuggingFace</a></li>
-<li>📖 <a href="https://arxiv.org/abs/2506.07900">Technical report (arXiv 2506.07900)</a></li>
-<li>🛠️ <a href="https://github.com/OpenBMB/MiniCPM">Main repository (OpenBMB/MiniCPM)</a></li>
-<li>➡️ For new projects we recommend <a href="../minicpm4_1/overview.html">MiniCPM 4.1</a>, which adds hybrid reasoning and EAGLE3 on top of this release.</li>
-</ul>
-<blockquote>
-<p>Per-feature guides (vLLM, SGLang, llama.cpp, Ollama, CPM.cu, quantization, fine-tuning, applications) are being added to this cookbook section. Use the version sidebar on the left to navigate as they land.</p>
-</blockquote></article>
+<li>MiniCPM 4 does <strong>not</strong> support hybrid reasoning. Use <a href="../minicpm4_1/deployment/ollama.html">MiniCPM 4.1</a> if you need <code>enable_thinking</code>.</li>
+<li>For the 0.5B size, build a local Modelfile against the <a href="https://huggingface.co/openbmb/MiniCPM4-0.5B-GGUF"><code>MiniCPM4-0.5B-GGUF</code></a> weights (no official Ollama tag yet).</li>
+</ul></article>
 
   <footer class="page-footer">
     <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>

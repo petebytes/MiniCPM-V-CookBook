@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="no-transitions">
+<html lang="zh-CN" class="no-transitions">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Overview — Recipes for vision, speech, and live-streaming multimodal AI.">
-<title>Overview — MiniCPM-V & o Cookbook</title>
+<meta name="description" content="llama.cpp — 视觉 / 语音 / 实时流多模态 AI 的实战手册。">
+<title>llama.cpp — MiniCPM-V & o Cookbook</title>
 <meta name="color-scheme" content="light dark">
-<link rel="icon" type="image/png" href="../../assets/logos/openbmb.png">
+<link rel="icon" type="image/png" href="../../../assets/logos/openbmb.png">
 <link rel="stylesheet" id="hljs-light-css" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css">
 <link rel="stylesheet" id="hljs-dark-css" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" media="not all">
 <style>
@@ -306,173 +306,198 @@ footer.page-footer a:hover { color: var(--primary); }
   })();
 </script>
 </head>
-<body data-version="minicpm4" data-lang="en" data-slug="minicpm4/overview">
+<body data-version="minicpm4_1" data-lang="zh" data-slug="minicpm4_1/deployment/llamacpp">
 
 <header class="topbar">
   <button class="topbar-toggle" aria-label="Toggle navigation" onclick="toggleSidebar()">☰</button>
-  <a class="topbar-brand" href="../index.html">
-    <img src="../../assets/logos/minicpmv.png" alt="MiniCPM-V">
+  <a class="topbar-brand" href="../../index.html">
+    <img src="../../../assets/logos/minicpmv.png" alt="MiniCPM-V">
     <span class="brand-text">MiniCPM-V & o Cookbook</span>
   </a>
   <div class="topbar-search">
-    <input type="search" placeholder="Search docs…" id="pagefind-search">
+    <input type="search" placeholder="搜索文档…" id="pagefind-search">
   </div>
   <nav class="topbar-actions">
-    <button class="topbar-action-btn" id="theme-toggle" type="button" aria-label="Toggle theme (auto / light / dark)" title="Toggle theme (auto / light / dark)">
+    <button class="topbar-action-btn" id="theme-toggle" type="button" aria-label="切换主题（自动 / 浅色 / 深色）" title="切换主题（自动 / 浅色 / 深色）">
       <span class="theme-toggle-icon" aria-hidden="true">🌓</span>
-      <span class="theme-toggle-label">Auto</span>
+      <span class="theme-toggle-label">自动</span>
     </button>
     <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook" target="_blank" rel="noopener">GitHub</a>
     <a href="https://huggingface.co/openbmb" target="_blank" rel="noopener">HuggingFace</a>
-    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">ModelScope</a>
+    <a href="https://modelscope.cn/organization/OpenBMB" target="_blank" rel="noopener">魔搭社区</a>
     <a href="https://discord.gg/rftuRMbqzf" target="_blank" rel="noopener">Discord</a>
-    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">Paper</a>
+    <a href="https://huggingface.co/papers/2509.18154" target="_blank" rel="noopener">技术报告</a>
   </nav>
 </header>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-lang-switch" href="../../zh/minicpm4/overview.html" rel="alternate" hreflang="zh">中文</a>
+    <a class="sidebar-lang-switch" href="../../../en/minicpm4_1/deployment/llamacpp.html" rel="alternate" hreflang="en">English</a>
   </div>
   <ul class="nav-list">
-  <li><a class="" href="../index.html">Home</a></li>
+  <li><a class="" href="../../index.html">首页</a></li>
 </ul>
-<div class="sidebar-section-title">Version</div>
+<div class="sidebar-section-title">版本</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../v4.6/overview.html">MiniCPM-V 4.6 [latest]</option>
-    <option value="../v4.5/overview.html">MiniCPM-V 4.5</option>
-    <option value="../o4.5/overview.html">MiniCPM-o 4.5</option>
-    <option value="../minicpm4_1/overview.html">MiniCPM 4.1 [latest-llm]</option>
-    <option value="overview.html" selected>MiniCPM 4</option>
-    <option value="../minicpm-sala/overview.html">MiniCPM-SALA [research]</option>
+    <option value="../../v4.6/deployment/llamacpp.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/deployment/llamacpp.html">MiniCPM-V 4.5</option>
+    <option value="../../o4.5/deployment/llamacpp.html">MiniCPM-o 4.5</option>
+    <option value="llamacpp.html" selected>MiniCPM 4.1 [latest-llm]</option>
+    <option value="../../minicpm4/deployment/llamacpp.html">MiniCPM 4</option>
+    <option value="../../minicpm-sala/deployment/llamacpp.html">MiniCPM-SALA [research]</option>
   </select>
 </div>
 <ul class="nav-list">
-<li><a class="active" href="overview.html">Overview</a></li>
-<li class="nav-group"><div class="nav-group-header">Inference</div><ul class="nav-group-children"><li><a class="" href="inference/chat.html">Chat</a></li></ul></li>
-<li class="nav-group"><div class="nav-group-header">Deployment</div><ul class="nav-group-children"><li><a class="" href="deployment/vllm.html">vLLM</a></li>
-<li><a class="" href="deployment/sglang.html">SGLang</a></li>
-<li><a class="" href="deployment/llamacpp.html">llama.cpp</a></li>
-<li><a class="" href="deployment/ollama.html">Ollama</a></li></ul></li>
+<li><a class="" href="../overview.html">概览</a></li>
+<li class="nav-group"><div class="nav-group-header">推理</div><ul class="nav-group-children"><li><a class="" href="../inference/chat.html">Chat（混合思考）</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">部署</div><ul class="nav-group-children"><li><a class="" href="vllm.html">vLLM</a></li>
+<li><a class="" href="sglang.html">SGLang</a></li>
+<li><a class="active" href="llamacpp.html">llama.cpp</a></li>
+<li><a class="" href="ollama.html">Ollama</a></li>
+<li><a class="" href="mlx.html">MLX（Apple Silicon）</a></li>
+<li><a class="" href="cpmcu.html">CPM.cu（端侧 CUDA）</a></li></ul></li>
 </ul>
-<div class="sidebar-section-title">Cross-version</div>
+<div class="sidebar-section-title">跨版本</div>
 <ul class="nav-list">
-<li class="nav-group"><div class="nav-group-header">Fine-tuning</div><ul class="nav-group-children"><li><a class="" href="../shared/finetune/official.html">Official scripts</a></li>
-<li><a class="" href="../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
-<li><a class="" href="../shared/finetune/swift.html">SWIFT</a></li>
-<li><a class="" href="../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
+<li class="nav-group"><div class="nav-group-header">微调</div><ul class="nav-group-children"><li><a class="" href="../../shared/finetune/official.html">官方脚本微调</a></li>
+<li><a class="" href="../../shared/finetune/llamafactory.html">LLaMA-Factory</a></li>
+<li><a class="" href="../../shared/finetune/swift.html">SWIFT</a></li>
+<li><a class="" href="../../shared/finetune/align-anything.html">Align-anything</a></li></ul></li>
 </ul>
 </aside>
 
 <main class="content" id="content">
-  <article><h1 id="minicpm-4-overview">MiniCPM 4 — Overview</h1>
-<blockquote>
-<p>The previous-generation MiniCPM LLM release. MiniCPM 4 introduced InfLLM-V2 sparse attention and the BitCPM4 3-bit quantization stack, and remains supported alongside <a href="../minicpm4_1/overview.html">MiniCPM 4.1</a>.</p>
-</blockquote>
-<h2 id="checkpoints">Checkpoints</h2>
+  <article><h1 id="minicpm-4-1-llama-cpp">MiniCPM 4.1 - llama.cpp</h1>
+<div class="admonition admonition-note" markdown="0">
+<p class="admonition-title">说明</p>
+<p>MiniCPM 4.1 官方 GGUF 权重在 <a href="https://huggingface.co/openbmb/MiniCPM4.1-8B-GGUF"><code>openbmb/MiniCPM4.1-8B-GGUF</code></a>。MiniCPM 4.1 为纯文本模型，使用标准 <code>llama-cli</code> 即可，无需 <code>--mmproj</code> projector。</p>
+</div>
+
+<h2 id="1-构建-llama-cpp">1. 构建 llama.cpp</h2>
+<div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ggml-org/llama.cpp.git
+<span class="nb">cd</span><span class="w"> </span>llama.cpp
+
+<span class="c1"># CPU / Metal</span>
+cmake<span class="w"> </span>-B<span class="w"> </span>build
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
+
+<span class="c1"># CUDA</span>
+cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DGGML_CUDA<span class="o">=</span>ON
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
+</code></pre></div>
+
+<h2 id="2-获取-gguf">2. 获取 GGUF</h2>
+<p>从 HuggingFace 或 ModelScope 下载，按显存预算挑选量化版本：</p>
+<ul>
+<li>HuggingFace: <a href="https://huggingface.co/openbmb/MiniCPM4.1-8B-GGUF">https://huggingface.co/openbmb/MiniCPM4.1-8B-GGUF</a></li>
+<li>ModelScope: <a href="https://modelscope.cn/models/OpenBMB/MiniCPM4.1-8B-GGUF">https://modelscope.cn/models/OpenBMB/MiniCPM4.1-8B-GGUF</a></li>
+</ul>
+<p>常用选择：</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Variant</th>
-<th style="text-align: left;">HuggingFace</th>
-<th style="text-align: left;">ModelScope</th>
+<th style="text-align: left;">量化</th>
+<th style="text-align: left;">体积</th>
+<th style="text-align: left;">典型用途</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Base / Instruct (8B)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B"><code>openbmb/MiniCPM4-8B</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B"><code>OpenBMB/MiniCPM4-8B</code></a></td>
+<td style="text-align: left;"><code>Q4_K_M</code></td>
+<td style="text-align: left;">约 5 GB</td>
+<td style="text-align: left;">速度 / 质量最佳折衷</td>
 </tr>
 <tr>
-<td style="text-align: left;">Base / Instruct (0.5B)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-0.5B"><code>openbmb/MiniCPM4-0.5B</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-0.5B"><code>OpenBMB/MiniCPM4-0.5B</code></a></td>
+<td style="text-align: left;"><code>Q5_K_M</code></td>
+<td style="text-align: left;">约 5.7 GB</td>
+<td style="text-align: left;">质量更高，速度损失很小</td>
 </tr>
 <tr>
-<td style="text-align: left;">Eagle (FRSpec, speculative decoding)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B-Eagle-FRSpec"><code>openbmb/MiniCPM4-8B-Eagle-FRSpec</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B-Eagle-FRSpec">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Eagle FRSpec + QAT</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B-Eagle-FRSpec-QAT"><code>openbmb/MiniCPM4-8B-Eagle-FRSpec-QAT</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B-Eagle-FRSpec-QAT">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Eagle for vLLM</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B-Eagle-vLLM"><code>openbmb/MiniCPM4-8B-Eagle-vLLM</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B-Eagle-vLLM">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">Marlin INT4 + Eagle for vLLM</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-8B-marlin-Eagle-vLLM"><code>openbmb/MiniCPM4-8B-marlin-Eagle-vLLM</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/MiniCPM4-8B-marlin-Eagle-vLLM">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">BitCPM4 (3-bit, 1B)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/BitCPM4-1B"><code>openbmb/BitCPM4-1B</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/BitCPM4-1B">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">BitCPM4 (3-bit, 0.5B)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/BitCPM4-0.5B"><code>openbmb/BitCPM4-0.5B</code></a></td>
-<td style="text-align: left;"><a href="https://www.modelscope.cn/models/OpenBMB/BitCPM4-0.5B">mirror</a></td>
-</tr>
-<tr>
-<td style="text-align: left;">MiniCPM4-0.5B QAT (Int4)</td>
-<td style="text-align: left;"><a href="https://huggingface.co/openbmb/MiniCPM4-0.5B-QAT-Int4-GPTQ-format"><code>openbmb/MiniCPM4-0.5B-QAT-Int4-GPTQ-format</code></a></td>
-<td style="text-align: left;"><a href="https://modelscope.cn/models/OpenBMB/MiniCPM4-0.5B-QAT-Int4-GPTQ-format">mirror</a></td>
+<td style="text-align: left;"><code>Q8_0</code></td>
+<td style="text-align: left;">约 8.5 GB</td>
+<td style="text-align: left;">接近 FP16 质量</td>
 </tr>
 </tbody>
 </table>
-<h2 id="highlights">Highlights</h2>
-<ul>
-<li><strong>InfLLM-V2 sparse attention</strong> — long-context inference with under 5% of full-attention compute on a 128K window.</li>
-<li><strong>BitCPM4 ternary quantization</strong> — official 3-bit weights that compress the model to roughly 10% of the original size while preserving most of the quality.</li>
-<li><strong>Eagle / FRSpec speculative decoding</strong> — official draft checkpoints (including a QAT-friendly variant) for accelerated generation on the 8B model.</li>
-<li><strong>0.5B / 8B size points</strong> — choose 0.5B for tightly constrained edge deployments, 8B for full reasoning capability.</li>
-</ul>
-<h2 id="quick-start">Quick start</h2>
-<h3 id="inference-hugging-face-transformers">Inference (Hugging Face Transformers)</h3>
-<div class="code"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
-
-<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;openbmb/MiniCPM4-8B&quot;</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="n">model_path</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Write an article about Artificial Intelligence.&quot;</span><span class="p">}]</span>
-<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
-    <span class="n">messages</span><span class="p">,</span> <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-
-<span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<h2 id="3-运行">3. 运行</h2>
+<h3 id="单条-prompt">单条 prompt</h3>
+<div class="code"><pre><span></span><code>./build/bin/llama-cli<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w"> </span>/path/to/MiniCPM4.1-8B-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span>--top-k<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-p<span class="w"> </span><span class="s2">&quot;写一篇关于端侧 AI 的短文。&quot;</span>
 </code></pre></div>
 
-<h3 id="serve-with-vllm">Serve with vLLM</h3>
-<div class="code"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>vllm
-vllm<span class="w"> </span>serve<span class="w"> </span>openbmb/MiniCPM4-8B<span class="w"> </span>--trust-remote-code<span class="w"> </span>--max-model-len<span class="w"> </span><span class="m">32768</span>
+<h3 id="交互式对话">交互式对话</h3>
+<div class="code"><pre><span></span><code>./build/bin/llama-cli<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w"> </span>/path/to/MiniCPM4.1-8B-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.7<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.8<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--conversation
 </code></pre></div>
 
-<h2 id="where-to-next">Where to next</h2>
-<ul>
-<li>🤗 <a href="https://huggingface.co/collections/openbmb/minicpm-4-6841ab29d180257e940baa9b">Model collection on HuggingFace</a></li>
-<li>📖 <a href="https://arxiv.org/abs/2506.07900">Technical report (arXiv 2506.07900)</a></li>
-<li>🛠️ <a href="https://github.com/OpenBMB/MiniCPM">Main repository (OpenBMB/MiniCPM)</a></li>
-<li>➡️ For new projects we recommend <a href="../minicpm4_1/overview.html">MiniCPM 4.1</a>, which adds hybrid reasoning and EAGLE3 on top of this release.</li>
-</ul>
-<blockquote>
-<p>Per-feature guides (vLLM, SGLang, llama.cpp, Ollama, CPM.cu, quantization, fine-tuning, applications) are being added to this cookbook section. Use the version sidebar on the left to navigate as they land.</p>
-</blockquote></article>
+<h3 id="混合思考">混合思考</h3>
+<p>MiniCPM 4.1 的 chat template 支持 <code>enable_thinking</code>。开启思考请同时传 <code>--jinja</code> 和 <code>--chat-template-kwargs</code>：</p>
+<div class="code"><pre><span></span><code>./build/bin/llama-cli<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-m<span class="w"> </span>/path/to/MiniCPM4.1-8B-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-c<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--temp<span class="w"> </span><span class="m">0</span>.6<span class="w"> </span>--top-p<span class="w"> </span><span class="m">0</span>.95<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--jinja<span class="w"> </span>--chat-template-kwargs<span class="w"> </span><span class="s1">&#39;{&quot;enable_thinking&quot;: true}&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-p<span class="w"> </span><span class="s2">&quot;列车 9:00 出发，以 80 km/h 行驶到 200 km 外的城市，几点到达？&quot;</span>
+</code></pre></div>
+
+<div class="admonition admonition-tip" markdown="0">
+<p class="admonition-title">提示</p>
+<p><code>enable_thinking</code> 默认为 <code>false</code>。推荐采样：开启时 <code>temperature=0.6, top_p=0.95</code>；关闭时 <code>0.7, 0.8</code>。</p>
+</div>
+
+<h2 id="4-从-pytorch-转换-可选">4. 从 PyTorch 转换（可选）</h2>
+<div class="code"><pre><span></span><code>python<span class="w"> </span>./convert_hf_to_gguf.py<span class="w"> </span>/path/to/MiniCPM4.1-8B<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--outfile<span class="w"> </span>/path/to/MiniCPM4.1-8B-F16.gguf<span class="w"> </span>--outtype<span class="w"> </span>f16
+
+./build/bin/llama-quantize<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>/path/to/MiniCPM4.1-8B-F16.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>/path/to/MiniCPM4.1-8B-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>Q4_K_M
+</code></pre></div>
+
+<h2 id="5-参数说明">5. 参数说明</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>-m, --model</code></td>
+<td style="text-align: left;">GGUF 路径</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-p, --prompt</code></td>
+<td style="text-align: left;">单次 prompt</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-c, --ctx-size</code></td>
+<td style="text-align: left;">最大上下文（开启 InfLLM-V2 的构建版本下可达 128K）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--conversation</code></td>
+<td style="text-align: left;">多轮交互模式</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--jinja</code></td>
+<td style="text-align: left;">使用模型自带的 Jinja chat template</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--chat-template-kwargs</code></td>
+<td style="text-align: left;">传给 chat template 的 JSON 参数 —— 用于切换 <code>enable_thinking</code></td>
+</tr>
+</tbody>
+</table></article>
 
   <footer class="page-footer">
-    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub</a></span>
-    <span>Built with <code>build_docs.py</code></span>
+    <span>© OpenBMB · <a href="https://github.com/OpenSQZ/MiniCPM-V-CookBook">GitHub 仓库</a></span>
+    <span>由 <code>build_docs.py</code> 自动生成</span>
   </footer>
 </main>
 
