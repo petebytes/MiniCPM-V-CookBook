@@ -250,6 +250,12 @@ versions:
             src:   inference/minicpm4_1_chat.md
             url:   inference/chat
 
+      - group: { en: "Deployment", zh: "部署" }
+        items:
+          - title: { en: "vLLM", zh: "vLLM" }
+            src:   deployment/vllm/minicpm4_1_vllm.md
+            url:   deployment/vllm
+
   - id: minicpm4
     label: { en: "MiniCPM 4", zh: "MiniCPM 4" }
     nav:
@@ -262,6 +268,12 @@ versions:
           - title: { en: "Chat", zh: "Chat" }
             src:   inference/minicpm4_chat.md
             url:   inference/chat
+
+      - group: { en: "Deployment", zh: "部署" }
+        items:
+          - title: { en: "vLLM", zh: "vLLM" }
+            src:   deployment/vllm/minicpm4_vllm.md
+            url:   deployment/vllm
 
   - id: minicpm-sala
     label: { en: "MiniCPM-SALA", zh: "MiniCPM-SALA" }
