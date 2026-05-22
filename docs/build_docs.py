@@ -872,6 +872,7 @@ def render_sidebar(
     shared: list[NavGroup],
     current: PageEntry,
     current_version: str | None,
+    registry: Registry,
 ) -> str:
     """Render the sidebar HTML for a given page."""
 
@@ -902,7 +903,7 @@ def render_sidebar(
     out.append('  <select id="version-switcher-select">')
     for v in versions:
         # determine target URL when switching to this version
-        target_slug = _equivalent_slug(current, v.id)
+        target_slug = _equivalent_slug(current, v.id, registry)
         target = _href_to_slug(current, target_slug, lang)
         selected = " selected" if v.id == nav_version_id else ""
         label = v.label.get(lang, v.label["en"])
@@ -985,8 +986,15 @@ def _href_to_slug(current: PageEntry, slug: str, lang: str) -> str:
     return _relpath_url(f"{lang}/{current.url}", f"{lang}/{slug}.html")
 
 
-def _equivalent_slug(current: PageEntry, target_version: str) -> str:
-    """When switching version, try to land on the same logical page."""
+def _equivalent_slug(current: PageEntry, target_version: str, registry: Registry) -> str:
+    """When switching version, try to land on the same logical page.
+
+    Different model series (V / o / LLM) don't share a uniform page layout —
+    e.g. ``inference/single-image`` only exists for V/o, while ``inference/chat``
+    only exists for the LLM series. If the naive same-path candidate doesn't
+    exist under ``target_version``, fall back to that version's ``overview``
+    page so the user never lands on a 404.
+    """
     if current.is_top_level or current.is_shared:
         # top-level pages are version-agnostic; just navigate to that version's overview
         return f"{target_version}/overview"
@@ -994,7 +1002,10 @@ def _equivalent_slug(current: PageEntry, target_version: str) -> str:
         return current.slug
     # strip version prefix and try same path under target version
     rest = current.slug.split("/", 1)[1] if "/" in current.slug else "overview"
-    return f"{target_version}/{rest}"
+    candidate = f"{target_version}/{rest}"
+    if candidate in registry.by_slug:
+        return candidate
+    return f"{target_version}/overview"
 
 
 # ---------------------------------------------------------------------------
@@ -1087,6 +1098,7 @@ def build_page(ctx: BuildContext, page: PageEntry, lang: str) -> str | None:
         shared=ctx.shared,
         current=page,
         current_version=page.version_id,
+        registry=ctx.registry,
     )
 
     description = page.title.get(lang, page.title["en"])
