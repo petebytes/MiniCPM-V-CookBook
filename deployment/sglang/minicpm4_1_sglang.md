@@ -1,7 +1,7 @@
 # MiniCPM 4.1 - SGLang
 
 > [!NOTE]
-> SGLang upstream does not yet ship MiniCPM 4.1 support, so we maintain it on the [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork under the `minicpm` branch. The branch tracks SGLang `main` plus our MiniCPM 4 / 4.1 / SALA additions and is rebased regularly. We aim to upstream these changes once the API stabilises.
+> SGLang upstream does not yet ship MiniCPM 4.1 support, so we maintain it on the [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork under the `minicpm` branch. The branch tracks SGLang `main` plus our MiniCPM 4 / 4.1 additions and is rebased regularly. We aim to upstream these changes once the API stabilises. (SALA lives on a separate [`minicpm_sala`](https://github.com/tc-mb/sglang/tree/minicpm_sala) branch.)
 
 ## 1. Environment
 

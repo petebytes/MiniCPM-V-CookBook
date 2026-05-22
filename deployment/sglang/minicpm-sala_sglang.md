@@ -1,14 +1,14 @@
 # MiniCPM-SALA - SGLang
 
 > [!NOTE]
-> SALA support lives on the [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork under the `minicpm` branch, alongside MiniCPM 4 / 4.1. The branch ships the hybrid sparse + linear attention kernels needed by SALA.
+> SALA support lives on the [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork under the `minicpm_sala` branch (a dedicated branch separate from `minicpm` used by MiniCPM 4 / 4.1). It ships the hybrid sparse + linear attention kernels needed by SALA.
 
 ## 1. Environment
 
 ```bash
 git clone https://github.com/tc-mb/sglang.git
 cd sglang
-git checkout minicpm
+git checkout minicpm_sala
 
 pip install --upgrade pip
 pip install -e "python[all]"
@@ -60,6 +60,6 @@ print(resp.choices[0].message.content)
 
 ## 4. Notes
 
-- Branch in use: [`tc-mb/sglang @ minicpm`](https://github.com/tc-mb/sglang/tree/minicpm).
+- Branch in use: [`tc-mb/sglang @ minicpm_sala`](https://github.com/tc-mb/sglang/tree/minicpm_sala).
 - Kernel dependency: [`OpenBMB/infllmv2_cuda_impl`](https://github.com/OpenBMB/infllmv2_cuda_impl). Required for the sparse-attention layers — without it the model will fall back to a slow reference path.
 - SALA is a research checkpoint; expect APIs and behaviour to evolve.

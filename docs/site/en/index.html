@@ -377,7 +377,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <main class="content" id="content">
   <article><h1 id="minicpm-v-o-cookbook">MiniCPM-V &amp; o Cookbook</h1>
-<p>Cook up amazing multimodal AI applications effortlessly with <strong>MiniCPM-V</strong> and <strong>MiniCPM-o</strong>, bringing vision, speech, and live-streaming capabilities right to your fingertips.</p>
+<p>Cook up amazing AI applications effortlessly with <strong>MiniCPM-V</strong>, <strong>MiniCPM-o</strong>, and the <strong>MiniCPM LLM</strong> series — bringing text, vision, speech, and live-streaming capabilities right to your fingertips.</p>
 <h2 id="what-s-new">What's new</h2>
 <ul>
 <li>🎉 <strong>MiniCPM-V 4.6</strong> released — Instruct + Thinking variants, Qwen3.5 hybrid backbone, 256K context, simplified vision merger.</li>
@@ -408,38 +408,97 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><a href="shared/finetune/align-anything.html">Align-anything</a></li>
 </ul>
 <h2 id="versions">Versions</h2>
-<p>This cookbook tracks all currently supported MiniCPM-V &amp; o releases:</p>
+<p>This cookbook tracks all currently supported MiniCPM releases:</p>
+<h3 id="minicpm-v">MiniCPM-V</h3>
 <table>
 <thead>
 <tr>
 <th style="text-align: left;">Version</th>
 <th style="text-align: left;">Status</th>
-<th style="text-align: left;">Modalities</th>
-<th style="text-align: left;">Backbone</th>
+<th style="text-align: left;">Modality</th>
+<th style="text-align: left;">Size</th>
+<th style="text-align: left;">Highlights</th>
 <th style="text-align: left;">Context</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>MiniCPM-V 4.6</strong> <em>(latest)</em></td>
+<td style="text-align: left;"><strong>4.6</strong> <em>(latest)</em></td>
 <td style="text-align: left;">Recommended</td>
 <td style="text-align: left;">Image, Video</td>
-<td style="text-align: left;">Qwen3.5 hybrid</td>
+<td style="text-align: left;">~1.2B</td>
+<td style="text-align: left;">Phone-ready edge MLLM, LLaVA-UHD v4 vision tower</td>
 <td style="text-align: left;">256K</td>
 </tr>
 <tr>
-<td style="text-align: left;">MiniCPM-V 4.5</td>
+<td style="text-align: left;">4.5</td>
 <td style="text-align: left;">Stable</td>
 <td style="text-align: left;">Image, Video</td>
-<td style="text-align: left;">Qwen3</td>
+<td style="text-align: left;">9B</td>
+<td style="text-align: left;">Image + video understanding, optional thinking mode</td>
 <td style="text-align: left;">32K</td>
 </tr>
+</tbody>
+</table>
+<h3 id="minicpm-o">MiniCPM-o</h3>
+<table>
+<thead>
 <tr>
-<td style="text-align: left;">MiniCPM-o 4.5</td>
-<td style="text-align: left;">Stable</td>
+<th style="text-align: left;">Version</th>
+<th style="text-align: left;">Status</th>
+<th style="text-align: left;">Modality</th>
+<th style="text-align: left;">Size</th>
+<th style="text-align: left;">Highlights</th>
+<th style="text-align: left;">Context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>4.5</strong> <em>(latest)</em></td>
+<td style="text-align: left;">Recommended</td>
 <td style="text-align: left;">Image, Video, Audio</td>
-<td style="text-align: left;">Qwen3</td>
+<td style="text-align: left;">9B</td>
+<td style="text-align: left;">End-to-end omnimodal (vision + speech + TTS), full-duplex streaming</td>
 <td style="text-align: left;">32K</td>
+</tr>
+</tbody>
+</table>
+<h3 id="minicpm-llm">MiniCPM (LLM)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Version</th>
+<th style="text-align: left;">Status</th>
+<th style="text-align: left;">Modality</th>
+<th style="text-align: left;">Size</th>
+<th style="text-align: left;">Highlights</th>
+<th style="text-align: left;">Context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>4.1</strong> <em>(latest)</em></td>
+<td style="text-align: left;">Recommended</td>
+<td style="text-align: left;">Text</td>
+<td style="text-align: left;">8B</td>
+<td style="text-align: left;">Hybrid reasoning, EAGLE3, InfLLM-V2</td>
+<td style="text-align: left;">128K</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Stable</td>
+<td style="text-align: left;">Text</td>
+<td style="text-align: left;">0.5B / 8B</td>
+<td style="text-align: left;">InfLLM-V2, BitCPM4 3-bit, FRSpec</td>
+<td style="text-align: left;">128K</td>
+</tr>
+<tr>
+<td style="text-align: left;">SALA</td>
+<td style="text-align: left;">Research</td>
+<td style="text-align: left;">Text</td>
+<td style="text-align: left;">8B</td>
+<td style="text-align: left;">Sparse + linear hybrid attention</td>
+<td style="text-align: left;">1M+</td>
 </tr>
 </tbody>
 </table>

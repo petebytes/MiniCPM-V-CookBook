@@ -340,9 +340,9 @@ footer.page-footer a:hover { color: var(--primary); }
 <div class="sidebar-section-title">版本</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/inference/chat.html">MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/inference/chat.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/inference/chat.html">MiniCPM-o 4.5</option>
+    <option value="../../v4.6/overview.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/overview.html">MiniCPM-V 4.5</option>
+    <option value="../../o4.5/overview.html">MiniCPM-o 4.5</option>
     <option value="../../minicpm4_1/inference/chat.html">MiniCPM 4.1 [latest-llm]</option>
     <option value="../../minicpm4/inference/chat.html">MiniCPM 4</option>
     <option value="chat.html" selected>MiniCPM-SALA [research]</option>
@@ -431,7 +431,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <ul>
 <li>SALA 是<strong>研究版本</strong>，API 与行为后续可能演进。架构细节参见<a href="https://github.com/OpenBMB/MiniCPM/blob/main/docs/MiniCPM_SALA.pdf">技术报告（PDF）</a>。</li>
 <li>稀疏注意力层依赖 <a href="https://github.com/OpenBMB/infllmv2_cuda_impl">InfLLM-V2 CUDA kernel</a>。HF Transformers 推理时会自动回落到较慢的参考实现；高吞吐服务请安装 kernel 并使用本版本下的 SGLang 指南。</li>
-<li>SALA 的 SGLang 推理需要使用 <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork 的 <code>minicpm</code> 分支 —— 详见本节 <code>Deployment &gt; SGLang</code>。</li>
+<li>SALA 的 SGLang 推理需要使用 <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork 的 <code>minicpm_sala</code> 分支 —— 详见本节 <code>Deployment &gt; SGLang</code>。</li>
 </ul></article>
 
   <footer class="page-footer">

@@ -52,7 +52,7 @@ print(tokenizer.decode(out[0][inputs.shape[-1]:], skip_special_tokens=True))
 # SALA 需要我们维护的 tc-mb/sglang 分支。
 git clone https://github.com/tc-mb/sglang.git
 cd sglang
-git checkout minicpm
+git checkout minicpm_sala
 pip install --upgrade pip
 pip install -e "python[all]"
 

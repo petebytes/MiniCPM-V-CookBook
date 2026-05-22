@@ -70,4 +70,4 @@ print(tokenizer.decode(out_ids[0][input_ids.shape[-1]:], skip_special_tokens=Tru
 
 - SALA is a **research checkpoint** — APIs and behaviour may evolve. Refer to the [technical report (PDF)](https://github.com/OpenBMB/MiniCPM/blob/main/docs/MiniCPM_SALA.pdf) for architectural details.
 - The sparse-attention layers depend on [InfLLM-V2 CUDA kernels](https://github.com/OpenBMB/infllmv2_cuda_impl). For HF Transformers inference the model auto-falls-back to a slower reference path; for high-throughput serving install the kernels and use the SGLang guide under this version.
-- SGLang inference for SALA requires the [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork on the `minicpm` branch — see `Deployment > SGLang` in this section.
+- SGLang inference for SALA requires the [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork on the `minicpm_sala` branch — see `Deployment > SGLang` in this section.

@@ -367,13 +367,13 @@ footer.page-footer a:hover { color: var(--primary); }
   <article><h1 id="minicpm-sala-sglang">MiniCPM-SALA - SGLang</h1>
 <div class="admonition admonition-note" markdown="0">
 <p class="admonition-title">说明</p>
-<p>SALA 支持位于 <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork 的 <code>minicpm</code> 分支，与 MiniCPM 4 / 4.1 共用同一分支。该分支包含 SALA 所需的稀疏 + 线性混合注意力 kernel。</p>
+<p>SALA 支持位于 <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork 的 <code>minicpm_sala</code> 分支（独立于 MiniCPM 4 / 4.1 使用的 <code>minicpm</code> 分支）。该分支包含 SALA 所需的稀疏 + 线性混合注意力 kernel。</p>
 </div>
 
 <h2 id="1-环境准备">1. 环境准备</h2>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/sglang.git
 <span class="nb">cd</span><span class="w"> </span>sglang
-git<span class="w"> </span>checkout<span class="w"> </span>minicpm
+git<span class="w"> </span>checkout<span class="w"> </span>minicpm_sala
 
 pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;python[all]&quot;</span>
@@ -423,7 +423,7 @@ pip install -e .
 
 <h2 id="4-注意事项">4. 注意事项</h2>
 <ul>
-<li>使用分支：<a href="https://github.com/tc-mb/sglang/tree/minicpm"><code>tc-mb/sglang @ minicpm</code></a>。</li>
+<li>使用分支：<a href="https://github.com/tc-mb/sglang/tree/minicpm_sala"><code>tc-mb/sglang @ minicpm_sala</code></a>。</li>
 <li>Kernel 依赖：<a href="https://github.com/OpenBMB/infllmv2_cuda_impl"><code>OpenBMB/infllmv2_cuda_impl</code></a>。稀疏注意力层必须依赖它，否则模型会回落到很慢的参考实现。</li>
 <li>SALA 是研究版本，API 与行为可能演进。</li>
 </ul></article>

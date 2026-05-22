@@ -367,13 +367,13 @@ footer.page-footer a:hover { color: var(--primary); }
   <article><h1 id="minicpm-sala-sglang">MiniCPM-SALA - SGLang</h1>
 <div class="admonition admonition-note" markdown="0">
 <p class="admonition-title">Note</p>
-<p>SALA support lives on the <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork under the <code>minicpm</code> branch, alongside MiniCPM 4 / 4.1. The branch ships the hybrid sparse + linear attention kernels needed by SALA.</p>
+<p>SALA support lives on the <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork under the <code>minicpm_sala</code> branch (a dedicated branch separate from <code>minicpm</code> used by MiniCPM 4 / 4.1). It ships the hybrid sparse + linear attention kernels needed by SALA.</p>
 </div>
 
 <h2 id="1-environment">1. Environment</h2>
 <div class="code"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tc-mb/sglang.git
 <span class="nb">cd</span><span class="w"> </span>sglang
-git<span class="w"> </span>checkout<span class="w"> </span>minicpm
+git<span class="w"> </span>checkout<span class="w"> </span>minicpm_sala
 
 pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;python[all]&quot;</span>
@@ -423,7 +423,7 @@ pip install -e .
 
 <h2 id="4-notes">4. Notes</h2>
 <ul>
-<li>Branch in use: <a href="https://github.com/tc-mb/sglang/tree/minicpm"><code>tc-mb/sglang @ minicpm</code></a>.</li>
+<li>Branch in use: <a href="https://github.com/tc-mb/sglang/tree/minicpm_sala"><code>tc-mb/sglang @ minicpm_sala</code></a>.</li>
 <li>Kernel dependency: <a href="https://github.com/OpenBMB/infllmv2_cuda_impl"><code>OpenBMB/infllmv2_cuda_impl</code></a>. Required for the sparse-attention layers — without it the model will fall back to a slow reference path.</li>
 <li>SALA is a research checkpoint; expect APIs and behaviour to evolve.</li>
 </ul></article>

@@ -377,7 +377,7 @@ footer.page-footer a:hover { color: var(--primary); }
 
 <main class="content" id="content">
   <article><h1 id="minicpm-v-o-cookbook">MiniCPM-V &amp; o Cookbook</h1>
-<p>用 <strong>MiniCPM-V</strong> / <strong>MiniCPM-o</strong> 轻松搭建强大的多模态 AI 应用 —— 视觉、语音、实时流媒体能力一站式获得。</p>
+<p>用 <strong>MiniCPM-V</strong>、<strong>MiniCPM-o</strong> 以及 <strong>MiniCPM LLM</strong> 系列轻松搭建强大的 AI 应用 —— 文本、视觉、语音、实时流媒体能力一站式获得。</p>
 <h2 id="最新动态">最新动态</h2>
 <ul>
 <li>🎉 <strong>MiniCPM-V 4.6</strong> 发布 —— Instruct 与 Thinking 双版本，Qwen3.5 hybrid backbone，256K 上下文，重构后的视觉 merger 结构。</li>
@@ -408,38 +408,97 @@ footer.page-footer a:hover { color: var(--primary); }
 <li><a href="shared/finetune/align-anything.html">Align-anything</a></li>
 </ul>
 <h2 id="版本一览">版本一览</h2>
-<p>本 Cookbook 覆盖目前在维护的所有 MiniCPM-V &amp; o 版本：</p>
+<p>本 Cookbook 覆盖目前在维护的所有 MiniCPM 版本：</p>
+<h3 id="minicpm-v">MiniCPM-V</h3>
 <table>
 <thead>
 <tr>
 <th style="text-align: left;">版本</th>
 <th style="text-align: left;">状态</th>
 <th style="text-align: left;">模态</th>
-<th style="text-align: left;">语言模型</th>
+<th style="text-align: left;">参数量</th>
+<th style="text-align: left;">亮点</th>
 <th style="text-align: left;">上下文</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>MiniCPM-V 4.6</strong> <em>(最新)</em></td>
+<td style="text-align: left;"><strong>4.6</strong> <em>(最新)</em></td>
 <td style="text-align: left;">推荐</td>
 <td style="text-align: left;">图像、视频</td>
-<td style="text-align: left;">Qwen3.5 hybrid</td>
+<td style="text-align: left;">~1.2B</td>
+<td style="text-align: left;">可上手机的多模态大模型，LLaVA-UHD v4 视觉塔</td>
 <td style="text-align: left;">256K</td>
 </tr>
 <tr>
-<td style="text-align: left;">MiniCPM-V 4.5</td>
+<td style="text-align: left;">4.5</td>
 <td style="text-align: left;">稳定</td>
 <td style="text-align: left;">图像、视频</td>
-<td style="text-align: left;">Qwen3</td>
+<td style="text-align: left;">9B</td>
+<td style="text-align: left;">图像 + 视频理解，可选思考模式</td>
 <td style="text-align: left;">32K</td>
 </tr>
+</tbody>
+</table>
+<h3 id="minicpm-o">MiniCPM-o</h3>
+<table>
+<thead>
 <tr>
-<td style="text-align: left;">MiniCPM-o 4.5</td>
-<td style="text-align: left;">稳定</td>
+<th style="text-align: left;">版本</th>
+<th style="text-align: left;">状态</th>
+<th style="text-align: left;">模态</th>
+<th style="text-align: left;">参数量</th>
+<th style="text-align: left;">亮点</th>
+<th style="text-align: left;">上下文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>4.5</strong> <em>(最新)</em></td>
+<td style="text-align: left;">推荐</td>
 <td style="text-align: left;">图像、视频、音频</td>
-<td style="text-align: left;">Qwen3</td>
+<td style="text-align: left;">9B</td>
+<td style="text-align: left;">端到端全模态（视觉 + 语音 + TTS），全双工流式</td>
 <td style="text-align: left;">32K</td>
+</tr>
+</tbody>
+</table>
+<h3 id="minicpm-llm">MiniCPM (LLM)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">版本</th>
+<th style="text-align: left;">状态</th>
+<th style="text-align: left;">模态</th>
+<th style="text-align: left;">参数量</th>
+<th style="text-align: left;">亮点</th>
+<th style="text-align: left;">上下文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>4.1</strong> <em>(最新)</em></td>
+<td style="text-align: left;">推荐</td>
+<td style="text-align: left;">文本</td>
+<td style="text-align: left;">8B</td>
+<td style="text-align: left;">混合思考、EAGLE3、InfLLM-V2</td>
+<td style="text-align: left;">128K</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">稳定</td>
+<td style="text-align: left;">文本</td>
+<td style="text-align: left;">0.5B / 8B</td>
+<td style="text-align: left;">InfLLM-V2、BitCPM4 3-bit、FRSpec</td>
+<td style="text-align: left;">128K</td>
+</tr>
+<tr>
+<td style="text-align: left;">SALA</td>
+<td style="text-align: left;">研究</td>
+<td style="text-align: left;">文本</td>
+<td style="text-align: left;">8B</td>
+<td style="text-align: left;">稀疏 + 线性混合注意力</td>
+<td style="text-align: left;">1M+</td>
 </tr>
 </tbody>
 </table>

@@ -1,7 +1,7 @@
 # MiniCPM 4.1 - SGLang
 
 > [!NOTE]
-> SGLang 上游尚未合入 MiniCPM 4.1 支持，因此我们在 [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork 的 `minicpm` 分支上维护。该分支跟踪 SGLang `main` 并叠加 MiniCPM 4 / 4.1 / SALA 修改，定期 rebase。API 稳定后会推动合入上游。
+> SGLang 上游尚未合入 MiniCPM 4.1 支持，因此我们在 [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork 的 `minicpm` 分支上维护。该分支跟踪 SGLang `main` 并叠加 MiniCPM 4 / 4.1 修改，定期 rebase。API 稳定后会推动合入上游。（SALA 位于独立的 [`minicpm_sala`](https://github.com/tc-mb/sglang/tree/minicpm_sala) 分支。）
 
 ## 1. 环境准备
 

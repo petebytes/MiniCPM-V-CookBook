@@ -340,9 +340,9 @@ footer.page-footer a:hover { color: var(--primary); }
 <div class="sidebar-section-title">Version</div>
 <div class="version-switcher">
   <select id="version-switcher-select">
-    <option value="../../v4.6/inference/chat.html">MiniCPM-V 4.6 [latest]</option>
-    <option value="../../v4.5/inference/chat.html">MiniCPM-V 4.5</option>
-    <option value="../../o4.5/inference/chat.html">MiniCPM-o 4.5</option>
+    <option value="../../v4.6/overview.html">MiniCPM-V 4.6 [latest]</option>
+    <option value="../../v4.5/overview.html">MiniCPM-V 4.5</option>
+    <option value="../../o4.5/overview.html">MiniCPM-o 4.5</option>
     <option value="../../minicpm4_1/inference/chat.html">MiniCPM 4.1 [latest-llm]</option>
     <option value="../../minicpm4/inference/chat.html">MiniCPM 4</option>
     <option value="chat.html" selected>MiniCPM-SALA [research]</option>
@@ -431,7 +431,7 @@ footer.page-footer a:hover { color: var(--primary); }
 <ul>
 <li>SALA is a <strong>research checkpoint</strong> — APIs and behaviour may evolve. Refer to the <a href="https://github.com/OpenBMB/MiniCPM/blob/main/docs/MiniCPM_SALA.pdf">technical report (PDF)</a> for architectural details.</li>
 <li>The sparse-attention layers depend on <a href="https://github.com/OpenBMB/infllmv2_cuda_impl">InfLLM-V2 CUDA kernels</a>. For HF Transformers inference the model auto-falls-back to a slower reference path; for high-throughput serving install the kernels and use the SGLang guide under this version.</li>
-<li>SGLang inference for SALA requires the <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork on the <code>minicpm</code> branch — see <code>Deployment &gt; SGLang</code> in this section.</li>
+<li>SGLang inference for SALA requires the <a href="https://github.com/tc-mb/sglang"><code>tc-mb/sglang</code></a> fork on the <code>minicpm_sala</code> branch — see <code>Deployment &gt; SGLang</code> in this section.</li>
 </ul></article>
 
   <footer class="page-footer">

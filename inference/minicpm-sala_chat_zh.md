@@ -70,4 +70,4 @@ print(tokenizer.decode(out_ids[0][input_ids.shape[-1]:], skip_special_tokens=Tru
 
 - SALA 是**研究版本**，API 与行为后续可能演进。架构细节参见[技术报告（PDF）](https://github.com/OpenBMB/MiniCPM/blob/main/docs/MiniCPM_SALA.pdf)。
 - 稀疏注意力层依赖 [InfLLM-V2 CUDA kernel](https://github.com/OpenBMB/infllmv2_cuda_impl)。HF Transformers 推理时会自动回落到较慢的参考实现；高吞吐服务请安装 kernel 并使用本版本下的 SGLang 指南。
-- SALA 的 SGLang 推理需要使用 [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork 的 `minicpm` 分支 —— 详见本节 `Deployment > SGLang`。
+- SALA 的 SGLang 推理需要使用 [`tc-mb/sglang`](https://github.com/tc-mb/sglang) fork 的 `minicpm_sala` 分支 —— 详见本节 `Deployment > SGLang`。
